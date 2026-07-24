@@ -7,17 +7,21 @@ export interface ImageAnalysis {
   hasAlpha: boolean;
   hasTransparency: boolean;
   hasSemiTransparency: boolean;
-  dpi: number;
+  dpi: number; // Target / Estimated DPI
+  hasEmbeddedDpi: boolean;
   estimatedPrintWidthCm: number;
   estimatedPrintHeightCm: number;
   semiTransparentPixelCount: number;
   transparentPixelCount: number;
   opaquePixelCount: number;
+  isLargeFormat: boolean; // Flag for > 5000px images requiring memory caution
+  warningFlags: string[];
 }
 
 /**
- * Analyzes an HTMLImageElement or ImageData to extract pixel dimensions,
+ * Analyzes an HTMLImageElement to extract pixel dimensions,
  * transparency status, semi-transparency counts, and estimated print size.
+ * Includes safeguards for large format images (> 5000px).
  */
 export async function analyzeImage(
   image: HTMLImageElement,
@@ -27,13 +31,19 @@ export async function analyzeImage(
   const width = image.naturalWidth || image.width;
   const height = image.naturalHeight || image.height;
   const aspectRatio = width / height;
+  const warningFlags: string[] = [];
 
-  // Create temporary canvas to inspect pixel data
+  const isLargeFormat = width > 5000 || height > 5000;
+  if (isLargeFormat) {
+    warningFlags.push("Imagen de gran formato (> 5000 px). Renderizado optimizado activado.");
+  }
+
+  // Create sampling canvas (limit max sampling dimension to 2048px for browser memory safety & smooth UI)
   const canvas = document.createElement("canvas");
-  canvas.width = Math.min(width, 2048); // Limit internal sampling canvas size for performance
+  canvas.width = Math.min(width, 2048);
   canvas.height = Math.round(canvas.width / aspectRatio);
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
   let hasAlpha = false;
   let hasTransparency = false;
   let hasSemiTransparency = false;
@@ -64,6 +74,7 @@ export async function analyzeImage(
     }
   }
 
+  // Exact DTF Math Formula: 300 DPI = (width / 300) * 2.54 cm
   const dpi = 300;
   const estimatedPrintWidthCm = Number(((width / dpi) * 2.54).toFixed(2));
   const estimatedPrintHeightCm = Number(((height / dpi) * 2.54).toFixed(2));
@@ -78,10 +89,13 @@ export async function analyzeImage(
     hasTransparency,
     hasSemiTransparency,
     dpi,
+    hasEmbeddedDpi: false, // Default false unless PNG pHYs chunk is explicitly parsed
     estimatedPrintWidthCm,
     estimatedPrintHeightCm,
     semiTransparentPixelCount,
     transparentPixelCount,
     opaquePixelCount,
+    isLargeFormat,
+    warningFlags,
   };
 }

@@ -8,6 +8,7 @@ import { AuthGateModal } from "@components/auth/AuthGateModal";
 import { analyzeImage, ImageAnalysis } from "@lib/image-processing/analyzer";
 import { runDtfPreflight, PreflightReport } from "@lib/image-processing/preflight";
 import { ImagePipeline } from "@lib/image-processing/pipeline";
+import { AlphaProcessingMode, ProcessingConfig } from "@lib/image-processing/provider";
 import { getStorageService } from "@lib/storage/StorageService";
 import { createClient } from "@lib/supabase/client";
 import {
@@ -23,6 +24,9 @@ import {
   Sliders,
   RefreshCw,
   SlidersHorizontal,
+  Scissors,
+  ShieldCheck,
+  Cpu,
 } from "lucide-react";
 
 export default function ImageLabPage() {
@@ -36,9 +40,10 @@ export default function ImageLabPage() {
   // Processing Parameters
   const [targetWidthCm, setTargetWidthCm] = useState<number>(30);
   const [targetDpi, setTargetDpi] = useState<number>(300);
-  const [cleanAlpha, setCleanAlpha] = useState<boolean>(true);
-  const [removeSemiTransparency, setRemoveSemiTransparency] = useState<boolean>(true);
+  const [alphaMode, setAlphaMode] = useState<AlphaProcessingMode>("balanced");
   const [alphaThreshold, setAlphaThreshold] = useState<number>(30);
+  const [cleanAlpha, setCleanAlpha] = useState<boolean>(true);
+  const [removeBackground, setRemoveBackground] = useState<boolean>(false);
 
   // States
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -53,7 +58,7 @@ export default function ImageLabPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const sourceImageRef = useRef<HTMLImageElement | null>(null);
 
-  // Handle Image File Selection
+  // Handle File Selection
   async function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -68,7 +73,7 @@ export default function ImageLabPage() {
       return;
     }
 
-    // Validate max size (50MB)
+    // Validate max file size (50MB)
     if (file.size > 50 * 1024 * 1024) {
       setErrorMessage("El archivo supera el tamaño máximo permitido (50 MB).");
       return;
@@ -114,14 +119,18 @@ export default function ImageLabPage() {
       const pipeline = new ImagePipeline();
       const format = selectedFile.name.split(".").pop() || "png";
 
-      const result = await pipeline.run(sourceImageRef.current, selectedFile.size, format, {
+      const config: ProcessingConfig = {
+        processingVersion: "1.0",
         targetWidthCm,
         targetDpi,
-        cleanAlpha,
+        alphaMode,
         alphaThreshold,
-        removeSemiTransparency,
-        removeBackground: false,
-      });
+        cleanAlpha,
+        removeBackground,
+        backgroundRemovalMode: removeBackground ? "color-key" : undefined,
+      };
+
+      const result = await pipeline.run(sourceImageRef.current, selectedFile.size, format, config);
 
       const processedUrl = URL.createObjectURL(result.processedBlob);
       setProcessedImageUrl(processedUrl);
@@ -135,7 +144,7 @@ export default function ImageLabPage() {
     }
   }
 
-  // Handle Save to Designs (Workspace-scoped authenticated operation)
+  // Handle Save to Designs
   async function handleSaveToDesigns() {
     setErrorMessage(null);
 
@@ -144,7 +153,7 @@ export default function ImageLabPage() {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // If unauthenticated, trigger Progressive Auth Gate Modal
+    // Trigger Auth Gate Modal if unauthenticated
     if (!user) {
       setIsAuthGateOpen(true);
       return;
@@ -158,7 +167,6 @@ export default function ImageLabPage() {
     setIsSaving(true);
 
     try {
-      // 1. Get user active workspace
       const { data: member, error: errMember } = await supabase
         .from("workspace_members")
         .select("workspace_id")
@@ -173,17 +181,17 @@ export default function ImageLabPage() {
       const designId = crypto.randomUUID();
       const storageService = getStorageService();
 
-      // 2. Upload Original File
+      // 1. Upload Original File (Byte-for-byte untouched)
       const originalExt = selectedFile.name.split(".").pop() || "png";
       const originalPath = `${workspaceId}/designs/${designId}/original/${selectedFile.name}`;
       const originalUpload = await storageService.upload("designs", originalPath, selectedFile);
 
-      // 3. Upload Processed PNG File
+      // 2. Upload Processed PNG File (with embedded 300 DPI pHYs chunk)
       const processedPath = `${workspaceId}/designs/${designId}/processed/dtf_optimized_${selectedFile.name.replace(/\.[^/.]+$/, "")}.png`;
       const processedFile = new File([processedBlob], `dtf_optimized_${selectedFile.name}`, { type: "image/png" });
       const processedUpload = await storageService.upload("designs", processedPath, processedFile);
 
-      // 4. Save Record in public.designs
+      // 3. Save Record in public.designs
       const { error: errInsert } = await supabase.from("designs").insert({
         id: designId,
         workspace_id: workspaceId,
@@ -202,11 +210,14 @@ export default function ImageLabPage() {
         has_alpha: analysis.hasAlpha,
         has_transparency: analysis.hasTransparency,
         processing_config: {
+          processingVersion: "1.0",
           targetWidthCm,
           targetDpi,
-          cleanAlpha,
+          alphaMode,
           alphaThreshold,
-          removeSemiTransparency,
+          cleanAlpha,
+          removeBackground,
+          backgroundRemovalMode: removeBackground ? "color-key" : "none",
         },
         analyzer_metadata: analysis,
       });
@@ -238,13 +249,13 @@ export default function ImageLabPage() {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/15 border border-secondary/30 text-xs font-semibold text-secondary mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Studio de Optimización DTF</span>
+            <span>Studio de Optimización DTF (v1.0)</span>
           </div>
           <h1 className="font-display text-2xl md:text-3xl font-extrabold text-on-surface">
             Image Lab
           </h1>
           <p className="text-xs md:text-sm text-on-surface-variant">
-            Limpia transparencias, evalúa DPI y optimiza imágenes para estampación textil.
+            Redimensionado determinista, limpieza de alfas y pre-flight técnico para impresión textil.
           </p>
         </div>
 
@@ -282,7 +293,7 @@ export default function ImageLabPage() {
         <div className="neu-pressed bg-secondary-dark/30 border border-secondary/40 text-secondary p-4 rounded-xl text-xs flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-5 h-5 shrink-0" />
-            <span className="font-semibold">¡Diseño guardado exitosamente en "Mis Diseños"!</span>
+            <span className="font-semibold">¡Diseño guardado exitosamente con metadatos pHYs (300 DPI) en "Mis Diseños"!</span>
           </div>
         </div>
       )}
@@ -299,7 +310,7 @@ export default function ImageLabPage() {
                   <span>Comparativa Visual Antes / Después (Desliza para inspeccionar)</span>
                 </span>
                 <span className="text-[11px] text-on-surface-variant font-mono">
-                  {analysis ? `${analysis.width} x ${analysis.height} px` : ""}
+                  {analysis ? `${analysis.width} × ${analysis.height} px` : ""}
                 </span>
               </div>
 
@@ -319,7 +330,7 @@ export default function ImageLabPage() {
                   <div className="flex items-center gap-2">
                     <FileCheck2 className="w-5 h-5 text-primary" />
                     <h3 className="font-display font-bold text-base text-on-surface">
-                      Reporte DTF Pre-Flight
+                      Reporte Técnico Pre-Flight DTF
                     </h3>
                   </div>
 
@@ -332,26 +343,39 @@ export default function ImageLabPage() {
                         : "bg-error/15 text-error border-error/30"
                     }`}
                   >
-                    Estado: {preflight.overallStatus === "optimal" ? "Óptimo" : preflight.overallStatus === "warning" ? "Advertencia" : "Requiere Atención"}
+                    Estado: {preflight.overallStatus === "optimal" ? "Óptimo" : preflight.overallStatus === "warning" ? "Advertencia" : "Resolución Baja"}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="p-3 rounded-xl neu-pressed bg-surface-container/60 space-y-1 text-xs">
-                    <span className="text-on-surface-variant">DPI Efectivo:</span>
-                    <p className="font-bold text-sm text-secondary">{preflight.effectiveDpi} DPI</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="p-3 rounded-xl neu-pressed bg-surface-container/60 space-y-1">
+                    <span className="text-on-surface-variant">Píxeles:</span>
+                    <p className="font-bold text-on-surface font-mono">{analysis?.width} × {analysis?.height} px</p>
                   </div>
 
-                  <div className="p-3 rounded-xl neu-pressed bg-surface-container/60 space-y-1 text-xs">
+                  <div className="p-3 rounded-xl neu-pressed bg-surface-container/60 space-y-1">
                     <span className="text-on-surface-variant">Tamaño Objetivo:</span>
-                    <p className="font-bold text-sm text-on-surface">{preflight.targetWidthCm} x {preflight.targetHeightCm} cm</p>
+                    <p className="font-bold text-on-surface">{preflight.targetWidthCm} × {preflight.targetHeightCm} cm</p>
                   </div>
 
-                  <div className="p-3 rounded-xl neu-pressed bg-surface-container/60 space-y-1 text-xs">
-                    <span className="text-on-surface-variant">Puntuación Técnica:</span>
-                    <p className="font-bold text-sm text-primary">{preflight.overallScore} / 100</p>
+                  <div className="p-3 rounded-xl neu-pressed bg-surface-container/60 space-y-1">
+                    <span className="text-on-surface-variant">Resolución Efectiva:</span>
+                    <p className="font-bold text-secondary">{preflight.effectiveDpi} DPI</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl neu-pressed bg-surface-container/60 space-y-1">
+                    <span className="text-on-surface-variant">Meta pHYs DPI:</span>
+                    <p className="font-bold text-primary">Inyectado (300 DPI)</p>
                   </div>
                 </div>
+
+                {/* Warning Flags for Large Format */}
+                {analysis?.warningFlags && analysis.warningFlags.length > 0 && (
+                  <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 text-xs text-primary flex items-center gap-2">
+                    <Info className="w-4 h-4 shrink-0" />
+                    <span>{analysis.warningFlags[0]}</span>
+                  </div>
+                )}
 
                 {/* Detailed Checks */}
                 <div className="space-y-2 pt-1">
@@ -377,13 +401,13 @@ export default function ImageLabPage() {
             <GlassCard className="p-6 space-y-6">
               <h3 className="font-display font-bold text-base text-on-surface flex items-center gap-2 border-b border-white/10 pb-3">
                 <Sliders className="w-4 h-4 text-secondary" />
-                <span>Parámetros de Impresión</span>
+                <span>Redimensionar para Impresión</span>
               </h3>
 
               {/* Target Print Width (cm) */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-xs font-semibold text-on-surface-variant">
-                  <span>Ancho de Estampado (cm)</span>
+                  <span>Ancho Físico (cm)</span>
                   <span className="font-mono text-secondary font-bold">{targetWidthCm} cm</span>
                 </div>
                 <input
@@ -400,14 +424,14 @@ export default function ImageLabPage() {
               {/* Target DPI */}
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
-                  Resolución Target (DPI)
+                  Resolución de Salida
                 </label>
                 <select
                   value={targetDpi}
                   onChange={(e) => setTargetDpi(parseInt(e.target.value))}
                   className="w-full neu-pressed bg-surface-container-lowest text-on-surface text-xs rounded-xl px-3.5 py-2.5 border border-white/5 focus:outline-none focus:ring-1 focus:ring-secondary"
                 >
-                  <option value={300}>300 DPI (Estándar DTF Recomendado)</option>
+                  <option value={300}>300 DPI (Estándar DTF - Con pHYs)</option>
                   <option value={240}>240 DPI (Calidad Media)</option>
                   <option value={150}>150 DPI (Baja Resolución)</option>
                 </select>
@@ -417,41 +441,29 @@ export default function ImageLabPage() {
 
               <h3 className="font-display font-bold text-base text-on-surface flex items-center gap-2 border-b border-white/10 pb-3">
                 <Layers className="w-4 h-4 text-primary" />
-                <span>Filtros de Tinta Blanca</span>
+                <span>Modo de Procesamiento de Alfa</span>
               </h3>
 
-              {/* Clean Alpha Toggle */}
-              <div className="flex items-center justify-between p-3 rounded-xl neu-pressed bg-surface-container/60">
-                <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-on-surface">Limpieza de Transparencias</p>
-                  <p className="text-[10px] text-on-surface-variant">Elimina píxeles semi-transparentes ruidosos</p>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={cleanAlpha}
-                  onChange={(e) => setCleanAlpha(e.target.checked)}
-                  className="rounded text-secondary focus:ring-secondary cursor-pointer"
-                />
-              </div>
-
-              {/* Remove Semi Transparency Toggle */}
-              <div className="flex items-center justify-between p-3 rounded-xl neu-pressed bg-surface-container/60">
-                <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-on-surface">Normalizar Bordes de Máscara</p>
-                  <p className="text-[10px] text-on-surface-variant">Previene difuminado en la base blanca</p>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={removeSemiTransparency}
-                  onChange={(e) => setRemoveSemiTransparency(e.target.checked)}
-                  className="rounded text-primary focus:ring-secondary cursor-pointer"
-                />
+              {/* Alpha Processing Mode Selector */}
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                  Modo de Limpieza de Transparencia
+                </label>
+                <select
+                  value={alphaMode}
+                  onChange={(e) => setAlphaMode(e.target.value as AlphaProcessingMode)}
+                  className="w-full neu-pressed bg-surface-container-lowest text-on-surface text-xs rounded-xl px-3.5 py-2.5 border border-white/5 focus:outline-none focus:ring-1 focus:ring-secondary"
+                >
+                  <option value="balanced">Balanceado (Recomendado - Limpia ruido)</option>
+                  <option value="conservative">Conservador (Conserva bordes suaves)</option>
+                  <option value="aggressive">Agresivo (Bordes sólidos vectoriales)</option>
+                </select>
               </div>
 
               {/* Threshold Slider */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-xs font-semibold text-on-surface-variant">
-                  <span>Umbral de Corte de Alfa</span>
+                  <span>Umbral de Alfa</span>
                   <span className="font-mono text-primary font-bold">{alphaThreshold} / 255</span>
                 </div>
                 <input
@@ -461,6 +473,20 @@ export default function ImageLabPage() {
                   value={alphaThreshold}
                   onChange={(e) => setAlphaThreshold(parseInt(e.target.value))}
                   className="w-full accent-primary cursor-pointer"
+                />
+              </div>
+
+              {/* Color-Key Background Removal Toggle */}
+              <div className="flex items-center justify-between p-3 rounded-xl neu-pressed bg-surface-container/60">
+                <div className="space-y-0.5">
+                  <p className="text-xs font-semibold text-on-surface">Eliminar Fondo por Color (Croma)</p>
+                  <p className="text-[10px] text-on-surface-variant">Retira fondos blancos sólidos</p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={removeBackground}
+                  onChange={(e) => setRemoveBackground(e.target.checked)}
+                  className="rounded text-secondary focus:ring-secondary cursor-pointer"
                 />
               </div>
 
@@ -475,7 +501,7 @@ export default function ImageLabPage() {
                   className="w-full justify-center shadow-glow-violet"
                 >
                   <RefreshCw className={`w-4 h-4 ${isProcessing ? "animate-spin" : ""}`} />
-                  <span>{isProcessing ? "Procesando..." : "Procesar Imagen"}</span>
+                  <span>{isProcessing ? "Procesando..." : "Redimensionar y Procesar"}</span>
                 </NeuButton>
 
                 <NeuButton
@@ -505,7 +531,7 @@ export default function ImageLabPage() {
               Selecciona una imagen para comenzar
             </h2>
             <p className="text-xs text-on-surface-variant">
-              Admite formatos PNG, JPG y WEBP de hasta 50 MB. Analizaremos automáticamente DPI, dimensiones e integridad de transparencias.
+              Admite PNG, JPG y WEBP de hasta 50 MB. Analizaremos automáticamente dimensiones en píxeles, DPI efectivo y limpieza de transparencias.
             </p>
           </div>
 

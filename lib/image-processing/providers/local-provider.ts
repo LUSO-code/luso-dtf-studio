@@ -1,9 +1,10 @@
 import { ImageProcessingProvider, ProcessingConfig, ProcessingResult } from "../provider";
 import { analyzeImage, ImageAnalysis } from "../analyzer";
 import { runDtfPreflight } from "../preflight";
+import { embedPngDpi } from "../png-dpi";
 
 export class LocalCanvasProvider implements ImageProcessingProvider {
-  name = "Local Canvas Deterministic Engine";
+  name = "Local Canvas Deterministic Engine v1.0";
 
   async process(
     sourceImage: HTMLImageElement,
@@ -13,32 +14,44 @@ export class LocalCanvasProvider implements ImageProcessingProvider {
     const startTime = performance.now();
 
     // 1. Calculate Target Pixel Dimensions
+    // Formula: pixels = (centimeters / 2.54) * targetDpi
     const targetWidthInches = config.targetWidthCm / 2.54;
     const targetWidthPx = Math.round(targetWidthInches * config.targetDpi);
     const targetHeightPx = Math.round(targetWidthPx / originalAnalysis.aspectRatio);
 
+    // Safeguard: Limit max Canvas dimension to 8192px to prevent browser GPU/Canvas OOM crashes
+    const safeWidthPx = Math.min(targetWidthPx, 8192);
+    const safeHeightPx = Math.round(safeWidthPx / originalAnalysis.aspectRatio);
+
     // 2. Setup Canvas
     const canvas = document.createElement("canvas");
-    canvas.width = targetWidthPx;
-    canvas.height = targetHeightPx;
+    canvas.width = safeWidthPx;
+    canvas.height = safeHeightPx;
 
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) {
-      throw new Error("No se pudo obtener el contexto de dibujo Canvas 2D.");
+      throw new Error("No se pudo inicializar el motor de renderizado Canvas 2D.");
     }
 
-    // High quality scaling
+    // High Quality Bilinear/Bicubic Resampling
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
-    // Draw original image scaled to target canvas
-    ctx.drawImage(sourceImage, 0, 0, targetWidthPx, targetHeightPx);
+    // Draw Source Image
+    ctx.drawImage(sourceImage, 0, 0, safeWidthPx, safeHeightPx);
 
-    // 3. Perform Deterministic Transformations (Alpha Cleanup & Thresholding)
-    if (config.cleanAlpha || config.removeSemiTransparency || config.removeBackground) {
-      const imageData = ctx.getImageData(0, 0, targetWidthPx, targetHeightPx);
+    // 3. Alpha Channel Transformations (Conservative / Balanced / Aggressive Modes)
+    if (config.cleanAlpha || config.removeBackground) {
+      const imageData = ctx.getImageData(0, 0, safeWidthPx, safeHeightPx);
       const data = imageData.data;
-      const threshold = config.alphaThreshold || 30;
+
+      // Thresholds according to mode
+      let cutoffThreshold = config.alphaThreshold || 30;
+      if (config.alphaMode === "conservative") {
+        cutoffThreshold = Math.min(cutoffThreshold, 15);
+      } else if (config.alphaMode === "aggressive") {
+        cutoffThreshold = Math.max(cutoffThreshold, 65);
+      }
 
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
@@ -46,43 +59,47 @@ export class LocalCanvasProvider implements ImageProcessingProvider {
         const b = data[i + 2];
         const alpha = data[i + 3];
 
-        // Background color key removal (e.g., pure white background removal)
-        if (config.removeBackground) {
+        // Color-Key Background Removal (Chroma)
+        if (config.removeBackground && config.backgroundRemovalMode === "color-key") {
+          // Pure white / high-light background keying
           if (r > 245 && g > 245 && b > 245) {
-            data[i + 3] = 0; // Make transparent
+            data[i + 3] = 0;
             continue;
           }
         }
 
-        // Semi-transparency & Alpha Thresholding
-        if (alpha < threshold) {
-          data[i + 3] = 0; // Cut off low-alpha noise completely
-        } else if (config.removeSemiTransparency && alpha < 255) {
-          // Normalize semi-transparent edges to full opacity for crisp DTF white underbase
-          data[i + 3] = 255;
+        // Alpha Mode Transformations
+        if (alpha < cutoffThreshold) {
+          data[i + 3] = 0; // Cut off low opacity noise completely
+        } else if (config.alphaMode === "aggressive" && alpha < 255) {
+          data[i + 3] = 255; // Force crisp opaque edges for aggressive mode
         }
       }
 
       ctx.putImageData(imageData, 0, 0);
     }
 
-    // 4. Convert Canvas to PNG Blob
-    const processedBlob = await new Promise<Blob>((resolve, reject) => {
+    // 4. Export PNG Blob
+    const rawBlob = await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob((blob) => {
         if (blob) resolve(blob);
-        else reject(new Error("Error al exportar PNG procesado."));
+        else reject(new Error("Error al generar archivo PNG."));
       }, "image/png");
     });
 
-    // 5. Re-analyze Processed Image
+    // 5. Inject pHYs DPI Chunk (300 DPI metadata) into PNG Binary
+    const processedBlob = await embedPngDpi(rawBlob, config.targetDpi);
+
+    // 6. Re-analyze Processed Image
     const tempImg = new Image();
     tempImg.src = URL.createObjectURL(processedBlob);
     await new Promise((resolve) => (tempImg.onload = resolve));
 
     const updatedAnalysis = await analyzeImage(tempImg, processedBlob.size, "png");
+    updatedAnalysis.hasEmbeddedDpi = true;
     URL.revokeObjectURL(tempImg.src);
 
-    // 6. Run Pre-Flight Report
+    // 7. Run Pre-Flight Report
     const preflight = runDtfPreflight(updatedAnalysis, config.targetWidthCm, config.targetDpi);
 
     const processingTimeMs = Math.round(performance.now() - startTime);
@@ -93,6 +110,7 @@ export class LocalCanvasProvider implements ImageProcessingProvider {
       analysis: updatedAnalysis,
       preflight,
       processingTimeMs,
+      config,
     };
   }
 }

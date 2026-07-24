@@ -3,23 +3,28 @@ import { ImageAnalysis } from "./analyzer";
 export interface PreflightCheckItem {
   id: string;
   name: string;
-  status: "optimal" | "warning" | "attention";
+  status: "optimal" | "warning" | "low";
   message: string;
   detail?: string;
 }
 
 export interface PreflightReport {
-  overallStatus: "optimal" | "warning" | "attention";
+  overallStatus: "optimal" | "warning" | "low";
   overallScore: number; // 0 - 100
+  effectiveDpiWidth: number;
+  effectiveDpiHeight: number;
   effectiveDpi: number;
   targetWidthCm: number;
   targetHeightCm: number;
+  requiredPixelsWidth: number;
+  requiredPixelsHeight: number;
   checks: PreflightCheckItem[];
   recommendation: string;
 }
 
 /**
- * Evaluates print suitability for DTF printing based on target print width and DPI settings.
+ * Evaluates print suitability for DTF printing based on target print width in cm and target DPI.
+ * Uses exact formula: requiredPixels = (printWidthCm / 2.54) * targetDpi
  */
 export function runDtfPreflight(
   analysis: ImageAnalysis,
@@ -29,110 +34,111 @@ export function runDtfPreflight(
   const checks: PreflightCheckItem[] = [];
   let score = 100;
 
-  // Calculate target height preserving aspect ratio
+  // Target Height preserving aspect ratio
   const targetHeightCm = Number((targetWidthCm / analysis.aspectRatio).toFixed(2));
 
-  // Calculate effective DPI at target print size
-  const targetWidthInches = targetWidthCm / 2.54;
-  const effectiveDpi = Math.round(analysis.width / targetWidthInches);
+  // Required Pixels for 100% 300 DPI Quality
+  const requiredPixelsWidth = Math.round((targetWidthCm / 2.54) * targetDpi);
+  const requiredPixelsHeight = Math.round((targetHeightCm / 2.54) * targetDpi);
 
-  // 1. Resolution & DPI Check
+  // Effective DPI at target print dimensions
+  const effectiveDpiWidth = Math.round(analysis.width / (targetWidthCm / 2.54));
+  const effectiveDpiHeight = Math.round(analysis.height / (targetHeightCm / 2.54));
+  const effectiveDpi = Math.min(effectiveDpiWidth, effectiveDpiHeight);
+
+  // 1. Resolution & Effective DPI Check
   if (effectiveDpi >= 280) {
     checks.push({
       id: "resolution",
       name: "Resolución Efectiva",
       status: "optimal",
-      message: `Excelente resolución de impresión (${effectiveDpi} DPI).`,
-      detail: `La imagen contiene suficientes píxeles (${analysis.width}x${analysis.height} px) para imprimirse limpia a ${targetWidthCm} cm.`,
+      message: `Resolución efectiva óptima (${effectiveDpi} DPI).`,
+      detail: `Píxeles disponibles (${analysis.width} × ${analysis.height} px) superan o igualan el objetivo técnico para ${targetWidthCm} cm.`,
     });
-  } else if (effectiveDpi >= 200) {
-    score -= 20;
+  } else if (effectiveDpi >= 180) {
+    score -= 25;
     checks.push({
       id: "resolution",
       name: "Resolución Efectiva",
       status: "warning",
       message: `Resolución moderada (${effectiveDpi} DPI).`,
-      detail: `La imagen puede perder ligera nitidez al imprimirse a ${targetWidthCm} cm. Se recomienda mejorar el archivo fuente o reducir el tamaño.`,
+      detail: `Para obtener 300 DPI nítidos a ${targetWidthCm} cm se requieren ${requiredPixelsWidth} × ${requiredPixelsHeight} px.`,
     });
   } else {
-    score -= 45;
+    score -= 50;
     checks.push({
       id: "resolution",
       name: "Resolución Efectiva",
-      status: "attention",
-      message: `Resolución insuficiente (${effectiveDpi} DPI).`,
+      status: "low",
+      message: `Resolución muy baja (${effectiveDpi} DPI).`,
       detail: `Riesgo de pixelado visible en la impresión DTF a ${targetWidthCm} cm.`,
     });
   }
 
-  // 2. Transparency & Alpha Channel Check
+  // 2. Transparency & Alpha Edge Check
   if (analysis.hasSemiTransparency) {
     score -= 15;
     checks.push({
       id: "transparency",
-      name: "Bordes con Semi-Transparencia",
+      name: "Bordes Semi-Transparentes",
       status: "warning",
-      message: "Se detectaron píxeles semi-transparentes en los bordes.",
-      detail: "En la impresión DTF, los tonos semi-transparentes pueden causar halos blancos no deseados al aplicar la base de tinta blanca. Se recomienda ejecutar la limpieza de alfa.",
+      message: "Se detectaron píxeles semi-transparentes en los bordes del diseño.",
+      detail: "En DTF, los bordes semi-transparentes pueden provocar halos blancos alrededor de la tinta al aplicar la base de blanco.",
     });
   } else if (analysis.hasTransparency) {
     checks.push({
       id: "transparency",
-      name: "Canal Alfa y Transparencia",
+      name: "Transparencia y Canal Alfa",
       status: "optimal",
-      message: "Transparencia limpia sin bordes difusos.",
-      detail: "El archivo cuenta con fondo transparente nítido para la generación de máscara de blanco.",
+      message: "Transparencia limpia sin difuminados.",
+      detail: "Manejo nítido del mapa de bits para la máscara de blanco.",
     });
   } else {
     checks.push({
       id: "transparency",
-      name: "Fondo Opaco Detectado",
+      name: "Fondo Opaco",
       status: "warning",
-      message: "El archivo no contiene canal alfa transparente.",
-      detail: "Se imprimirá todo el fondo salvo que ejecutes la herramienta de eliminación de fondo.",
+      message: "El archivo no posee fondo transparente.",
+      detail: "Usa la herramienta 'Eliminar Fondo por Color' si deseas aislar el estampado.",
     });
   }
 
-  // 3. Format Check
-  if (analysis.format === "png" || analysis.format === "webp") {
+  // 3. Format & Large Format Check
+  if (analysis.isLargeFormat) {
     checks.push({
       id: "format",
-      name: "Formato de Archivo",
+      name: "Formato de Imagen",
       status: "optimal",
-      message: `Formato compatible (${analysis.format.toUpperCase()}).`,
-    });
-  } else {
-    score -= 10;
-    checks.push({
-      id: "format",
-      name: "Formato de Archivo",
-      status: "warning",
-      message: `Formato ${analysis.format.toUpperCase()} sin transparencia nativa.`,
-      detail: "Formato no ideal para estampados recortados.",
+      message: "Imagen de alta resolución de gran formato.",
+      detail: "Apta para impresiones de gran escala en rollo.",
     });
   }
 
-  // Determine overall status
-  let overallStatus: "optimal" | "warning" | "attention" = "optimal";
-  if (score < 60 || checks.some((c) => c.status === "attention")) {
-    overallStatus = "attention";
+  // Overall Status Determination
+  let overallStatus: "optimal" | "warning" | "low" = "optimal";
+  if (score < 55 || checks.some((c) => c.status === "low")) {
+    overallStatus = "low";
   } else if (score < 90 || checks.some((c) => c.status === "warning")) {
     overallStatus = "warning";
   }
 
-  let recommendation = "Diseño listo y apto para maquetar en plancha DTF.";
-  if (overallStatus === "attention") {
-    recommendation = "Revisar resolución o aplicar limpieza de transparencias antes de maquetar.";
+  let recommendation = "Diseño optimizado y listo para maquetación en plancha DTF.";
+  if (overallStatus === "low") {
+    recommendation = "Reducir el tamaño de estampado o suministrar un archivo fuente de mayor resolución.";
   } else if (overallStatus === "warning") {
-    recommendation = "Apto para imprimir. Aplica la limpieza de alfa sugerida para optimizar la tinta blanca.";
+    recommendation = "Apto para imprimir. Aplica el modo de alfa balanceado o conservador según el tipo de diseño.";
   }
 
   return {
     overallStatus,
     overallScore: Math.max(0, score),
+    effectiveDpiWidth,
+    effectiveDpiHeight,
     effectiveDpi,
     targetWidthCm,
     targetHeightCm,
+    requiredPixelsWidth,
+    requiredPixelsHeight,
     checks,
     recommendation,
   };
