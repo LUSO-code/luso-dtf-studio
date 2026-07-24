@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUSO DTF Studio - Login</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#958ea0",
+                        "on-primary-fixed": "#23005c",
+                        "outline-variant": "#494454",
+                        "on-primary": "#3c0091",
+                        "on-tertiary-container": "#5b0017",
+                        "on-surface-variant": "#cbc3d7",
+                        "surface-container-lowest": "#060e20",
+                        "inverse-on-surface": "#283044",
+                        "primary-fixed-dim": "#d0bcff",
+                        "primary-fixed": "#e9ddff",
+                        "surface-bright": "#31394d",
+                        "secondary": "#4cd7f6",
+                        "on-secondary": "#003640",
+                        "surface-container-low": "#131b2e",
+                        "surface-tint": "#d0bcff",
+                        "primary": "#d0bcff",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-surface": "#dae2fd",
+                        "surface-container-highest": "#2d3449",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "inverse-primary": "#6d3bd7",
+                        "on-tertiary": "#67001b",
+                        "surface": "#0b1326",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "surface-container-high": "#222a3d",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "primary-container": "#a078ff",
+                        "tertiary": "#ffb2b7",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "tertiary-container": "#ff516a",
+                        "background": "#0b1326",
+                        "on-tertiary-fixed": "#40000d",
+                        "on-primary-fixed-variant": "#5516be",
+                        "surface-variant": "#2d3449",
+                        "secondary-fixed": "#acedff",
+                        "surface-dim": "#0b1326",
+                        "secondary-container": "#03b5d3",
+                        "on-error": "#690005",
+                        "surface-container": "#171f33",
+                        "on-secondary-container": "#00424e",
+                        "on-secondary-fixed": "#001f26",
+                        "on-background": "#dae2fd",
+                        "on-primary-container": "#340080",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "1.5rem",
+                        "container-margin": "2rem",
+                        "element-gap": "1rem",
+                        "topbar-height": "72px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-xl": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Refined Neumorphic inset shadow for inputs to simulate being carved into the glass */
+        .sunk-input {
+            box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.6), inset -2px -2px 5px rgba(255, 255, 255, 0.03);
+        }
+        /* Soft, glowing outline on focus */
+        .sunk-input:focus {
+            box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.6), inset -2px -2px 5px rgba(255, 255, 255, 0.03), 0 0 10px rgba(76, 215, 246, 0.3);
+            border-color: rgba(76, 215, 246, 0.5); /* secondary color hint */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center relative overflow-hidden font-body-md selection:bg-secondary/30 selection:text-secondary-fixed">
+<!-- Level 0: Animated Background Layer -->
+<!-- STITCH_SHADER_START:ANIMATION_3 class="absolute inset-0 w-full h-full -z-10" -->
+<div class="absolute inset-0 w-full h-full -z-10" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+// Simplex 2D noise
+vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+  + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+    dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    float t = u_time * 0.15;
+    
+    // Create animated aurora-like layers
+    float n1 = snoise(uv * 2.0 + t);
+    float n2 = snoise(uv * 3.0 - t * 0.8);
+    float n3 = snoise(uv * 4.0 + t * 1.2);
+    
+    // Define the vibrant palette stops
+    vec3 deepViolet = vec3(0.18, 0.07, 0.45);
+    vec3 electricPurple = vec3(0.55, 0.36, 0.96);
+    vec3 magenta = vec3(0.9, 0.1, 0.6);
+    vec3 cyan = vec3(0.0, 0.8, 0.9);
+    vec3 warmOrange = vec3(1.0, 0.5, 0.2);
+    
+    // Mix based on noise and coordinates
+    vec3 color = mix(deepViolet, electricPurple, 0.5 + 0.5 * n1);
+    color = mix(color, magenta, smoothstep(0.1, 0.9, n2));
+    color = mix(color, cyan, smoothstep(0.4, 1.0, n3) * 0.3);
+    color = mix(color, warmOrange, smoothstep(0.7, 1.0, n1 * n2) * 0.2);
+    
+    // Add soft lighting orbs
+    float orb = 1.0 - length(uv - vec2(0.8, 0.2 + 0.1 * sin(t)));
+    color += mix(vec3(0.0), cyan, pow(max(0.0, orb), 4.0) * 0.5);
+    
+    float orb2 = 1.0 - length(uv - vec2(0.2, 0.8 + 0.1 * cos(t)));
+    color += mix(vec3(0.0), magenta, pow(max(0.0, orb2), 4.0) * 0.4);
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+<!-- Ambient Overlay to ensure legibility over the shader -->
+<div class="absolute inset-0 bg-background/40 -z-10 mix-blend-multiply"></div>
+<!-- Level 1: Main Glass Panel Container -->
+<!-- Responsive sizing, glassmorphism blur, and zenithal light borders -->
+<div class="w-full max-w-md mx-container-margin p-8 md:p-10 rounded-[1.5rem] bg-surface/60 backdrop-blur-[25px] border-t border-l border-white/20 border-r-transparent border-b-transparent shadow-[0_20px_40px_rgba(0,0,0,0.4)] relative flex flex-col items-center">
+<!-- Subtle internal glow for the glass panel -->
+<div class="absolute inset-0 rounded-[1.5rem] shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] pointer-events-none"></div>
+<!-- Header Section -->
+<div class="w-full text-center mb-10 relative z-10">
+<!-- Brand Logo / Name -->
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight mb-2 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+                LUSO DTF Studio
+            </h1>
+<!-- Headline -->
+<p class="font-body-lg text-body-lg text-on-surface-variant">Bienvenido de nuevo</p>
+</div>
+<!-- Form Section -->
+<form action="#" class="w-full flex flex-col gap-element-gap relative z-10" onsubmit="event.preventDefault();">
+<!-- Email Input -->
+<div class="flex flex-col gap-1 w-full">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1" for="email">Correo electrónico</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-secondary transition-colors">mail</span>
+<input class="w-full h-12 pl-12 pr-4 rounded-xl bg-surface-container-low/50 text-on-surface border border-transparent outline-none sunk-input font-body-md text-body-md placeholder-on-surface-variant/50 caret-secondary transition-all" id="email" placeholder="tu@email.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="flex flex-col gap-1 w-full mb-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1" for="password">Contraseña</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-secondary transition-colors">lock</span>
+<input class="w-full h-12 pl-12 pr-4 rounded-xl bg-surface-container-low/50 text-on-surface border border-transparent outline-none sunk-input font-body-md text-body-md placeholder-on-surface-variant/50 caret-secondary transition-all" id="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<!-- Forgot Password Link -->
+<div class="w-full flex justify-end">
+<a class="font-label-sm text-label-sm text-secondary hover:text-secondary-fixed transition-colors" href="#">
+                    ¿Olvidaste tu contraseña?
+                </a>
+</div>
+<!-- Level 2: Neumorphic Submit Button -->
+<!-- Solid surface color to enable shadows to work, primary gradient, projecting out, sinking in on active -->
+<button class="w-full h-12 mt-4 rounded-xl bg-primary text-on-primary font-label-md text-label-md tracking-wide shadow-[4px_4px_10px_rgba(0,0,0,0.5),-2px_-2px_8px_rgba(255,255,255,0.08)] active:shadow-[inset_3px_3px_8px_rgba(0,0,0,0.4),inset_-2px_-2px_6px_rgba(255,255,255,0.1)] hover:brightness-110 transition-all duration-200 flex items-center justify-center gap-2 relative overflow-hidden group" type="submit">
+<span class="relative z-10">Iniciar sesión</span>
+<span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+<!-- Subtle internal shine -->
+<div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-t-xl"></div>
+</button>
+</form>
+<!-- Create Account Link (Glass Secondary Action) -->
+<div class="mt-8 pt-6 w-full text-center border-t border-white/5 relative z-10 flex flex-col items-center gap-4">
+<span class="font-label-sm text-label-sm text-on-surface-variant">¿No tienes una cuenta?</span>
+<a class="px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 font-label-md text-label-md text-on-surface transition-all duration-300" href="#">
+                Crear una cuenta
+            </a>
+</div>
+</div>
+</body></html>

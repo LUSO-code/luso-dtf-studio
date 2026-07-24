@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUSO DTF Studio - Preparación de Imagen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#958ea0",
+                        "on-primary-fixed": "#23005c",
+                        "outline-variant": "#494454",
+                        "on-primary": "#3c0091",
+                        "on-tertiary-container": "#5b0017",
+                        "on-surface-variant": "#cbc3d7",
+                        "surface-container-lowest": "#060e20",
+                        "inverse-on-surface": "#283044",
+                        "primary-fixed-dim": "#d0bcff",
+                        "primary-fixed": "#e9ddff",
+                        "surface-bright": "#31394d",
+                        "secondary": "#4cd7f6",
+                        "on-secondary": "#003640",
+                        "surface-container-low": "#131b2e",
+                        "surface-tint": "#d0bcff",
+                        "primary": "#d0bcff",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-surface": "#dae2fd",
+                        "surface-container-highest": "#2d3449",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "inverse-primary": "#6d3bd7",
+                        "on-tertiary": "#67001b",
+                        "surface": "#0b1326",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "surface-container-high": "#222a3d",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "primary-container": "#a078ff",
+                        "tertiary": "#ffb2b7",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "tertiary-container": "#ff516a",
+                        "background": "#0b1326",
+                        "on-tertiary-fixed": "#40000d",
+                        "on-primary-fixed-variant": "#5516be",
+                        "surface-variant": "#2d3449",
+                        "secondary-fixed": "#acedff",
+                        "surface-dim": "#0b1326",
+                        "secondary-container": "#03b5d3",
+                        "on-error": "#690005",
+                        "surface-container": "#171f33",
+                        "on-secondary-container": "#00424e",
+                        "on-secondary-fixed": "#001f26",
+                        "on-background": "#dae2fd",
+                        "on-primary-container": "#340080",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "1.5rem",
+                        "container-margin": "2rem",
+                        "element-gap": "1rem",
+                        "topbar-height": "72px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-xl": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); overflow-x: hidden; }
+        
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(11, 19, 38, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Neumorphic Controls */
+        .neumorphic-btn {
+            background: rgba(11, 19, 38, 0.8);
+            box-shadow: -4px -4px 10px rgba(255, 255, 255, 0.05), 4px 4px 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease;
+        }
+        .neumorphic-btn:active, .neumorphic-btn.active {
+            box-shadow: inset -4px -4px 10px rgba(255, 255, 255, 0.05), inset 4px 4px 10px rgba(0, 0, 0, 0.5);
+            color: theme('colors.primary');
+        }
+
+        .neumorphic-input {
+            background: rgba(11, 19, 38, 0.5);
+            box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.6), inset -2px -2px 6px rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: theme('colors.surface-variant'); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: theme('colors.outline'); }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative flex">
+<!-- Background Shader -->
+<div class="fixed inset-0 z-0 pointer-events-none">
+<!-- STITCH_SHADER_START:ANIMATION_3 class="absolute inset-0 w-full h-full opacity-60" -->
+<div class="absolute inset-0 w-full h-full opacity-60" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+// Simplex 2D noise
+vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+  + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+    dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    float t = u_time * 0.15;
+    
+    // Create animated aurora-like layers
+    float n1 = snoise(uv * 2.0 + t);
+    float n2 = snoise(uv * 3.0 - t * 0.8);
+    float n3 = snoise(uv * 4.0 + t * 1.2);
+    
+    // Define the vibrant palette stops
+    vec3 deepViolet = vec3(0.18, 0.07, 0.45);
+    vec3 electricPurple = vec3(0.55, 0.36, 0.96);
+    vec3 magenta = vec3(0.9, 0.1, 0.6);
+    vec3 cyan = vec3(0.0, 0.8, 0.9);
+    vec3 warmOrange = vec3(1.0, 0.5, 0.2);
+    
+    // Mix based on noise and coordinates
+    vec3 color = mix(deepViolet, electricPurple, 0.5 + 0.5 * n1);
+    color = mix(color, magenta, smoothstep(0.1, 0.9, n2));
+    color = mix(color, cyan, smoothstep(0.4, 1.0, n3) * 0.3);
+    color = mix(color, warmOrange, smoothstep(0.7, 1.0, n1 * n2) * 0.2);
+    
+    // Add soft lighting orbs
+    float orb = 1.0 - length(uv - vec2(0.8, 0.2 + 0.1 * sin(t)));
+    color += mix(vec3(0.0), cyan, pow(max(0.0, orb), 4.0) * 0.5);
+    
+    float orb2 = 1.0 - length(uv - vec2(0.2, 0.8 + 0.1 * cos(t)));
+    color += mix(vec3(0.0), magenta, pow(max(0.0, orb2), 4.0) * 0.4);
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+</div>
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex fixed left-4 top-4 bottom-4 w-sidebar-width flex-col p-panel-padding z-50 rounded-xl m-container-margin bg-surface/60 dark:bg-surface/60 backdrop-blur-[25px] border-t border-l border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+<div class="mb-8">
+<h1 class="font-headline-lg text-headline-lg text-primary">DTF Pro</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Luz Líquida</p>
+</div>
+<ul class="space-y-2 flex-grow">
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">print</span>
+<span class="font-label-md text-label-md">Trabajos</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-primary shadow-[0_0_15px_rgba(208,188,255,0.4)] font-bold active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.05)] bg-white/5" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">palette</span>
+<span class="font-label-md text-label-md">Mis diseños</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">tune</span>
+<span class="font-label-md text-label-md">Perfiles de producción</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto flex items-center gap-3 pt-4 border-t border-white/10">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+<div class="flex-col">
+<span class="font-label-sm text-label-sm text-on-surface block">Usuario</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-[320px] relative z-10 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-panel-padding h-topbar-height w-[calc(100%-4rem)] mx-auto mt-4 rounded-xl m-container-margin bg-surface/60 dark:bg-surface/60 backdrop-blur-[25px] border-t border-l border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary">Preparación de imagen</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant/40 transition-all duration-300 active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.05)]">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Workspace Grid -->
+<div class="flex-1 p-6 grid grid-cols-1 md:grid-cols-12 gap-element-gap overflow-hidden">
+<!-- Left Panel: Tools -->
+<div class="md:col-span-2 glass-panel rounded-xl flex flex-col p-4 gap-4 overflow-y-auto">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Herramientas</h2>
+<button class="neumorphic-btn active flex items-center gap-3 p-3 rounded-lg text-primary">
+<span class="material-symbols-outlined">auto_fix_high</span>
+<span class="font-label-md text-label-md text-left">Eliminar fondo AI</span>
+</button>
+<button class="neumorphic-btn flex items-center gap-3 p-3 rounded-lg text-on-surface">
+<span class="material-symbols-outlined">colorize</span>
+<span class="font-label-md text-label-md text-left">Selección por color</span>
+</button>
+<button class="neumorphic-btn flex items-center gap-3 p-3 rounded-lg text-on-surface">
+<span class="material-symbols-outlined">ink_eraser</span>
+<span class="font-label-md text-label-md text-left">Borrador</span>
+</button>
+<button class="neumorphic-btn flex items-center gap-3 p-3 rounded-lg text-on-surface">
+<span class="material-symbols-outlined">settings_backup_restore</span>
+<span class="font-label-md text-label-md text-left">Restaurar</span>
+</button>
+<button class="neumorphic-btn flex items-center gap-3 p-3 rounded-lg text-on-surface">
+<span class="material-symbols-outlined">brush</span>
+<span class="font-label-md text-label-md text-left">Refinar bordes</span>
+</button>
+</div>
+<!-- Center Panel: Canvas -->
+<div class="md:col-span-7 glass-panel rounded-xl flex flex-col relative overflow-hidden">
+<!-- Canvas Toolbar -->
+<div class="h-14 border-b border-white/10 flex items-center justify-between px-4 bg-surface/40">
+<div class="flex gap-2">
+<button class="px-4 py-1 rounded-full text-label-sm font-label-sm bg-primary/20 text-primary border border-primary/30 shadow-[0_0_10px_rgba(208,188,255,0.2)]">ORIGINAL</button>
+<button class="px-4 py-1 rounded-full text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors">RESULTADO PROCESADO</button>
+<button class="px-4 py-1 rounded-full text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors">MÁSCARA</button>
+</div>
+<div class="flex gap-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">zoom_in</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">zoom_out</span></button>
+</div>
+</div>
+<!-- Canvas Area -->
+<div class="flex-1 flex items-center justify-center p-8 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')]">
+<img class="max-w-full max-h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" data-alt="A highly detailed, vibrant graphic design suitable for DTF printing, featuring an intricate cybernetic tiger surrounded by glowing neon floral elements. The artwork is set against a transparent background (simulated in UI) and is rendered with crisp, hyper-detailed lines, vibrant magenta and cyan accents, and high-contrast lighting to showcase print-ready quality in a dark-mode interface setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAuG7q8ks7tSYA3SxgMtQHdwzL3WkRrttjWcVLDvP04-IX1esqn5qlkTRcSeeFif1B38j2cLn8V-_WNhyKa3Z8sjjcTgLOJtrI7bYDQGF-ENYR_EsAI4qZ9LVQHNXNy1z8_EOvrNj8O8pFW02TUXJOa8t1IjMKJmHG07M1gAxMdwiAGyfiuK6AF5931zm22OcQ1k8ih88uyzzB88lt6nRnv4hgHrYHopnGDAG60pPWeVjW4VJKOhrf5azJimzoHe4AIFxQryz4YTd0"/>
+</div>
+<!-- Status Overlay -->
+<div class="absolute bottom-4 left-4 right-4 flex justify-center pointer-events-none">
+<div class="bg-surface-container-highest/80 backdrop-blur-md border border-white/10 rounded-full px-6 py-2 flex items-center gap-3 shadow-lg">
+<span class="material-symbols-outlined text-secondary animate-pulse">memory</span>
+<span class="font-label-sm text-label-sm text-on-surface">Analizando imagen...</span>
+</div>
+</div>
+</div>
+<!-- Right Panel: Inspector -->
+<div class="md:col-span-3 glass-panel rounded-xl flex flex-col p-6 gap-6 overflow-y-auto">
+<div class="flex justify-between items-center mb-2">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Ajustes AI</h2>
+<span class="material-symbols-outlined text-primary text-sm">auto_awesome</span>
+</div>
+<!-- Sliders -->
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm font-label-sm">
+<span class="text-on-surface">Sensibilidad</span>
+<span class="text-primary">75%</span>
+</div>
+<div class="h-2 w-full neumorphic-input rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary-container to-primary w-[75%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm font-label-sm">
+<span class="text-on-surface">Suavizado de bordes</span>
+<span class="text-primary">40%</span>
+</div>
+<div class="h-2 w-full neumorphic-input rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary-container to-primary w-[40%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Toggles -->
+<div class="space-y-4 mt-4">
+<label class="flex items-center justify-between cursor-pointer">
+<span class="font-body-md text-body-md text-on-surface">Conservar semitransparencias</span>
+<div class="relative">
+<input checked="" class="sr-only" type="checkbox"/>
+<div class="block bg-surface-container-high w-10 h-6 rounded-full border border-white/10"></div>
+<div class="dot absolute left-1 top-1 bg-primary w-4 h-4 rounded-full transition transform translate-x-4 shadow-[0_0_8px_rgba(208,188,255,0.6)]"></div>
+</div>
+</label>
+<label class="flex items-center justify-between cursor-pointer">
+<span class="font-body-md text-body-md text-on-surface">Eliminación agresiva de halos</span>
+<div class="relative">
+<input class="sr-only" type="checkbox"/>
+<div class="block bg-surface-container-high w-10 h-6 rounded-full border border-white/10"></div>
+<div class="dot absolute left-1 top-1 bg-outline-variant w-4 h-4 rounded-full transition"></div>
+</div>
+</label>
+</div>
+<!-- Action Buttons -->
+<div class="mt-auto space-y-3 pt-6">
+<button class="w-full py-3 rounded-lg bg-gradient-to-r from-primary-container to-primary text-on-primary-container font-label-md text-label-md shadow-[0_4px_15px_rgba(208,188,255,0.3)] hover:shadow-[0_6px_20px_rgba(208,188,255,0.5)] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">check_circle</span>
+                        Guardar y continuar
+                    </button>
+<button class="w-full py-3 rounded-lg neumorphic-btn text-on-surface-variant font-label-md text-label-md hover:text-on-surface flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">close</span>
+                        Cancelar
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple toggle visual logic for demonstration
+        document.querySelectorAll('input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const dot = this.parentElement.querySelector('.dot');
+                if(this.checked) {
+                    dot.classList.add('translate-x-4', 'bg-primary', 'shadow-[0_0_8px_rgba(208,188,255,0.6)]');
+                    dot.classList.remove('bg-outline-variant');
+                } else {
+                    dot.classList.remove('translate-x-4', 'bg-primary', 'shadow-[0_0_8px_rgba(208,188,255,0.6)]');
+                    dot.classList.add('bg-outline-variant');
+                }
+            });
+        });
+
+        // Simulate status change
+        setTimeout(() => {
+            const statusText = document.querySelector('.absolute.bottom-4 .text-label-sm');
+            const statusIcon = document.querySelector('.absolute.bottom-4 .material-symbols-outlined');
+            if(statusText && statusIcon) {
+                statusText.textContent = 'Detectando fondo...';
+                setTimeout(() => {
+                    statusText.textContent = 'Proceso completado';
+                    statusIcon.textContent = 'check';
+                    statusIcon.classList.remove('animate-pulse');
+                    statusIcon.classList.add('text-primary');
+                }, 2000);
+            }
+        }, 2000);
+    </script>
+</body></html>

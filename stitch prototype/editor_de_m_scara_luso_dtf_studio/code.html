@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editor de Máscara - LUSO DTF</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#283044",
+                        "on-surface": "#dbe2fd",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#060d20",
+                        "primary-fixed-dim": "#d0bcff",
+                        "primary-fixed": "#e9ddff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "surface-container-highest": "#2d3449",
+                        "tertiary": "#ffd9db",
+                        "surface-tint": "#d0bcff",
+                        "inverse-surface": "#dbe2fd",
+                        "on-surface-variant": "#cac4d0",
+                        "surface-variant": "#2d3449",
+                        "on-tertiary-fixed": "#370c12",
+                        "surface-bright": "#31394e",
+                        "on-tertiary-fixed-variant": "#6d363b",
+                        "primary": "#e9ddff",
+                        "on-background": "#dbe2fd",
+                        "on-secondary": "#003640",
+                        "outline-glow": "rgba(255, 255, 255, 0.2)",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "background": "#0b1326",
+                        "on-primary-fixed-variant": "#4d3d76",
+                        "on-secondary-fixed": "#001f26",
+                        "surface-dim": "#0b1326",
+                        "on-secondary-container": "#00424e",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-primary-fixed": "#210f48",
+                        "outline": "#948f9a",
+                        "surface-container": "#171f33",
+                        "on-tertiary-container": "#7b4147",
+                        "surface-glass": "rgba(11, 19, 38, 0.6)",
+                        "secondary-container": "#03b5d4",
+                        "surface-container-low": "#131b2e",
+                        "accent-cyan": "#00e5ff",
+                        "on-tertiary": "#522126",
+                        "secondary-fixed": "#acedff",
+                        "primary-container": "#d0bcff",
+                        "secondary": "#4cd7f6",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-primary-container": "#594983",
+                        "surface": "#0b1326",
+                        "surface-container-high": "#222a3e",
+                        "inverse-primary": "#665590",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#49454f",
+                        "on-primary": "#37265e",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "tertiary-container": "#ffb2b7",
+                        "deep-violet": "#1e0b4a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "1.5rem",
+                        "topbar-height": "72px",
+                        "sidebar-width": "280px",
+                        "container-margin": "2rem",
+                        "gutter": "1.5rem",
+                        "element-gap": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-xl": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .neu-raised {
+            box-shadow: -2px -2px 5px rgba(255, 255, 255, 0.03), 4px 4px 10px rgba(0, 0, 0, 0.6);
+        }
+        .neu-pressed {
+            box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.6), inset -2px -2px 5px rgba(255, 255, 255, 0.03);
+        }
+        .checkerboard {
+            background-color: #222a3e;
+            background-image: 
+                linear-gradient(45deg, #171f33 25%, transparent 25%, transparent 75%, #171f33 75%, #171f33),
+                linear-gradient(45deg, #171f33 25%, transparent 25%, transparent 75%, #171f33 75%, #171f33);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen w-screen overflow-hidden antialiased flex flex-col">
+<!-- Top Navigation / Workspace Header -->
+<header class="bg-surface-glass/40 backdrop-blur-[25px] border-b border-white/10 h-topbar-height flex justify-between items-center px-gutter w-full shadow-xl z-50 shrink-0">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg text-on-surface-variant hover:text-secondary hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div>
+<h1 class="font-headline-md text-primary font-bold">Editor de Máscara</h1>
+<p class="font-label-sm text-on-surface-variant">Diseño_042_Final.png</p>
+</div>
+</div>
+<div class="flex items-center gap-element-gap">
+<button class="p-2 rounded-lg text-on-surface-variant hover:text-secondary hover:bg-white/5 transition-colors" title="Deshacer">
+<span class="material-symbols-outlined">undo</span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:text-secondary hover:bg-white/5 transition-colors opacity-50 cursor-not-allowed" title="Rehacer">
+<span class="material-symbols-outlined">redo</span>
+</button>
+<div class="w-px h-6 bg-white/10 mx-2"></div>
+<button class="px-6 py-2 rounded-lg bg-surface-container font-label-md text-on-surface-variant hover:bg-white/5 transition-colors neu-raised">Cancelar</button>
+<button class="px-6 py-2 rounded-lg bg-primary-container text-on-primary-container font-label-md font-bold shadow-[0_0_15px_rgba(208,188,255,0.4)] hover:scale-95 transition-all neu-raised">Aplicar Máscara</button>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 relative flex">
+<!-- Left Toolbar (Tools) -->
+<aside class="absolute left-container-margin top-1/2 -translate-y-1/2 bg-surface-glass/60 backdrop-blur-[25px] rounded-xl border border-white/10 p-2 flex flex-col gap-2 shadow-[0_20px_40px_rgba(0,0,0,0.3)] z-40">
+<button class="p-3 rounded-lg text-primary font-bold shadow-[0_0_15px_rgba(208,188,255,0.4)] bg-primary-container/20 neu-pressed group relative" title="Selección Automática">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_fix_high</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-surface-container-high rounded text-label-sm opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none border border-white/5">Selección Automática</span>
+</button>
+<button class="p-3 rounded-lg text-on-surface-variant hover:text-secondary hover:bg-white/5 transition-colors group relative" title="Borrador">
+<span class="material-symbols-outlined">ink_eraser</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-surface-container-high rounded text-label-sm opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none border border-white/5">Borrador</span>
+</button>
+<button class="p-3 rounded-lg text-on-surface-variant hover:text-secondary hover:bg-white/5 transition-colors group relative" title="Pincel">
+<span class="material-symbols-outlined">brush</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-surface-container-high rounded text-label-sm opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none border border-white/5">Pincel</span>
+</button>
+<div class="h-px bg-white/10 mx-2 my-1"></div>
+<button class="p-3 rounded-lg text-on-surface-variant hover:text-secondary hover:bg-white/5 transition-colors group relative" title="Invertir Máscara">
+<span class="material-symbols-outlined">flip_to_back</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-surface-container-high rounded text-label-sm opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none border border-white/5">Invertir Máscara</span>
+</button>
+</aside>
+<!-- Right Toolbar (Properties) -->
+<aside class="absolute right-container-margin top-1/2 -translate-y-1/2 w-64 bg-surface-glass/60 backdrop-blur-[25px] rounded-xl border-t border-l border-white/10 p-panel-padding shadow-[0_20px_40px_rgba(0,0,0,0.3)] z-40 flex flex-col gap-6">
+<div>
+<h3 class="font-label-md text-on-surface mb-3 flex items-center justify-between">
+                    Opciones de Herramienta
+                    <span class="material-symbols-outlined text-sm text-secondary">tune</span>
+</h3>
+<div class="space-y-4">
+<div>
+<label class="font-label-sm text-on-surface-variant flex justify-between mb-1">
+<span>Tamaño</span>
+<span class="text-secondary">45px</span>
+</label>
+<div class="h-2 bg-surface-container-low rounded-full neu-pressed relative overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-secondary w-[45%] rounded-full shadow-[0_0_10px_rgba(76,215,246,0.6)]"></div>
+</div>
+</div>
+<div>
+<label class="font-label-sm text-on-surface-variant flex justify-between mb-1">
+<span>Dureza</span>
+<span class="text-secondary">80%</span>
+</label>
+<div class="h-2 bg-surface-container-low rounded-full neu-pressed relative overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-secondary w-[80%] rounded-full shadow-[0_0_10px_rgba(76,215,246,0.6)]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="h-px bg-white/10 w-full"></div>
+<div>
+<h3 class="font-label-md text-on-surface mb-3">Refinar Bordes</h3>
+<button class="w-full py-2 rounded-lg bg-surface-container-high text-on-surface hover:text-secondary hover:bg-white/5 transition-colors border border-white/5 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">filter_b_and_w</span>
+<span class="font-label-sm">Ajuste Inteligente</span>
+</button>
+</div>
+</aside>
+<!-- Canvas Area -->
+<div class="flex-1 relative checkerboard flex items-center justify-center overflow-hidden">
+<!-- Simulated Canvas Image with Mask Overlay -->
+<div class="relative w-[600px] h-[400px] shadow-2xl transform scale-100 transition-transform">
+<img class="w-full h-full object-cover rounded-sm" data-alt="A highly detailed, professional production artwork featuring a complex geometric design with vibrant liquid light colors on a dark background. The image represents a design file ready for DTF (Direct to Film) printing, showcasing high fidelity and sharp contrast, fitting the industrial, futuristic aesthetic of a modern print studio." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHdQDWuWOHkha4GY2wMD5ex_H6Kxhlmx6vLHZbzKUKGkCAKknwOKKGV_uR4WJjSHx8zavp2lOqAQ1wrVQVYM_s7rKo1oZFanfdXeDEljyfSORqWqz7E9mVpRizpbBTdXKLF815ADLoZv2RkkjqVgE8r8OI_aMQN4zIJohc1Xn__7Tl-x4jeq-AXWN3ae1qhLMO9V1qKjOIDdeiVGyMe-mlA3nAwTRxbjgfOUCMHN-3xqELuNx1lcdB8mKeDDIOOLYtN7kDbeAMxkOt"/>
+<!-- Mask Overlay Simulation -->
+<div class="absolute inset-0 bg-error/40 backdrop-blur-[1px] mix-blend-multiply" style="clip-path: circle(40% at 50% 50%);"></div>
+<!-- Selection Outline Simulation -->
+<div class="absolute inset-0 border-2 border-dashed border-secondary/80 animate-[spin_10s_linear_infinite]" style="border-radius: 50%; width: 80%; height: 80%; top: 10%; left: 10%;"></div>
+</div>
+<!-- Bottom Floating Controls (Zoom/Pan) -->
+<div class="absolute bottom-container-margin left-1/2 -translate-x-1/2 bg-surface-glass/60 backdrop-blur-[25px] rounded-full border border-white/10 px-4 py-2 flex items-center gap-4 shadow-xl">
+<span class="font-label-sm text-on-surface-variant w-12 text-center">100%</span>
+<div class="w-px h-4 bg-white/10"></div>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-sm">remove</span></button>
+<div class="w-24 h-1 bg-surface-container-low rounded-full neu-pressed relative">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full shadow-[0_0_8px_rgba(208,188,255,0.8)]"></div>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-sm">add</span></button>
+<div class="w-px h-4 bg-white/10"></div>
+<button class="text-on-surface-variant hover:text-secondary transition-colors p-1" title="Ajustar a pantalla"><span class="material-symbols-outlined text-sm">fit_screen</span></button>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html><html class="dark" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Catálogo - LUSO DTF</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#283044",
+                        "on-surface": "#dbe2fd",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#060d20",
+                        "primary-fixed-dim": "#d0bcff",
+                        "primary-fixed": "#e9ddff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "surface-container-highest": "#2d3449",
+                        "tertiary": "#ffd9db",
+                        "surface-tint": "#d0bcff",
+                        "inverse-surface": "#dbe2fd",
+                        "on-surface-variant": "#cac4d0",
+                        "surface-variant": "#2d3449",
+                        "on-tertiary-fixed": "#370c12",
+                        "surface-bright": "#31394e",
+                        "on-tertiary-fixed-variant": "#6d363b",
+                        "primary": "#e9ddff",
+                        "on-background": "#dbe2fd",
+                        "on-secondary": "#003640",
+                        "outline-glow": "rgba(255, 255, 255, 0.2)",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "background": "#0b1326",
+                        "on-primary-fixed-variant": "#4d3d76",
+                        "on-secondary-fixed": "#001f26",
+                        "surface-dim": "#0b1326",
+                        "on-secondary-container": "#00424e",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-primary-fixed": "#210f48",
+                        "outline": "#948f9a",
+                        "surface-container": "#171f33",
+                        "on-tertiary-container": "#7b4147",
+                        "surface-glass": "rgba(11, 19, 38, 0.6)",
+                        "secondary-container": "#03b5d4",
+                        "surface-container-low": "#131b2e",
+                        "accent-cyan": "#00e5ff",
+                        "on-tertiary": "#522126",
+                        "secondary-fixed": "#acedff",
+                        "primary-container": "#d0bcff",
+                        "secondary": "#4cd7f6",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-primary-container": "#594983",
+                        "surface": "#0b1326",
+                        "surface-container-high": "#222a3e",
+                        "inverse-primary": "#665590",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#49454f",
+                        "on-primary": "#37265e",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "tertiary-container": "#ffb2b7",
+                        "deep-violet": "#1e0b4a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "1.5rem",
+                        "topbar-height": "72px",
+                        "sidebar-width": "280px",
+                        "container-margin": "2rem",
+                        "gutter": "1.5rem",
+                        "element-gap": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-xl": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            overflow-x: hidden;
+        }
+
+        /* Ambient animated background elements */
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: -1;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        .blob-1 { top: 10%; left: 10%; width: 500px; height: 500px; background: theme('colors.primary'); }
+        .blob-2 { bottom: 20%; right: 10%; width: 400px; height: 400px; background: theme('colors.secondary'); animation-delay: -5s; }
+        .blob-3 { top: 50%; left: 50%; width: 600px; height: 600px; background: theme('colors.tertiary'); transform: translate(-50%, -50%); animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -50px) scale(1.1); }
+        }
+
+        /* Neumorphic & Glassmorphic Utilities */
+        .neu-raised {
+            background: linear-gradient(135deg, theme('colors.surface-container-high') 0%, theme('colors.surface-container') 100%);
+            box-shadow: -2px -2px 6px rgba(255,255,255,0.03), 4px 4px 10px rgba(0,0,0,0.6);
+            border: 1px solid theme('colors.outline-variant');
+        }
+        
+        .neu-pressed {
+            background: theme('colors.surface-container-lowest');
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5), inset -1px -1px 3px rgba(255,255,255,0.02);
+            border: 1px solid theme('colors.outline-variant');
+        }
+
+        .glass-panel {
+            background: theme('colors.surface-glass');
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Ambient Glows for Cards */
+        .glow-primary { position: relative; }
+        .glow-primary::before {
+            content: ''; position: absolute; inset: -2px; z-index: -1;
+            background: theme('colors.primary-container'); filter: blur(15px); opacity: 0; transition: opacity 0.3s ease; border-radius: inherit;
+        }
+        .glow-primary:hover::before { opacity: 0.5; }
+
+        .glow-secondary { position: relative; }
+        .glow-secondary::before {
+            content: ''; position: absolute; inset: -2px; z-index: -1;
+            background: theme('colors.secondary-container'); filter: blur(15px); opacity: 0; transition: opacity 0.3s ease; border-radius: inherit;
+        }
+        .glow-secondary:hover::before { opacity: 0.5; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: theme('colors.surface-container-lowest'); }
+        ::-webkit-scrollbar-thumb { background: theme('colors.surface-variant'); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: theme('colors.outline'); }
+    </style>
+</head>
+<body class="antialiased min-h-screen font-body-md text-body-md selection:bg-secondary/30 selection:text-secondary-fixed bg-background">
+<!-- Ambient Background -->
+<div class="ambient-blob blob-1"></div>
+<div class="ambient-blob blob-2"></div>
+<div class="ambient-blob blob-3"></div>
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col gap-element-gap p-panel-padding bg-surface-glass/60 backdrop-blur-[25px] fixed left-4 top-4 bottom-4 w-sidebar-width rounded-xl border-t border-l border-white/10 shadow-2xl z-50">
+<!-- Header -->
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-lg bg-primary-container/20 flex items-center justify-center border border-primary/20">
+<img class="w-8 h-8 object-contain" data-alt="A stylized, high-tech industrial logo icon for 'LUSO DTF', rendered in a vibrant neon purple and deep space black, embodying a futuristic liquid light aesthetic with crisp glassmorphic elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5wzqsqRJF3yjG08zZJxY3PRIztNWLepgYAzmzbkb5Oy76mvRe7l2Iw_21yR_FAoxyD0t47Mw8joCNxPxP5FfLJl9UCMIE3n4tEVX2qv539bJq72v6yoCanOpDRdqcVC7jO5Ef09CSLqftST_nJ8eYG8h4feLnfRqBhabOM21VZZ5hKjrkulaOwK1KxFmE-QMETBlEn6V9efLDJiZXEI2WLApc3N6ZSTALVCyoO24mgH-B6B6pDEWWVjVr5I5GUglm_MlREdUCCMcz">
+</div>
+<div>
+<h1 class="font-display-xl text-primary font-extrabold tracking-tighter" style="font-size: 20px; line-height: 1;">LUSO DTF</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Estudio de Producción</p>
+</div>
+</div>
+<button class="w-full neu-raised py-3 rounded-lg flex items-center justify-center gap-2 text-primary font-label-md text-label-md hover:bg-white/5 transition-all duration-300 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">add_circle</span>
+            Nueva Órden
+        </button>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 duration-300" href="#">
+<span class="material-symbols-outlined">home</span>
+                Inicio
+            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 duration-300" href="#">
+<span class="material-symbols-outlined">manufacturing</span>
+                Trabajos
+            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-primary font-bold shadow-[0_0_15px_rgba(208,188,255,0.4)] bg-primary-container/20 neu-pressed font-label-md text-label-md transition-transform scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">draw</span>
+                Mis diseños
+            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 duration-300" href="#">
+<span class="material-symbols-outlined">settings_suggest</span>
+                Perfiles
+            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Configuración
+            </a>
+</div>
+<!-- User Avatar Footer (Implicit in sidebar structure) -->
+<div class="mt-auto pt-4 border-t border-white/5 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A futuristic avatar portrait of an industrial designer, illuminated by soft neon cyan and purple rim lighting, against a dark metallic background, high fidelity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5BLnx8M7FSGCXvfVDfS41eiDldnsNPlfdcJ-QVwz5UYtGJMJ2qjuWNKsWiaLguqcUvzPUTqKSU294fXUCb0_mQZI0fJ-pC_Oobvx-bDnOtXmbsXutz-kPUNNGpvgdApK957wwujPBYhR5tjiE8hhCZKwGp1T6LIbLebJc_JzDCFGuLDRrFkP9es0K-HdNbTliUfnNlFS00zIMmOeSkMp3LDKtgZI2--nTLOhM5AN25lObWot20DIvofC1j8uz_vPI58Ij8fkOo6kp">
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">Usuario de LUSO DTF</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Premium Plan</p>
+</div>
+</div>
+</nav>
+<!-- TopNavBar (Shared Component) -->
+<header class="hidden md:flex justify-between items-center px-gutter w-full bg-surface-glass/40 backdrop-blur-[25px] fixed top-4 right-4 left-[312px] h-topbar-height rounded-xl border-t border-l border-white/10 shadow-xl z-40 transition-all backdrop-blur-md" style="width: calc(100% - 312px - 1rem);">
+<div class="flex items-center gap-6">
+<h2 class="font-headline-md text-primary font-bold">Catálogo</h2>
+<nav class="flex items-center gap-4 border-l border-white/10 pl-6 h-8">
+<a class="text-secondary border-b-2 border-secondary pb-1 font-bold font-label-sm text-label-sm transition-colors hover:text-secondary hover:scale-98" href="#">Diseños</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm transition-colors hover:text-secondary hover:scale-98" href="#">Preparación</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm transition-colors hover:text-secondary hover:scale-98" href="#">Revisión</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm transition-colors hover:text-secondary hover:scale-98" href="#">Nesting</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm transition-colors hover:text-secondary hover:scale-98" href="#">Planchas</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm transition-colors hover:text-secondary hover:scale-98" href="#">Exportación</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative w-64 neu-pressed rounded-full flex items-center px-4 py-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-on-surface font-body-md text-body-md w-full placeholder-on-surface-variant/50 caret-secondary text-sm" placeholder="Buscar en catálogo..." type="text">
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="pt-[104px] pb-8 md:pl-[312px] px-4 md:pr-8 min-h-screen max-w-[1600px] mx-auto flex flex-col gap-8 bg-transparent">
+<!-- Filters & Categories Bar -->
+<section class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full glass-panel rounded-xl p-4 bg-surface-glass/40">
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-4 py-2 rounded-full font-label-md text-label-md bg-primary-container text-on-primary-container shadow-[0_0_10px_rgba(208,188,255,0.3)] transition-all">Todos</button>
+<button class="px-4 py-2 rounded-full font-label-md text-label-md border border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary transition-all">Anime</button>
+<button class="px-4 py-2 rounded-full font-label-md text-label-md border border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary transition-all">Gaming</button>
+<button class="px-4 py-2 rounded-full font-label-md text-label-md border border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary transition-all">Urbano</button>
+<button class="px-4 py-2 rounded-full font-label-md text-label-md border border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary transition-all">Retro</button>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ordenar por:</span>
+<select class="neu-pressed rounded-lg border-none text-on-surface font-label-sm text-label-sm py-2 pl-3 pr-8 focus:ring-1 focus:ring-secondary appearance-none bg-transparent">
+<option class="bg-surface">Más recientes</option>
+<option class="bg-surface">Más populares</option>
+<option class="bg-surface">Premium primero</option>
+</select>
+</div>
+</section>
+<!-- Bento Grid Catalog -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1: Anime (Premium) -->
+<article class="glass-panel rounded-xl overflow-hidden flex flex-col group glow-secondary">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A highly detailed, vibrant anime-style illustration of a cyberpunk samurai in a neon-lit futuristic city, rich cyans and magentas, liquid light aesthetic, high resolution suitable for DTF printing." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAK7LLoAAPYDZ-frxN3T60Lhh5LEaYN2yw1RjdSPrTgoXjhy_HLTBv2Fc-r8MiTlGImJdEtKw1ikgrsOuKxM1z87g9TR4gRmKZKDV7AuTxhZtALGt9Txs4muTl4y6OVTZ4D12nUnhY48LSY3CKT6MKc1de7Tsaef69FS_p9d02KKyehMmGbPCN0Q7VSUIHr6S0wEquFa3_1LEn6ifaAMm2GlA17zD0GjGqyD_Ke_BBZ4HVOwybJj0MnJs3hZ1oHCw90BYGeuW149rje')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+<!-- Premium Badge -->
+<div class="absolute top-3 right-3 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full flex items-center gap-1 shadow-lg backdrop-blur-md bg-opacity-90">
+<span class="material-symbols-outlined text-[14px]">diamond</span>
+<span class="font-label-sm text-label-sm font-bold">Premium</span>
+</div>
+<div class="absolute top-3 left-3 bg-surface-glass backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+<span class="font-label-sm text-label-sm text-on-surface">Anime</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-4 flex-1">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Cyber Samurai V2</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm line-clamp-2">Diseño vectorial de alta resolución optimizado para impresión DTF sobre fondos oscuros.</p>
+</div>
+<div class="flex flex-wrap gap-2 mt-auto">
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">300 DPI</span>
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">CMYK + White</span>
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">Vector</span>
+</div>
+<button class="w-full neu-raised py-2.5 rounded-lg text-secondary font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-secondary/10 transition-colors mt-2">
+<span class="material-symbols-outlined text-[18px]">add_task</span>
+                        Agregar al trabajo
+                    </button>
+</div>
+</article>
+<!-- Card 2: Urbano (Standard) -->
+<article class="glass-panel rounded-xl overflow-hidden flex flex-col group hover:border-primary/30 transition-colors">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A gritty, urban streetwear graphic design featuring distorted typography and abstract spray paint textures in a monochromatic palette with bright cyan accents, high contrast." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDhV8FdCk_kxUuvJYmKlFSv53iOltwy7E_e0_BhHGu7-HZJVt2g_ipvOgPFWbhm5ijZvcle6SwuZyx9xG9e0iVumm9vmao5wSFWRtC2Ho_wM2JdRk2HYjiko3t4Pzhk7air8lhrplxzuhTZZkxqv7zHOMeSuK2lTg90Gt6RloB1N-IE0ZFNFY7S17qMAUjb4YhUAwo9tlZqaN3OHKsCamODEjuGc0Y9b1zClB5rY1k4F-O82nBcFiDW3jueV2gIxu9jxEX26iO_TTOW')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+<div class="absolute top-3 left-3 bg-surface-glass backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+<span class="font-label-sm text-label-sm text-on-surface">Urbano</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-4 flex-1">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Urban Decay Type</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm line-clamp-2">Tipografía grunge con elementos de desgaste, ideal para streetwear.</p>
+</div>
+<div class="flex flex-wrap gap-2 mt-auto">
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">PNG</span>
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">Transparente</span>
+</div>
+<button class="w-full border border-outline-variant py-2.5 rounded-lg text-on-surface font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-white/5 transition-colors mt-2">
+<span class="material-symbols-outlined text-[18px]">add_task</span>
+                        Agregar al trabajo
+                    </button>
+</div>
+</article>
+<!-- Card 3: Gaming (Premium) -->
+<article class="glass-panel rounded-xl overflow-hidden flex flex-col group glow-primary">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="An isometric 3D render of a retro-futuristic arcade cabinet glowing with neon purple and pink lights, set against a dark void, stylized for gaming apparel prints." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhhTq_Yw6XnJCvFHTRaK5TS1eKhKvQXDBh1bERd5Rs3NjdKODLD-WW3IPjc-JSQfsEfpBI_PKXqwkP-r-jCZ53zXNtcq5eozzIes6auw15NrDGht50zoV7wv8suw8Of9KAGrcnnUbPIyqGt-UBlr1H0K4v5AqEWcBq4HZf9dYikBsqm2_JAzml9pJSYXK4dtDN0Be0d4XjmRUNg7B7z_xinnVEiT8AusTrYDCSKUmLoYPk6C10xA05RCtkKiCYxFD0PTMwh4eU7tZN')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+<!-- Premium Badge -->
+<div class="absolute top-3 right-3 bg-primary-container text-on-primary-container px-3 py-1 rounded-full flex items-center gap-1 shadow-lg backdrop-blur-md bg-opacity-90">
+<span class="material-symbols-outlined text-[14px]">diamond</span>
+<span class="font-label-sm text-label-sm font-bold">Premium</span>
+</div>
+<div class="absolute top-3 left-3 bg-surface-glass backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+<span class="font-label-sm text-label-sm text-on-surface">Gaming</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-4 flex-1">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Neon Arcade 3D</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm line-clamp-2">Render 3D isométrico con separación de color perfecta para DTF.</p>
+</div>
+<div class="flex flex-wrap gap-2 mt-auto">
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">4K Res</span>
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">Separado</span>
+</div>
+<button class="w-full neu-raised py-2.5 rounded-lg text-primary font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-primary/10 transition-colors mt-2">
+<span class="material-symbols-outlined text-[18px]">add_task</span>
+                        Agregar al trabajo
+                    </button>
+</div>
+</article>
+<!-- Card 4: Retro (Standard) -->
+<article class="glass-panel rounded-xl overflow-hidden flex flex-col group hover:border-secondary/30 transition-colors">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A vintage 1980s synthwave sunset graphic with palm tree silhouettes and wireframe mountains, classic vibrant orange, magenta, and deep blue colors, clean edges for printing." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuABk4JtUi73eUD15jUOT1DBcWEsB6_-uc6L0qleigjyKRQIV62wWshiuImpeZNryLvF4qwsppbJzgelRLs-BGcBEbLK9J2mhWLaSIcH-LdRCNdw7AoKwoGiHP15gsZYKIKbf-Id6TPk8GWgUwLKXtGk48SgKzBRa8-XBvOAFrPpyhhXjuImIMcklkyasImx2k6D411n-sE_RIDIWLO-PpeOHo2egBkEcYUqrx20ONeCU0ptk6dHAxjftI4eZqd_5a9IFuFUDVx-YpT6')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+<div class="absolute top-3 left-3 bg-surface-glass backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+<span class="font-label-sm text-label-sm text-on-surface">Retro</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-4 flex-1">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Synthwave Sunset</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm line-clamp-2">Clásico diseño retrowave de los 80s, colores sólidos sin degradados complejos.</p>
+</div>
+<div class="flex flex-wrap gap-2 mt-auto">
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">Vector EPS</span>
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px] border border-outline-variant/30">3 Colores</span>
+</div>
+<button class="w-full border border-outline-variant py-2.5 rounded-lg text-on-surface font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-white/5 transition-colors mt-2">
+<span class="material-symbols-outlined text-[18px]">add_task</span>
+                        Agregar al trabajo
+                    </button>
+</div>
+</article>
+</section>
+<!-- Pagination / Load More -->
+<div class="flex justify-center mt-8">
+<button class="glass-panel px-8 py-3 rounded-full text-on-surface font-label-md text-label-md hover:text-primary hover:border-primary/50 transition-all flex items-center gap-2">
+                 Cargar más diseños
+                 <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</main>
+
+
+</body></html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Configuración de Plancha - LUSO DTF</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-on-surface": "#283044",
+                      "on-surface": "#dbe2fd",
+                      "error": "#ffb4ab",
+                      "surface-container-lowest": "#060d20",
+                      "primary-fixed-dim": "#d0bcff",
+                      "primary-fixed": "#e9ddff",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "surface-container-highest": "#2d3449",
+                      "tertiary": "#ffd9db",
+                      "surface-tint": "#d0bcff",
+                      "inverse-surface": "#dbe2fd",
+                      "on-surface-variant": "#cac4d0",
+                      "surface-variant": "#2d3449",
+                      "on-tertiary-fixed": "#370c12",
+                      "surface-bright": "#31394e",
+                      "on-tertiary-fixed-variant": "#6d363b",
+                      "primary": "#e9ddff",
+                      "on-background": "#dbe2fd",
+                      "on-secondary": "#003640",
+                      "outline-glow": "rgba(255, 255, 255, 0.2)",
+                      "error-container": "#93000a",
+                      "on-error": "#690005",
+                      "background": "#0b1326",
+                      "on-primary-fixed-variant": "#4d3d76",
+                      "on-secondary-fixed": "#001f26",
+                      "surface-dim": "#0b1326",
+                      "on-secondary-container": "#00424e",
+                      "tertiary-fixed": "#ffdadb",
+                      "on-primary-fixed": "#210f48",
+                      "outline": "#948f9a",
+                      "surface-container": "#171f33",
+                      "on-tertiary-container": "#7b4147",
+                      "surface-glass": "rgba(11, 19, 38, 0.6)",
+                      "secondary-container": "#03b5d4",
+                      "surface-container-low": "#131b2e",
+                      "accent-cyan": "#00e5ff",
+                      "on-tertiary": "#522126",
+                      "secondary-fixed": "#acedff",
+                      "primary-container": "#d0bcff",
+                      "secondary": "#4cd7f6",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "on-primary-container": "#594983",
+                      "surface": "#0b1326",
+                      "surface-container-high": "#222a3e",
+                      "inverse-primary": "#665590",
+                      "on-error-container": "#ffdad6",
+                      "outline-variant": "#49454f",
+                      "on-primary": "#37265e",
+                      "tertiary-fixed-dim": "#ffb2b7",
+                      "tertiary-container": "#ffb2b7",
+                      "deep-violet": "#1e0b4a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "panel-padding": "1.5rem",
+                      "topbar-height": "72px",
+                      "sidebar-width": "280px",
+                      "container-margin": "2rem",
+                      "gutter": "1.5rem",
+                      "element-gap": "1rem"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "display-xl": ["Plus Jakarta Sans"],
+                      "label-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "display-xl-mobile": ["Plus Jakarta Sans"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                      "display-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "display-xl-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Neumorphic utilities */
+        .neu-pressed {
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.03);
+            background: rgba(45, 52, 73, 0.4); /* surface-container-highest adjusted */
+        }
+        .neu-raised {
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(255,255,255,0.05);
+            background: #2d3449;
+        }
+        .glass-panel {
+            background-color: rgba(11, 19, 38, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Animated Background Shader Simulation */
+        .bg-shader {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background: linear-gradient(to bottom right, #060d20, #0b1326);
+            overflow: hidden;
+        }
+        .bg-shader::before, .bg-shader::after {
+            content: '';
+            position: absolute;
+            width: 80vw; height: 80vw;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        .bg-shader::before {
+            background: radial-gradient(circle, #00e5ff, transparent 60%);
+            top: -20%; left: -10%;
+        }
+        .bg-shader::after {
+            background: radial-gradient(circle, #d0bcff, transparent 60%);
+            bottom: -20%; right: -10%;
+            animation-delay: -10s;
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(5%, 5%) scale(1.1); }
+        }
+
+        /* Segmented Control Custom Styling */
+        input[type="radio"]:checked + label.segmented-btn {
+            background: rgba(208, 188, 255, 0.2);
+            color: #4cd7f6;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5), inset -2px -2px 5px rgba(255,255,255,0.05);
+            border-color: rgba(76, 215, 246, 0.5);
+        }
+        
+        /* Custom Scrollbar for inner elements if needed */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen relative overflow-x-hidden selection:bg-secondary selection:text-on-secondary">
+<!-- Background Shader -->
+<div class="bg-shader"></div>
+<!-- SideNavBar -->
+<aside class="fixed hidden md:flex left-4 top-4 bottom-4 w-sidebar-width rounded-xl border-t border-l border-white/10 bg-surface-glass/60 backdrop-blur-[25px] shadow-[0_20px_40px_rgba(0,0,0,0.3)] shadow-2xl flex-col gap-element-gap p-panel-padding z-50 transition-all duration-300">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-white/10 shrink-0">
+<img alt="Usuario de LUSO DTF" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, futuristic metallic emblem glowing with a subtle cyan edge light against a very dark matte background. The emblem has geometric, technical details suggesting precision engineering. High contrast, sharp focus, cinematic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC52vHvY36IX_cQ8xNsD-D6YKIbcuiHUIqWd-G1brh7ON8ur8T6CG8Mr-54ryaPHjPTpY3V10t1l6cvT1E5AVT6f1AyHicczRVIbtVist7rzhHtf0E0tQpVvrLbZnBwxLpDisksKJkIMMANf1k7-jWyED3xkwQ-52_7baenGP3PjNA3zDvSNv6XKKmDQNt_14aen_f8nVo4w54pJYDSlYtY7CZHSy5YIODkakl18s7M1Vn56RS1iT2ZK-4AsCVVBo5xJS8g5wFryNp"/>
+</div>
+<div>
+<h1 class="font-display-xl text-primary font-extrabold tracking-tighter" style="font-size: 24px; line-height: 1;">LUSO DTF</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Estudio de Producción</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 transition-all duration-300 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 transition-all duration-300 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">manufacturing</span>
+<span class="font-label-md text-label-md">Trabajos</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 transition-all duration-300 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">draw</span>
+<span class="font-label-md text-label-md">Mis diseños</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 transition-all duration-300 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">settings_suggest</span>
+<span class="font-label-md text-label-md">Perfiles</span>
+</a>
+<!-- Active -->
+<a class="flex items-center gap-3 text-primary font-bold shadow-[0_0_15px_rgba(208,188,255,0.4)] bg-primary-container/20 rounded-lg p-3 neu-pressed scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</nav>
+<button class="w-full mt-auto py-3 px-4 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-[0_0_20px_rgba(233,221,255,0.3)] hover:bg-white transition-all duration-300 neu-raised hover:scale-105 active:scale-95 flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-lg">add</span>
+            Nueva Órden
+        </button>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed hidden md:flex top-4 right-4 left-[312px] h-topbar-height rounded-xl border-t border-l border-white/10 bg-surface-glass/40 backdrop-blur-[25px] shadow-[0_10px_30px_rgba(0,0,0,0.2)] shadow-xl justify-between items-center px-gutter z-40 transition-all duration-300">
+<div class="flex items-center gap-6">
+<h2 class="font-headline-md text-primary font-bold">Workflow: Preparación</h2>
+<div class="h-6 w-px bg-white/10 mx-2"></div>
+<nav class="flex gap-6">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Diseños</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Preparación</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Revisión</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Nesting</a>
+<!-- Active -->
+<a class="text-secondary border-b-2 border-secondary pb-1 font-bold font-label-sm text-label-sm relative" href="#">
+                    Planchas
+                    <span class="absolute -bottom-[2px] left-0 w-full h-[2px] bg-secondary shadow-[0_0_10px_#4cd7f6]"></span>
+</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Exportación</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-white/5 transition-colors text-on-surface-variant hover:text-secondary relative group">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-accent-cyan shadow-[0_0_8px_#00e5ff]"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-white/5 transition-colors text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[104px] pb-8 px-4 md:pl-[312px] md:pr-4 lg:pr-8 xl:pr-12 w-full max-w-[1600px] mx-auto min-h-screen flex flex-col">
+<!-- Page Header -->
+<div class="mb-6 flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-on-surface mb-2">Configuración de Plancha</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Define los parámetros técnicos y dimensiones para la generación automática de archivos de impresión.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-white transition-colors border border-outline-variant hover:border-white/30 bg-surface-container/50">
+                    Restaurar
+                </button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-primary bg-primary neu-raised hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(208,188,255,0.2)]">
+                    Guardar Perfil
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 flex-grow">
+<!-- Left Column: Settings Form (Glass Panel) -->
+<div class="xl:col-span-5 glass-panel rounded-xl p-6 flex flex-col gap-8 relative shadow-2xl overflow-hidden">
+<!-- Ambient glow behind panel -->
+<div class="absolute -top-32 -left-32 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex items-center justify-between border-b border-white/5 pb-4">
+<h3 class="font-headline-md text-headline-md text-primary">Parámetros</h3>
+<span class="material-symbols-outlined text-on-surface-variant">tune</span>
+</div>
+<div class="space-y-6 relative z-10">
+<!-- Dimension: Width -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">straighten</span>
+                            Ancho de Bobina (mm)
+                        </label>
+<div class="relative">
+<input class="w-full bg-surface-container-highest border-none text-on-surface font-body-lg text-body-lg rounded-lg p-3 pl-4 focus:ring-1 focus:ring-secondary caret-secondary neu-pressed outline-none transition-all" type="number" value="600"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-sm text-label-sm">mm</span>
+</div>
+</div>
+<!-- Dimension: Length Mode -->
+<div class="space-y-3">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">rule</span>
+                            Modo de Longitud
+                        </label>
+<div class="grid grid-cols-3 gap-2 bg-surface-container-lowest p-1 rounded-lg border border-white/5 shadow-inner">
+<div class="relative">
+<input checked="" class="sr-only" id="mode_exact" name="length_mode" type="radio"/>
+<label class="segmented-btn flex justify-center items-center py-2 rounded-md font-label-sm text-label-sm text-on-surface-variant cursor-pointer transition-all border border-transparent hover:bg-white/5" for="mode_exact">
+                                    Exacta
+                                </label>
+</div>
+<div class="relative">
+<input class="sr-only" id="mode_blocks" name="length_mode" type="radio"/>
+<label class="segmented-btn flex justify-center items-center py-2 rounded-md font-label-sm text-label-sm text-on-surface-variant cursor-pointer transition-all border border-transparent hover:bg-white/5" for="mode_blocks">
+                                    Bloques Fijos
+                                </label>
+</div>
+<div class="relative">
+<input class="sr-only" id="mode_auto" name="length_mode" type="radio"/>
+<label class="segmented-btn flex justify-center items-center py-2 rounded-md font-label-sm text-label-sm text-on-surface-variant cursor-pointer transition-all border border-transparent hover:bg-white/5" for="mode_auto">
+                                    Automática
+                                </label>
+</div>
+</div>
+</div>
+<!-- Margins Grid -->
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">crop_free</span>
+                                Márgenes (mm)
+                            </label>
+<button class="text-secondary hover:text-accent-cyan p-1 rounded-full hover:bg-white/5 transition-colors" title="Vincular márgenes">
+<span class="material-symbols-outlined text-[16px]">link</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-sm text-[10px] uppercase tracking-wider">Sup</span>
+<input class="w-full bg-surface-container-highest border-none text-on-surface font-body-md rounded-lg py-2 pl-10 pr-3 focus:ring-1 focus:ring-secondary caret-secondary neu-pressed outline-none text-right" type="number" value="15"/>
+</div>
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-sm text-[10px] uppercase tracking-wider">Inf</span>
+<input class="w-full bg-surface-container-highest border-none text-on-surface font-body-md rounded-lg py-2 pl-10 pr-3 focus:ring-1 focus:ring-secondary caret-secondary neu-pressed outline-none text-right" type="number" value="15"/>
+</div>
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-sm text-[10px] uppercase tracking-wider">Izq</span>
+<input class="w-full bg-surface-container-highest border-none text-on-surface font-body-md rounded-lg py-2 pl-10 pr-3 focus:ring-1 focus:ring-secondary caret-secondary neu-pressed outline-none text-right" type="number" value="10"/>
+</div>
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-sm text-[10px] uppercase tracking-wider">Der</span>
+<input class="w-full bg-surface-container-highest border-none text-on-surface font-body-md rounded-lg py-2 pl-10 pr-3 focus:ring-1 focus:ring-secondary caret-secondary neu-pressed outline-none text-right" type="number" value="10"/>
+</div>
+</div>
+</div>
+<!-- Spacing -->
+<div class="space-y-2 pt-4 border-t border-white/5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">format_letter_spacing</span>
+                            Espaciado entre Elementos
+                        </label>
+<div class="flex items-center gap-4">
+<input class="w-full h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-secondary" max="20" min="0" type="range" value="5"/>
+<div class="relative w-20 shrink-0">
+<input class="w-full bg-surface-container-highest border-none text-on-surface font-body-md rounded-lg py-2 text-center focus:ring-1 focus:ring-secondary caret-secondary neu-pressed outline-none" type="number" value="5"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Preview (Glass Panel) -->
+<div class="xl:col-span-7 glass-panel rounded-xl p-6 flex flex-col shadow-2xl relative overflow-hidden h-[600px] xl:h-auto">
+<!-- Ambient glow behind panel -->
+<div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex justify-between items-center mb-6 z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+                        Vista Previa
+                        <span class="px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant text-[10px] font-mono text-secondary">1:10 Escala</span>
+</h3>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-container hover:bg-surface-bright transition-colors text-on-surface-variant border border-white/5">
+<span class="material-symbols-outlined text-[18px]">zoom_in</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container hover:bg-surface-bright transition-colors text-on-surface-variant border border-white/5">
+<span class="material-symbols-outlined text-[18px]">zoom_out</span>
+</button>
+</div>
+</div>
+<!-- Canvas Area -->
+<div class="flex-grow bg-surface-container-lowest/50 rounded-lg border border-white/5 neu-pressed overflow-hidden flex items-center justify-center p-8 relative z-10">
+<!-- The Print Sheet Representation -->
+<div class="bg-inverse-on-surface/80 border border-outline-variant w-full max-w-[300px] h-[450px] relative shadow-lg transform transition-transform duration-500 hover:scale-[1.02]">
+<!-- Margins representation (dashed border) -->
+<div class="absolute inset-[15px] border-2 border-dashed border-secondary/40 pointer-events-none z-10"></div>
+<!-- Label: Margins -->
+<div class="absolute top-[2px] left-1/2 -translate-x-1/2 text-[9px] font-mono text-secondary/60">Margen Sup: 15mm</div>
+<div class="absolute -left-[30px] top-1/2 -translate-y-1/2 -rotate-90 text-[9px] font-mono text-secondary/60">Izq: 10mm</div>
+<!-- Content Simulation (Nesting Blocks) -->
+<div class="absolute inset-[15px] p-2 flex flex-wrap gap-2 content-start overflow-hidden opacity-80">
+<!-- Block 1 -->
+<div class="w-[80px] h-[100px] bg-primary/20 border border-primary/50 rounded flex items-center justify-center text-primary/50">
+<span class="material-symbols-outlined text-2xl">image</span>
+</div>
+<!-- Block 2 -->
+<div class="w-[120px] h-[60px] bg-primary/20 border border-primary/50 rounded flex items-center justify-center text-primary/50">
+<span class="material-symbols-outlined text-2xl">image</span>
+</div>
+<!-- Block 3 -->
+<div class="w-[60px] h-[60px] bg-primary/20 border border-primary/50 rounded flex items-center justify-center text-primary/50">
+<span class="material-symbols-outlined text-2xl">image</span>
+</div>
+<!-- Block 4 -->
+<div class="w-[100px] h-[80px] bg-primary/20 border border-primary/50 rounded flex items-center justify-center text-primary/50">
+<span class="material-symbols-outlined text-2xl">image</span>
+</div>
+<!-- Block 5 -->
+<div class="w-[140px] h-[120px] bg-primary/20 border border-primary/50 rounded flex items-center justify-center text-primary/50">
+<span class="material-symbols-outlined text-2xl">image</span>
+</div>
+</div>
+<!-- Dimensions overlay -->
+<div class="absolute -bottom-6 left-0 w-full flex justify-between text-[10px] font-mono text-on-surface-variant border-t border-outline-variant pt-1">
+<span>0</span>
+<span class="text-primary font-bold">Ancho: 600mm</span>
+<span>600</span>
+</div>
+</div>
+</div>
+<!-- Legend -->
+<div class="mt-4 flex gap-4 text-[11px] font-label-sm text-on-surface-variant justify-center z-10">
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 bg-inverse-on-surface border border-outline-variant"></div>
+                        Área Total
+                    </div>
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 border-2 border-dashed border-secondary/60"></div>
+                        Área de Impresión
+                    </div>
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 bg-primary/20 border border-primary/50"></div>
+                        Diseños (Nesting)
+                    </div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for segmented control visual feedback
+        const radioInputs = document.querySelectorAll('input[name="length_mode"]');
+        radioInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                // Remove active class from all labels (handled mostly by CSS :checked, but good for complex JS logic later)
+                console.log(`Mode changed to: ${e.target.id}`);
+            });
+        });
+    </script>
+</body></html>

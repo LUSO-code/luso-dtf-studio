@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trabajos - LUSO DTF</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#283044",
+                        "on-surface": "#dbe2fd",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#060d20",
+                        "primary-fixed-dim": "#d0bcff",
+                        "primary-fixed": "#e9ddff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "surface-container-highest": "#2d3449",
+                        "tertiary": "#ffd9db",
+                        "surface-tint": "#d0bcff",
+                        "inverse-surface": "#dbe2fd",
+                        "on-surface-variant": "#cac4d0",
+                        "surface-variant": "#2d3449",
+                        "on-tertiary-fixed": "#370c12",
+                        "surface-bright": "#31394e",
+                        "on-tertiary-fixed-variant": "#6d363b",
+                        "primary": "#e9ddff",
+                        "on-background": "#dbe2fd",
+                        "on-secondary": "#003640",
+                        "outline-glow": "rgba(255, 255, 255, 0.2)",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "background": "#0b1326",
+                        "on-primary-fixed-variant": "#4d3d76",
+                        "on-secondary-fixed": "#001f26",
+                        "surface-dim": "#0b1326",
+                        "on-secondary-container": "#00424e",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-primary-fixed": "#210f48",
+                        "outline": "#948f9a",
+                        "surface-container": "#171f33",
+                        "on-tertiary-container": "#7b4147",
+                        "surface-glass": "rgba(11, 19, 38, 0.6)",
+                        "secondary-container": "#03b5d4",
+                        "surface-container-low": "#131b2e",
+                        "accent-cyan": "#00e5ff",
+                        "on-tertiary": "#522126",
+                        "secondary-fixed": "#acedff",
+                        "primary-container": "#d0bcff",
+                        "secondary": "#4cd7f6",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-primary-container": "#594983",
+                        "surface": "#0b1326",
+                        "surface-container-high": "#222a3e",
+                        "inverse-primary": "#665590",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#49454f",
+                        "on-primary": "#37265e",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "tertiary-container": "#ffb2b7",
+                        "deep-violet": "#1e0b4a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "1.5rem",
+                        "topbar-height": "72px",
+                        "sidebar-width": "280px",
+                        "container-margin": "2rem",
+                        "gutter": "1.5rem",
+                        "element-gap": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-xl": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b1326; /* theme('colors.background') */
+            color: #dbe2fd; /* theme('colors.on-background') */
+            overflow-x: hidden;
+        }
+
+        /* Ambient Animated Background Shader Placeholder */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(208, 188, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(76, 215, 246, 0.1) 0%, transparent 50%);
+            animation: pulse-ambient 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-ambient {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Neumorphic Utilities */
+        .neu-raised {
+            box-shadow: -2px -2px 5px rgba(255, 255, 255, 0.03), 2px 2px 5px rgba(0, 0, 0, 0.6);
+        }
+        
+        .neu-pressed {
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.6), inset -2px -2px 5px rgba(255, 255, 255, 0.03);
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* Glassmorphic Base for Cards/Panels */
+        .glass-panel {
+            background-color: rgba(11, 19, 38, 0.6); /* surface-glass */
+            backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Ambient Glow behind high priority items */
+        .glow-primary {
+            position: relative;
+        }
+        .glow-primary::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            background: rgba(208, 188, 255, 0.2);
+            filter: blur(20px);
+            border-radius: inherit;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+<div class="ambient-bg"></div>
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col gap-element-gap p-panel-padding bg-surface-glass/60 backdrop-blur-[25px] shadow-2xl fixed left-4 top-4 bottom-4 w-sidebar-width rounded-xl border-t border-l border-white/10 z-50 shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+<div class="mb-8 flex flex-col items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/30 neu-raised flex items-center justify-center bg-surface-container">
+<span class="material-symbols-outlined text-3xl text-primary">account_circle</span>
+</div>
+<div class="text-center">
+<h1 class="font-display-xl text-primary font-extrabold tracking-tighter text-2xl">LUSO DTF</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Estudio de Producción</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 flex-grow">
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors rounded-lg hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</a>
+<!-- Active: Trabajos -->
+<a class="flex items-center gap-3 text-primary font-bold shadow-[0_0_15px_rgba(208,188,255,0.4)] bg-primary-container/20 rounded-lg p-3 neu-pressed scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">manufacturing</span>
+<span class="font-label-md text-label-md">Trabajos</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors rounded-lg hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">draw</span>
+<span class="font-label-md text-label-md">Mis diseños</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors rounded-lg hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-label-md text-label-md">Perfiles</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors rounded-lg hover:bg-white/5 transition-all duration-300 mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+<button class="mt-4 w-full py-3 bg-primary/10 text-primary font-label-md text-label-md rounded-lg neu-raised hover:bg-primary/20 transition-colors flex items-center justify-center gap-2 border border-primary/20">
+<span class="material-symbols-outlined text-sm">add</span>
+            Nueva Órden
+        </button>
+</nav>
+<!-- TopNavBar (Shared Component - Adapted for generic context as requested screen isn't a sub-workflow) -->
+<header class="hidden md:flex justify-between items-center px-gutter bg-surface-glass/40 backdrop-blur-[25px] shadow-xl fixed top-4 right-4 left-[312px] h-topbar-height rounded-xl border-t border-l border-white/10 z-40 shadow-[0_10px_30px_rgba(0,0,0,0.2)]">
+<div class="font-headline-md text-primary font-bold text-xl">
+            Gestión de Trabajos
+        </div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="text-on-surface-variant hover:text-secondary transition-colors scale-98 active:scale-95 w-10 h-10 rounded-full flex items-center justify-center bg-white/5 neu-raised">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="pt-[104px] pb-8 px-4 md:ml-[312px] md:pr-8 min-h-screen">
+<!-- Action & Filter Bar -->
+<div class="glass-panel rounded-xl p-4 mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg">
+<div class="w-full sm:w-1/2 md:w-1/3 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-transparent neu-pressed rounded-lg border-none focus:ring-1 focus:ring-secondary text-on-surface placeholder:text-on-surface-variant font-body-md text-body-md outline-none" placeholder="Buscar por nombre o ID..." type="text"/>
+</div>
+<div class="flex items-center gap-4 w-full sm:w-auto">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg text-on-surface-variant hover:text-on-surface transition-colors border border-white/5">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+<span class="font-label-sm text-label-sm">Filtros</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md neu-raised hover:bg-primary-fixed transition-colors whitespace-nowrap">
+<span class="material-symbols-outlined">add</span>
+                    Nuevo trabajo
+                </button>
+</div>
+</div>
+<!-- Bento Grid / Card Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Job Card 1 - Active/High Priority -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-4 shadow-xl glow-primary transform transition-transform hover:-translate-y-1 cursor-pointer">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg mb-1">Producción DTF - Julio 24</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">ID: #TRB-001A</p>
+</div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary/10 border border-secondary/30">
+<span class="material-symbols-outlined text-secondary text-sm">print</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_theme('colors.secondary')]"></span>
+<span class="font-label-sm text-label-sm text-secondary">En Impresión</span>
+</div>
+<div class="flex gap-2 mt-2">
+<div class="px-3 py-1 bg-surface-container-high rounded-full border border-white/5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">draw</span>
+<span class="font-label-sm text-label-sm text-on-surface">12 Diseños</span>
+</div>
+<div class="px-3 py-1 bg-surface-container-high rounded-full border border-white/5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">layers</span>
+<span class="font-label-sm text-label-sm text-on-surface">4 Planchas</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-white/5 flex justify-end">
+<button class="text-primary font-label-sm text-label-sm hover:text-primary-fixed transition-colors flex items-center gap-1">
+                        Ver Detalles <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Job Card 2 - Pending -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-4 shadow-lg transform transition-transform hover:-translate-y-1 cursor-pointer">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg mb-1">Lote Ropa Laboral</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">ID: #TRB-002B</p>
+</div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container border border-white/10">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">queue</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">En Cola de Preparación</span>
+</div>
+<div class="flex gap-2 mt-2">
+<div class="px-3 py-1 bg-surface-container-high rounded-full border border-white/5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">draw</span>
+<span class="font-label-sm text-label-sm text-on-surface">45 Diseños</span>
+</div>
+<div class="px-3 py-1 bg-surface-container-high rounded-full border border-white/5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">layers</span>
+<span class="font-label-sm text-label-sm text-on-surface">12 Planchas</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-white/5 flex justify-end">
+<button class="text-primary font-label-sm text-label-sm hover:text-primary-fixed transition-colors flex items-center gap-1">
+                        Ver Detalles <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Job Card 3 - Warning/Urgent -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-4 shadow-lg transform transition-transform hover:-translate-y-1 cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-error/10 rounded-bl-full blur-xl"></div>
+<div class="flex justify-between items-start relative z-10">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg mb-1">Muestras Urgentes</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">ID: #TRB-003C</p>
+</div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-error/10 border border-error/30">
+<span class="material-symbols-outlined text-error text-sm">warning</span>
+</div>
+</div>
+<div class="flex items-center gap-2 relative z-10">
+<span class="w-2 h-2 rounded-full bg-error shadow-[0_0_8px_theme('colors.error')] animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-error">Revisión Requerida</span>
+</div>
+<div class="flex gap-2 mt-2 relative z-10">
+<div class="px-3 py-1 bg-surface-container-high rounded-full border border-white/5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">draw</span>
+<span class="font-label-sm text-label-sm text-on-surface">3 Diseños</span>
+</div>
+<div class="px-3 py-1 bg-surface-container-high rounded-full border border-white/5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">layers</span>
+<span class="font-label-sm text-label-sm text-on-surface">1 Plancha</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-white/5 flex justify-end relative z-10">
+<button class="text-error font-label-sm text-label-sm hover:text-error-container transition-colors flex items-center gap-1">
+                        Resolver <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Job Card 4 - Completed -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-4 shadow-lg transform transition-transform hover:-translate-y-1 cursor-pointer opacity-70 hover:opacity-100">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg mb-1">Campaña Verano</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">ID: #TRB-000D</p>
+</div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container border border-white/10">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary/50"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Completado</span>
+</div>
+<div class="flex gap-2 mt-2">
+<div class="px-3 py-1 bg-surface-container-high rounded-full border border-white/5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">draw</span>
+<span class="font-label-sm text-label-sm text-on-surface">150 Diseños</span>
+</div>
+<div class="px-3 py-1 bg-surface-container-high rounded-full border border-white/5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">layers</span>
+<span class="font-label-sm text-label-sm text-on-surface">20 Planchas</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-white/5 flex justify-end">
+<button class="text-on-surface-variant font-label-sm text-label-sm hover:text-on-surface transition-colors flex items-center gap-1">
+                        Ver Historial <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

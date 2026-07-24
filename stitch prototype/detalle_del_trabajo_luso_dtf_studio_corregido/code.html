@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUSO DTF - Detalle del Trabajo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-on-surface": "#283044",
+                      "on-surface": "#dbe2fd",
+                      "error": "#ffb4ab",
+                      "surface-container-lowest": "#060d20",
+                      "primary-fixed-dim": "#d0bcff",
+                      "primary-fixed": "#e9ddff",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "surface-container-highest": "#2d3449",
+                      "tertiary": "#ffd9db",
+                      "surface-tint": "#d0bcff",
+                      "inverse-surface": "#dbe2fd",
+                      "on-surface-variant": "#cbc3d7",
+                      "surface-variant": "#2d3449",
+                      "on-tertiary-fixed": "#370c12",
+                      "surface-bright": "#31394e",
+                      "on-tertiary-fixed-variant": "#6d363b",
+                      "primary": "#e9ddff",
+                      "on-background": "#dbe2fd",
+                      "on-secondary": "#003640",
+                      "outline-glow": "rgba(255, 255, 255, 0.2)",
+                      "error-container": "#93000a",
+                      "on-error": "#690005",
+                      "background": "#0b1326",
+                      "on-primary-fixed-variant": "#4d3d76",
+                      "on-secondary-fixed": "#001f26",
+                      "surface-dim": "#0b1326",
+                      "on-secondary-container": "#00424e",
+                      "tertiary-fixed": "#ffdadb",
+                      "on-primary-fixed": "#210f48",
+                      "outline": "#948f9a",
+                      "surface-container": "#171f33",
+                      "on-tertiary-container": "#7b4147",
+                      "surface-glass": "rgba(11, 19, 38, 0.6)",
+                      "secondary-container": "#03b5d4",
+                      "surface-container-low": "#131b2e",
+                      "accent-cyan": "#00e5ff",
+                      "on-tertiary": "#522126",
+                      "secondary-fixed": "#acedff",
+                      "primary-container": "#d0bcff",
+                      "secondary": "#4cd7f6",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "on-primary-container": "#594983",
+                      "surface": "#0b1326",
+                      "surface-container-high": "#222a3e",
+                      "inverse-primary": "#665590",
+                      "on-error-container": "#ffdad6",
+                      "outline-variant": "#49454f",
+                      "on-primary": "#37265e",
+                      "tertiary-fixed-dim": "#ffb2b7",
+                      "tertiary-container": "#ffb2b7",
+                      "deep-violet": "#1e0b4a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "panel-padding": "1.5rem",
+                      "topbar-height": "72px",
+                      "sidebar-width": "280px",
+                      "container-margin": "2rem",
+                      "gutter": "1.5rem",
+                      "element-gap": "1rem"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "display-xl": ["Plus Jakarta Sans"],
+                      "label-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "display-xl-mobile": ["Plus Jakarta Sans"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                      "display-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "display-xl-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: theme('colors.on-background');
+            overflow-x: hidden;
+        }
+        
+        /* Deep Atmospheric Background using mesh gradients */
+        .atmospheric-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 10%, #1e0b4a 0%, transparent 40%),
+                radial-gradient(circle at 90% 10%, #060d20 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #171f33 0%, #0b1326 100%);
+            background-color: #0b1326;
+        }
+
+        /* Ambient Glow Blobs from Design System */
+        .ambient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .blob-1 { background: #d0bcff; width: 600px; height: 600px; top: -200px; left: -100px; animation: float 20s infinite alternate; }
+        .blob-2 { background: #4cd7f6; width: 500px; height: 500px; bottom: -150px; right: -50px; animation: float 25s infinite alternate-reverse; }
+        .blob-3 { background: #1e0b4a; width: 800px; height: 800px; top: 30%; right: -200px; opacity: 0.2; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 80px) scale(1.1); }
+        }
+        
+        .neu-raised {
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: 
+                -4px -4px 10px rgba(255, 255, 255, 0.02),
+                4px 4px 15px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .neu-pressed {
+            background: rgba(0, 0, 0, 0.2);
+            box-shadow: 
+                inset 4px 4px 10px rgba(0, 0, 0, 0.5),
+                inset -4px -4px 10px rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* Glassmorphism Refined */
+        .glass-panel {
+            background: rgba(23, 31, 51, 0.6);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-panel-light {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-glow-primary {
+            text-shadow: 0 0 15px rgba(208, 188, 255, 0.4);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative font-body-md text-body-md">
+<!-- Background Layer -->
+<div class="atmospheric-bg"></div>
+<div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+<div class="ambient-blob blob-1"></div>
+<div class="ambient-blob blob-2"></div>
+<div class="ambient-blob blob-3"></div>
+</div>
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col gap-element-gap p-panel-padding glass-panel fixed left-4 top-4 bottom-4 w-sidebar-width rounded-xl z-50">
+<!-- Header -->
+<div class="mb-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full glass-panel-light flex items-center justify-center overflow-hidden border border-white/20">
+<img class="w-full h-full object-cover" data-alt="A stylized, glowing liquid metal logomark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDryLAsUT88z_eUKlWuMKCGC8NOUkoCdxJyOQwmj0u_O5w3L1h37rn1vQqdxpvtCEVqNhAAHmzJ1uGVMqjJt6bw84E6ouunNLH9uFMb5YJU7X9GOJP2sSZO7nbidxJ8deRyDpWuuwOF-aCNhvqhGQmuNCBzusMM8BQKVHK-4UgZ_cwSSJD1vtn5YvidchkfDSbSVAGQCmiZ1m3ixAa3Hcmsf3_O3BBkmGnMwANwrJIy7--OEMO6fkQ4pAOGoL7pw-FHKPc2LUPZxU0U"/>
+</div>
+<div>
+<h1 class="font-display-xl text-primary font-extrabold tracking-tighter text-2xl text-glow-primary">LUSO DTF</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Estudio de Producción</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-2 font-label-md text-label-md">
+<a class="text-on-surface-variant hover:text-on-surface p-3 transition-all hover:bg-white/5 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">home</span>
+                    Inicio
+                </a>
+<!-- Active Item: Trabajos -->
+<a class="text-primary font-bold bg-primary-container/20 rounded-lg p-3 neu-pressed flex items-center gap-3 transition-transform text-glow-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">manufacturing</span>
+                    Trabajos
+                </a>
+<a class="text-on-surface-variant hover:text-on-surface p-3 transition-all hover:bg-white/5 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">draw</span>
+                    Mis diseños
+                </a>
+<a class="text-on-surface-variant hover:text-on-surface p-3 transition-all hover:bg-white/5 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings_suggest</span>
+                    Perfiles
+                </a>
+<a class="text-on-surface-variant hover:text-on-surface p-3 transition-all hover:bg-white/5 rounded-lg flex items-center gap-3 mt-auto" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+                    Configuración
+                </a>
+</div>
+<!-- CTA -->
+<button class="mt-4 w-full py-3 rounded-lg bg-primary/10 text-primary font-label-md text-label-md border border-primary/30 glass-panel-light hover:bg-primary/20 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                Nueva Órden
+            </button>
+</nav>
+<!-- TopNavBar -->
+<header class="hidden md:flex justify-between items-center px-gutter w-full glass-panel fixed top-4 right-4 left-[312px] h-topbar-height rounded-xl z-40">
+<div class="flex items-center gap-8">
+<div class="font-headline-md text-primary font-bold text-glow-primary">
+                    Workflow: Preparación
+                </div>
+<nav class="flex gap-6 font-label-sm text-label-sm">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors" href="#">Diseños</a>
+<a class="text-secondary border-b-2 border-secondary pb-1 font-bold" href="#">Preparación</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors" href="#">Revisión</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors" href="#">Nesting</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors" href="#">Planchas</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors" href="#">Exportación</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 ml-0 md:ml-[312px] mt-0 md:mt-[104px] p-container-margin overflow-y-auto h-full pb-32">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest">Lote de Producción</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary text-glow-primary">TRB-2024-089A</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-2xl">Revisión de parámetros técnicos antes de la fase de nesting. Lote prioritario para cliente corporativo.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-3 rounded-lg glass-panel-light text-on-surface border border-white/20 hover:bg-white/10 transition-colors font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined">download</span>
+                            Exportar
+                        </button>
+<button class="px-6 py-3 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md neu-raised hover:brightness-110 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(3,181,212,0.3)]">
+                            Continuar trabajo
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid Summary -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+<!-- Profile Card -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-4 relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary text-3xl">settings_applications</span>
+<span class="w-3 h-3 rounded-full bg-secondary shadow-[0_0_10px_theme('colors.secondary')]"></span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Perfil de Producción</p>
+<p class="font-headline-md text-headline-md text-on-surface">Algodón Oscuro Pro</p>
+</div>
+<div class="flex gap-2 mt-auto">
+<span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-on-surface-variant font-label-sm text-label-sm text-xs">1440x720 dpi</span>
+<span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-on-surface-variant font-label-sm text-label-sm text-xs">CMYK+W</span>
+</div>
+</div>
+<!-- Metrics Cards -->
+<div class="glass-panel rounded-xl p-6 flex flex-col justify-center gap-2 text-center border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant text-2xl mx-auto mb-2">category</span>
+<p class="font-display-xl text-display-xl text-secondary">12</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Diseños Únicos</p>
+</div>
+<div class="glass-panel rounded-xl p-6 flex flex-col justify-center gap-2 text-center border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant text-2xl mx-auto mb-2">style</span>
+<p class="font-display-xl text-display-xl text-primary">148</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Unidades Totales</p>
+</div>
+<div class="glass-panel rounded-xl p-6 flex flex-col justify-center gap-2 text-center border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant text-2xl mx-auto mb-2">layers</span>
+<p class="font-display-xl text-display-xl text-on-surface">3.5</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Metros Estimados</p>
+</div>
+</div>
+<!-- Design List Section -->
+<div class="glass-panel rounded-xl p-8 mt-8 border-white/5">
+<div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+<h3 class="font-headline-md text-headline-md text-primary text-glow-primary">Diseños Incluidos</h3>
+<div class="neu-pressed px-4 py-2 rounded-lg flex items-center gap-2 min-w-[250px] glass-panel-light">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<input class="bg-transparent border-none outline-none text-on-surface font-body-md text-body-md w-full placeholder-on-surface-variant/50 focus:ring-0 p-0" placeholder="Buscar diseño..." type="text"/>
+</div>
+</div>
+<div class="space-y-4">
+<!-- List Item 1 -->
+<div class="flex items-center gap-6 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10 group">
+<div class="w-16 h-16 rounded-md glass-panel-light overflow-hidden shrink-0 border border-white/10 p-2">
+<img class="w-full h-full object-contain" data-alt="Cyberpunk Skull Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQrAa9NzWzI6H6JlQJYcgqAujT2vN58KyaQ1zT9bGF7hzXyo5AzgBW5lJAVIM6pT77Ljs208axyt0qWqZ161ymOHNmRi-qJBbT_ipW25fRakdjTKBCuaV41tPKJaARKCeTysZCtqOpr-sGPn0MjEXIXP6Vdk1IIVGKaVFSLwvswQV36o0jbf-4UHDl00NmQmDMLzi0JdT0uCb82NayJIQcEw-FX-_YyUBMqs0HBw8eGjPUc1Bq6qedDidTurSIRGN-txmdntE5ru1T"/>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface">Cyberpunk Skull Logo v2</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Archivo: cp_skull_final.png</p>
+</div>
+<div class="flex gap-4 items-center">
+<div class="flex flex-col items-end mr-8">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Dimensiones</span>
+<span class="font-body-md text-body-md text-on-surface">250 x 300 mm</span>
+</div>
+<div class="flex flex-col items-center neu-pressed rounded-lg px-4 py-2 min-w-[80px]">
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[10px] uppercase">Cant.</span>
+<span class="font-headline-md text-headline-md text-secondary">50</span>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="flex items-center gap-6 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10 group">
+<div class="w-16 h-16 rounded-md glass-panel-light overflow-hidden shrink-0 border border-white/10 p-2">
+<img class="w-full h-full object-contain" data-alt="Liquid Light Typography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQlqvA4sJECoBdUObwThdm1N18BjV-DfeLXPh15VqOqRqpK5o6xeSusgnb7kzO3Xj7NkWwx_i1BDuqRYw6e6ILn9vG7ouHgERQ_VBCJFpRkXmTcomK5CV__N7bPcnUNZCishgryvsCJASX_dW1NM4_9wNuJupoDKHpk0yy47DVWeGvH9kq8F26nmjFyaBt4T8K8fuDc6yhzSLqe6HIXsqGeXMap-9f_1syOwUBRHDc7_RmGtIoD0X7ih9zbxh9vDudzP9u8kKlyc8_"/>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface">Liquid Light Typography</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Archivo: liquid_text_print.tiff</p>
+</div>
+<div class="flex gap-4 items-center">
+<div class="flex flex-col items-end mr-8">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Dimensiones</span>
+<span class="font-body-md text-body-md text-on-surface">280 x 100 mm</span>
+</div>
+<div class="flex flex-col items-center neu-pressed rounded-lg px-4 py-2 min-w-[80px]">
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[10px] uppercase">Cant.</span>
+<span class="font-headline-md text-headline-md text-secondary">98</span>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

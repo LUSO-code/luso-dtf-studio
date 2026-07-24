@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mis Diseños - LUSO DTF</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#283044", "on-surface": "#dbe2fd", "error": "#ffb4ab", "surface-container-lowest": "#060d20", "primary-fixed-dim": "#d0bcff", "primary-fixed": "#e9ddff", "secondary-fixed-dim": "#4cd7f6", "surface-container-highest": "#2d3449", "tertiary": "#ffd9db", "surface-tint": "#d0bcff", "inverse-surface": "#dbe2fd", "on-surface-variant": "#cac4d0", "surface-variant": "#2d3449", "on-tertiary-fixed": "#370c12", "surface-bright": "#31394e", "on-tertiary-fixed-variant": "#6d363b", "primary": "#e9ddff", "on-background": "#dbe2fd", "on-secondary": "#003640", "outline-glow": "rgba(255, 255, 255, 0.2)", "error-container": "#93000a", "on-error": "#690005", "background": "#0b1326", "on-primary-fixed-variant": "#4d3d76", "on-secondary-fixed": "#001f26", "surface-dim": "#0b1326", "on-secondary-container": "#00424e", "tertiary-fixed": "#ffdadb", "on-primary-fixed": "#210f48", "outline": "#948f9a", "surface-container": "#171f33", "on-tertiary-container": "#7b4147", "surface-glass": "rgba(11, 19, 38, 0.6)", "secondary-container": "#03b5d4", "surface-container-low": "#131b2e", "accent-cyan": "#00e5ff", "on-tertiary": "#522126", "secondary-fixed": "#acedff", "primary-container": "#d0bcff", "secondary": "#4cd7f6", "on-secondary-fixed-variant": "#004e5c", "on-primary-container": "#594983", "surface": "#0b1326", "surface-container-high": "#222a3e", "inverse-primary": "#665590", "on-error-container": "#ffdad6", "outline-variant": "#49454f", "on-primary": "#37265e", "tertiary-fixed-dim": "#ffb2b7", "tertiary-container": "#ffb2b7", "deep-violet": "#1e0b4a"
+                    },
+                    "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    "spacing": { "panel-padding": "1.5rem", "topbar-height": "72px", "sidebar-width": "280px", "container-margin": "2rem", "gutter": "1.5rem", "element-gap": "1rem" },
+                    "fontFamily": { "body-lg": ["Inter"], "headline-lg": ["Plus Jakarta Sans"], "display-xl": ["Plus Jakarta Sans"], "label-md": ["Inter"], "label-sm": ["Inter"], "headline-md": ["Plus Jakarta Sans"], "display-xl-mobile": ["Plus Jakarta Sans"], "body-md": ["Inter"] },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "display-xl": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .neu-raised {
+            box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.05), 4px 4px 12px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .neu-pressed {
+            box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.7), inset -2px -2px 5px rgba(255, 255, 255, 0.03);
+            background-color: rgba(0,0,0,0.2);
+            border: 1px solid rgba(0,0,0,0.5);
+        }
+        .glass-panel {
+            background-color: rgba(11, 19, 38, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+        .ambient-bg {
+            background: radial-gradient(circle at 20% 30%, rgba(208, 188, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(76, 215, 246, 0.05) 0%, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen overflow-x-hidden ambient-bg">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col gap-element-gap p-panel-padding bg-surface-glass/60 backdrop-blur-[25px] shadow-2xl fixed left-4 top-4 bottom-4 w-sidebar-width rounded-xl border-t border-l border-white/10 z-50">
+<div class="mb-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center neu-raised">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+</div>
+<div>
+<h1 class="font-display-xl text-primary font-extrabold tracking-tighter" style="font-size: 24px;">LUSO DTF</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Estudio de Producción</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 flex-grow">
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined">manufacturing</span>
+<span class="font-label-md text-label-md">Trabajos</span>
+</a>
+<!-- Active -->
+<a class="flex items-center gap-3 text-primary font-bold shadow-[0_0_15px_rgba(208,188,255,0.4)] bg-primary-container/20 rounded-lg p-3 neu-pressed scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">draw</span>
+<span class="font-label-md text-label-md">Mis diseños</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-label-md text-label-md">Perfiles</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+<button class="mt-auto w-full py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg neu-raised hover:bg-primary-fixed transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+            Nueva Orden
+        </button>
+</nav>
+<!-- TopNavBar -->
+<header class="hidden md:flex justify-between items-center px-gutter w-full bg-surface-glass/40 backdrop-blur-[25px] shadow-xl fixed top-4 right-4 left-[312px] h-topbar-height rounded-xl border-t border-l border-white/10 z-40" style="width: calc(100% - 312px - 1rem);">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-primary font-bold">Workflow: Preparación</span>
+</div>
+<nav class="flex gap-6 items-center">
+<a class="text-secondary border-b-2 border-secondary pb-1 font-bold font-label-sm text-label-sm click:scale-98" href="#">Diseños</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm click:scale-98" href="#">Preparación</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm click:scale-98" href="#">Revisión</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm click:scale-98" href="#">Nesting</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm click:scale-98" href="#">Planchas</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-sm text-label-sm click:scale-98" href="#">Exportación</a>
+</nav>
+<div class="flex items-center gap-4 text-secondary">
+<button class="hover:text-secondary-fixed transition-colors click:scale-98">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:text-secondary-fixed transition-colors click:scale-98">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="relative z-10 pt-[104px] pb-container-margin px-container-margin md:ml-[312px] max-w-7xl mx-auto">
+<!-- Header & Upload -->
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+<div>
+<h2 class="font-display-xl text-display-xl text-primary mb-2">Mis Diseños</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Gestiona y organiza tu librería personal para producción DTF.</p>
+</div>
+<!-- Upload Area -->
+<div class="glass-panel rounded-xl border-dashed border-2 border-primary/30 p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all w-full lg:w-auto min-w-[300px] neu-pressed">
+<span class="material-symbols-outlined text-primary mb-2" style="font-size: 32px;">upload_file</span>
+<span class="font-label-md text-label-md text-on-surface">Arrastra tus diseños aquí</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">PNG, TIFF, PDF (Max 500MB)</span>
+</div>
+</div>
+<!-- Tabs & Filters -->
+<div class="flex items-center gap-4 mb-8 border-b border-white/10 pb-4">
+<button class="px-4 py-2 rounded-lg neu-pressed text-primary font-label-md text-label-md shadow-[0_0_10px_rgba(208,188,255,0.2)] bg-primary/10">Recientes</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors font-label-md text-label-md">Favoritos</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors font-label-md text-label-md">Categorías</button>
+<div class="ml-auto flex items-center bg-surface-container-high rounded-full px-4 py-2 neu-pressed border border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none text-on-surface focus:ring-0 p-0 font-body-md text-sm placeholder:text-on-surface-variant/50 w-48" placeholder="Buscar diseño..." type="text"/>
+</div>
+</div>
+<!-- Design Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col group relative">
+<div class="absolute inset-0 bg-primary/20 blur-[50px] rounded-full z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+<div class="h-48 relative overflow-hidden z-10 bg-surface-container-lowest">
+<img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="A vibrant, highly detailed digital illustration of a cyberpunk skull wearing a futuristic visor, rendered in striking neon pinks, cyans, and deep purples against a pitch-black background. The style is sharp, industrial, and high-contrast, perfectly suited for high-fidelity DTF garment printing in a modern production setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlYEV5xAIhzuv3xp-cf5IZ5Via33FZN3fZPvpzEKKNPnARJ1vVGRoDC_8m6kQ49DtIilDNKKttsqFudN7Wa77W8N8vb6LNpU6z_mA6i0vGwAQfLKZpjd4AvdzS_2BV97fYEcfUBfWWmJHzSQDg3XP1jIeZcwh3M28pGMICiTAFZiKQPr3LmXNPkopFqmRf4krbdUZhwfOW9Glh5q6vIz8kTN7M2AvmxDf81ajKoNbe1dHP73VednRb4-lTjr2nXHwpdti75SN8dovx"/>
+<button class="absolute top-3 right-3 text-on-surface-variant hover:text-tertiary transition-colors drop-shadow-md">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-4 flex flex-col flex-grow z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg mb-1 truncate">Cyberpunk Skull V2</h3>
+<div class="flex gap-2 mb-4">
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-label-sm text-secondary border border-secondary/20">28x35 cm</span>
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-label-sm text-on-surface-variant border border-white/10">300 dpi</span>
+</div>
+<div class="mt-auto flex gap-2">
+<button class="flex-grow py-2 bg-primary/10 text-primary border border-primary/30 rounded-lg font-label-sm text-label-sm hover:bg-primary hover:text-on-primary transition-colors flex items-center justify-center gap-1 neu-raised">
+<span class="material-symbols-outlined text-[18px]">add_circle</span> Usar en trabajo
+                        </button>
+<button class="w-10 h-10 flex items-center justify-center border border-white/10 rounded-lg text-on-surface-variant hover:text-error hover:border-error/50 transition-colors bg-surface-container-high">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col group relative">
+<div class="absolute inset-0 bg-secondary/20 blur-[50px] rounded-full z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+<div class="h-48 relative overflow-hidden z-10 bg-surface-container-lowest">
+<img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="An intricate, abstract floral mandala design featuring liquid metal textures and glowing cyan accents on a dark slate background. The artwork is precise, technical, and highly stylized, designed as a premium graphic for custom apparel printing in a cutting-edge digital workspace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrD6ZzYn25i2xQkcTAbkxKmU_cBNeq-WQ2HxgVKthVC9QhiV_R61YO-qzTgdCvluW9wfZKHEV4QKQn9f3l_UrRhCLew9uiXoDXFdbFGOEyIhhF2EkhQ_cDPHfgNupgMlBQ6q4ybxRi4PnLj2ikvOspPuTnY4VZD6STLFeyghykvRb6hauLHT8ti8POkgGCsA263al6vJ1V6cdTxhvdXqwHG8uvZTWKJh-cOFTTXCF1THCdzdPR1K60J48a3H8bkqIPlW9ILtXr0QB7"/>
+<button class="absolute top-3 right-3 text-tertiary transition-colors drop-shadow-md" style="font-variation-settings: 'FILL' 1;">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-4 flex flex-col flex-grow z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg mb-1 truncate">Liquid Mandala</h3>
+<div class="flex gap-2 mb-4">
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-label-sm text-secondary border border-secondary/20">40x40 cm</span>
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-label-sm text-error border border-error/20">150 dpi</span>
+</div>
+<div class="mt-auto flex gap-2">
+<button class="flex-grow py-2 bg-primary/10 text-primary border border-primary/30 rounded-lg font-label-sm text-label-sm hover:bg-primary hover:text-on-primary transition-colors flex items-center justify-center gap-1 neu-raised">
+<span class="material-symbols-outlined text-[18px]">add_circle</span> Usar en trabajo
+                        </button>
+<button class="w-10 h-10 flex items-center justify-center border border-white/10 rounded-lg text-on-surface-variant hover:text-error hover:border-error/50 transition-colors bg-surface-container-high">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col group relative">
+<div class="h-48 relative overflow-hidden z-10 bg-surface-container-lowest flex items-center justify-center border-b border-white/5">
+<span class="material-symbols-outlined text-surface-bright" style="font-size: 64px;">image_not_supported</span>
+</div>
+<div class="p-4 flex flex-col flex-grow z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg mb-1 truncate">Logo_Corp_Final.png</h3>
+<div class="flex gap-2 mb-4">
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-label-sm text-secondary border border-secondary/20">10x5 cm</span>
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-label-sm text-on-surface-variant border border-white/10">300 dpi</span>
+</div>
+<div class="mt-auto flex gap-2">
+<button class="flex-grow py-2 bg-primary/10 text-primary border border-primary/30 rounded-lg font-label-sm text-label-sm hover:bg-primary hover:text-on-primary transition-colors flex items-center justify-center gap-1 neu-raised">
+<span class="material-symbols-outlined text-[18px]">add_circle</span> Usar en trabajo
+                        </button>
+<button class="w-10 h-10 flex items-center justify-center border border-white/10 rounded-lg text-on-surface-variant hover:text-error hover:border-error/50 transition-colors bg-surface-container-high">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Add New Placeholder -->
+<div class="glass-panel rounded-xl border-dashed border border-white/20 flex flex-col items-center justify-center text-on-surface-variant hover:bg-white/5 transition-colors cursor-pointer min-h-[300px]">
+<span class="material-symbols-outlined mb-2" style="font-size: 48px;">add_photo_alternate</span>
+<span class="font-label-md text-label-md">Subir nuevo diseño</span>
+</div>
+</div>
+</main>
+</body></html>

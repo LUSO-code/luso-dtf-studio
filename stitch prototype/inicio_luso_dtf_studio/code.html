@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUSO DTF Studio - Inicio</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#958ea0",
+                        "on-primary-fixed": "#23005c",
+                        "outline-variant": "#494454",
+                        "on-primary": "#3c0091",
+                        "on-tertiary-container": "#5b0017",
+                        "on-surface-variant": "#cbc3d7",
+                        "surface-container-lowest": "#060e20",
+                        "inverse-on-surface": "#283044",
+                        "primary-fixed-dim": "#d0bcff",
+                        "primary-fixed": "#e9ddff",
+                        "surface-bright": "#31394d",
+                        "secondary": "#4cd7f6",
+                        "on-secondary": "#003640",
+                        "surface-container-low": "#131b2e",
+                        "surface-tint": "#d0bcff",
+                        "primary": "#d0bcff",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-surface": "#dae2fd",
+                        "surface-container-highest": "#2d3449",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "inverse-primary": "#6d3bd7",
+                        "on-tertiary": "#67001b",
+                        "surface": "#0b1326",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "surface-container-high": "#222a3d",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "primary-container": "#a078ff",
+                        "tertiary": "#ffb2b7",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "tertiary-container": "#ff516a",
+                        "background": "#0b1326",
+                        "on-tertiary-fixed": "#40000d",
+                        "on-primary-fixed-variant": "#5516be",
+                        "surface-variant": "#2d3449",
+                        "secondary-fixed": "#acedff",
+                        "surface-dim": "#0b1326",
+                        "secondary-container": "#03b5d3",
+                        "on-error": "#690005",
+                        "surface-container": "#171f33",
+                        "on-secondary-container": "#00424e",
+                        "on-secondary-fixed": "#001f26",
+                        "on-background": "#dae2fd",
+                        "on-primary-container": "#340080",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "1.5rem",
+                        "container-margin": "2rem",
+                        "element-gap": "1rem",
+                        "topbar-height": "72px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-xl": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Base styles for material symbols */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Neumorphic utilities to supplement Tailwind arbitrary values */
+        .neu-pressed {
+            box-shadow: inset -4px -4px 10px rgba(255, 255, 255, 0.03), inset 4px 4px 10px rgba(0, 0, 0, 0.6);
+        }
+        .neu-raised {
+            box-shadow: -4px -4px 10px rgba(255, 255, 255, 0.03), 4px 4px 10px rgba(0, 0, 0, 0.6);
+        }
+        
+        /* Scrollbar styling for a cleaner look */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(149, 142, 160, 0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(149, 142, 160, 0.4); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen overflow-x-hidden font-body-md text-body-md antialiased selection:bg-primary selection:text-on-primary">
+<!-- Background Shader Animation -->
+<!-- STITCH_SHADER_START:ANIMATION_3 class="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-80 mix-blend-screen" -->
+<div class="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-80 mix-blend-screen" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+// Simplex 2D noise
+vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+  + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+    dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    float t = u_time * 0.15;
+    
+    // Create animated aurora-like layers
+    float n1 = snoise(uv * 2.0 + t);
+    float n2 = snoise(uv * 3.0 - t * 0.8);
+    float n3 = snoise(uv * 4.0 + t * 1.2);
+    
+    // Define the vibrant palette stops
+    vec3 deepViolet = vec3(0.18, 0.07, 0.45);
+    vec3 electricPurple = vec3(0.55, 0.36, 0.96);
+    vec3 magenta = vec3(0.9, 0.1, 0.6);
+    vec3 cyan = vec3(0.0, 0.8, 0.9);
+    vec3 warmOrange = vec3(1.0, 0.5, 0.2);
+    
+    // Mix based on noise and coordinates
+    vec3 color = mix(deepViolet, electricPurple, 0.5 + 0.5 * n1);
+    color = mix(color, magenta, smoothstep(0.1, 0.9, n2));
+    color = mix(color, cyan, smoothstep(0.4, 1.0, n3) * 0.3);
+    color = mix(color, warmOrange, smoothstep(0.7, 1.0, n1 * n2) * 0.2);
+    
+    // Add soft lighting orbs
+    float orb = 1.0 - length(uv - vec2(0.8, 0.2 + 0.1 * sin(t)));
+    color += mix(vec3(0.0), cyan, pow(max(0.0, orb), 4.0) * 0.5);
+    
+    float orb2 = 1.0 - length(uv - vec2(0.2, 0.8 + 0.1 * cos(t)));
+    color += mix(vec3(0.0), magenta, pow(max(0.0, orb2), 4.0) * 0.4);
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex bg-surface/60 dark:bg-surface/60 backdrop-blur-[25px] rounded-xl m-container-margin border-t border-l border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.3)] fixed left-4 top-4 bottom-4 w-sidebar-width flex-col p-panel-padding z-50">
+<!-- Brand / Header -->
+<div class="flex items-center gap-4 mb-10">
+<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-inverse-primary p-[1px] shadow-[0_0_20px_rgba(208,188,255,0.3)]">
+<div class="w-full h-full bg-surface-container-highest rounded-xl flex items-center justify-center neu-pressed">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary leading-none">DTF Pro</h1>
+<p class="font-label-sm text-label-sm text-secondary mt-1 tracking-wider uppercase">Luz Líquida</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-2 flex-grow">
+<!-- Active Tab: Inicio -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/5 transition-all duration-300 active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.05)] text-primary shadow-[0_0_15px_rgba(208,188,255,0.4)] font-bold relative overflow-hidden group" href="#">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined relative z-10" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md relative z-10">Inicio</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/5 transition-all duration-300 active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.05)] text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">print</span>
+<span class="font-label-md text-label-md">Trabajos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/5 transition-all duration-300 active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.05)] text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">palette</span>
+<span class="font-label-md text-label-md">Mis diseños</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/5 transition-all duration-300 active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.05)] text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-label-md text-label-md">Perfiles de producción</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/5 transition-all duration-300 active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.05)] text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+<!-- User Profile Footer -->
+<div class="mt-auto pt-6 border-t border-outline-variant/30">
+<div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white/20 shadow-lg">
+<img alt="Usuario" class="w-full h-full object-cover" data-alt="A highly detailed, professional high-resolution avatar portrait of a creative designer working in a futuristic digital printing studio. The lighting is moody with subtle neon cyan and purple rim lights, reflecting a modern, tech-forward dark-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6KvgS6HEX5fST_dG1eiznffHcsLk5H2Y4Ws8oDg0weV_9U7rQHZTAUUAIgyFBuaAI2FIrFf9VFqJrzqaDN53dNs9Fc6rYMk02-083l-OpRMwTBfkwerR-6AX8vqmOZWTBMk6_ymPg_olieKWcNAanQZlMlzKCuTL0n06OOXWCGW1tTQ0fAdxLEs2ETRVzi8qxh1EJd5zCUlxxsXXwvaBWfztZUcSO5d3sQoZiovuNP1mUKgBVg_175-FS-jbH7ka_OlX0pIumHPWV"/>
+</div>
+<div class="flex-grow overflow-hidden">
+<p class="font-label-md text-label-md text-on-surface truncate">Admin Studio</p>
+<p class="font-label-sm text-label-sm text-outline truncate">admin@lusodtf.com</p>
+</div>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper (Accounts for SideNavBar width + margin) -->
+<div class="md:ml-[312px] min-h-screen flex flex-col relative z-10 pb-12">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface/60 dark:bg-surface/60 backdrop-blur-[25px] rounded-xl m-container-margin border-t border-l border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.3)] flex justify-between items-center px-panel-padding h-topbar-height w-[calc(100%-4rem)] mx-auto mt-4 sticky top-4 z-40">
+<!-- Search Bar (on_left) -->
+<div class="flex-1 max-w-md flex items-center">
+<div class="relative w-full group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2 border-none rounded-lg bg-surface-container-highest/50 text-on-surface placeholder-outline focus:ring-1 focus:ring-primary/50 neu-pressed transition-all font-body-md text-body-md" placeholder="Buscar diseños, trabajos..." style="caret-color: #4cd7f6;" type="text"/>
+</div>
+</div>
+<!-- Brand (Centered implicitly or part of right flex, assuming standard layout) -->
+<div class="hidden lg:block absolute left-1/2 transform -translate-x-1/2">
+<span class="font-headline-md text-headline-md font-bold text-primary">DTF Master</span>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full text-on-surface-variant hover:bg-surface-variant/40 transition-all duration-300 active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.05)] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_8px_#4cd7f6]"></span>
+</button>
+<button class="p-2 rounded-full text-on-surface-variant hover:bg-surface-variant/40 transition-all duration-300 active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.05)]">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow px-8 mt-8 max-w-7xl mx-auto w-full">
+<!-- Greeting & Headline -->
+<div class="mb-12 animate-fade-in-up">
+<h2 class="font-body-lg text-body-lg text-secondary mb-2">Bienvenido de nuevo</h2>
+<h1 class="font-display-xl text-display-xl text-primary font-bold tracking-tight">¿Qué quieres hacer?</h1>
+</div>
+<!-- Quick Actions Grid (Neumorphic Style) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+<!-- Action 1: Primary Add -->
+<button class="group relative bg-surface-container border border-white/5 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 transition-all duration-300 neu-raised hover:border-primary/30 hover:text-primary active:neu-pressed focus:outline-none">
+<div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center shadow-[0_0_20px_rgba(208,188,255,0.2)] group-hover:shadow-[0_0_30px_rgba(208,188,255,0.5)] transition-shadow">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" style="font-variation-settings: 'FILL' 1;">add</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Nuevo trabajo</span>
+</button>
+<!-- Action 2 -->
+<button class="group relative bg-surface-container border border-white/5 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 transition-all duration-300 neu-raised hover:border-secondary/30 hover:text-secondary active:neu-pressed focus:outline-none">
+<div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center neu-pressed group-hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-secondary text-3xl">view_in_ar</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-secondary transition-colors">Preparar diseño</span>
+</button>
+<!-- Action 3 -->
+<button class="group relative bg-surface-container border border-white/5 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 transition-all duration-300 neu-raised hover:border-tertiary/30 hover:text-tertiary active:neu-pressed focus:outline-none">
+<div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center neu-pressed group-hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-tertiary text-3xl">folder_open</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-tertiary transition-colors">Abrir trabajo</span>
+</button>
+<!-- Action 4 -->
+<button class="group relative bg-surface-container border border-white/5 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 transition-all duration-300 neu-raised hover:border-primary/30 hover:text-primary active:neu-pressed focus:outline-none">
+<div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center neu-pressed group-hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-primary-fixed-dim text-3xl">palette</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary-fixed transition-colors">Mis diseños</span>
+</button>
+</div>
+<!-- Recent Jobs Section -->
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Trabajos recientes</h3>
+<button class="text-secondary hover:text-primary transition-colors font-label-md text-label-md flex items-center gap-1">
+                    Ver todos <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<!-- Bento Grid for Recent Jobs (Glass Cards) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="backdrop-blur-[25px] bg-surface/60 border-t border-l border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.3)] rounded-xl p-panel-padding flex flex-col gap-5 relative overflow-hidden group hover:bg-surface/80 transition-colors duration-500">
+<!-- Subtle ambient glow -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-500"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center neu-pressed text-primary">
+<span class="material-symbols-outlined">layers</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface leading-tight">Producción DTF<br/><span class="text-outline text-lg font-normal">Semana 30</span></h4>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-on-surface">more_horiz</span>
+</div>
+<div class="flex flex-wrap gap-2 z-10 mt-2">
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">image</span> 12 diseños
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">tag</span> 47 unidades
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">grid_on</span> 3 planchas
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">straighten</span> 58x300 cm
+                        </span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-4 z-10">
+<p class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Modificado hace 10 min
+                        </p>
+<button class="bg-primary/10 text-primary border border-primary/30 rounded-lg px-4 py-2 font-label-md text-label-md hover:bg-primary hover:text-on-primary transition-all duration-300 neu-raised active:neu-pressed">
+                            Abrir
+                        </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="backdrop-blur-[25px] bg-surface/60 border-t border-l border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.3)] rounded-xl p-panel-padding flex flex-col gap-5 relative overflow-hidden group hover:bg-surface/80 transition-colors duration-500">
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-secondary/10 rounded-full blur-3xl group-hover:bg-secondary/20 transition-all duration-500"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center neu-pressed text-secondary">
+<span class="material-symbols-outlined">layers</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface leading-tight">Muestrario<br/><span class="text-outline text-lg font-normal">Cliente A</span></h4>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-on-surface">more_horiz</span>
+</div>
+<div class="flex flex-wrap gap-2 z-10 mt-2">
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">image</span> 5 diseños
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">tag</span> 10 unidades
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">grid_on</span> 1 plancha
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">straighten</span> 58x100 cm
+                        </span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-4 z-10">
+<p class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Modificado hace 2 horas
+                        </p>
+<button class="bg-surface-variant text-on-surface border border-outline-variant/50 rounded-lg px-4 py-2 font-label-md text-label-md hover:border-primary/50 hover:text-primary transition-all duration-300 active:neu-pressed">
+                            Abrir
+                        </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="backdrop-blur-[25px] bg-surface/60 border-t border-l border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.3)] rounded-xl p-panel-padding flex flex-col gap-5 relative overflow-hidden group hover:bg-surface/80 transition-colors duration-500">
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-tertiary/10 rounded-full blur-3xl group-hover:bg-tertiary/20 transition-all duration-500"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center neu-pressed text-tertiary">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface leading-tight">Urgente<br/><span class="text-outline text-lg font-normal">Reposición</span></h4>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-on-surface">more_horiz</span>
+</div>
+<div class="flex flex-wrap gap-2 z-10 mt-2">
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">image</span> 2 diseños
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">tag</span> 150 unidades
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">grid_on</span> 5 planchas
+                        </span>
+<span class="bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">straighten</span> 58x500 cm
+                        </span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-4 z-10">
+<p class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Modificado ayer
+                        </p>
+<button class="bg-surface-variant text-on-surface border border-outline-variant/50 rounded-lg px-4 py-2 font-label-md text-label-md hover:border-primary/50 hover:text-primary transition-all duration-300 active:neu-pressed">
+                            Abrir
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Inline script for subtle entrance animations -->
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const animateElements = document.querySelectorAll('.animate-fade-in-up, .neu-raised, .backdrop-blur-\\[25px\\]');
+            animateElements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(10px)';
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body></html>

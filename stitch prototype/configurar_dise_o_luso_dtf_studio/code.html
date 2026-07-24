@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Configurar Diseño - LUSO DTF</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "inverse-on-surface": "#283044",
+                            "on-surface": "#dbe2fd",
+                            "error": "#ffb4ab",
+                            "surface-container-lowest": "#060d20",
+                            "primary-fixed-dim": "#d0bcff",
+                            "primary-fixed": "#e9ddff",
+                            "secondary-fixed-dim": "#4cd7f6",
+                            "surface-container-highest": "#2d3449",
+                            "tertiary": "#ffd9db",
+                            "surface-tint": "#d0bcff",
+                            "inverse-surface": "#dbe2fd",
+                            "on-surface-variant": "#cac4d0",
+                            "surface-variant": "#2d3449",
+                            "on-tertiary-fixed": "#370c12",
+                            "surface-bright": "#31394e",
+                            "on-tertiary-fixed-variant": "#6d363b",
+                            "primary": "#e9ddff",
+                            "on-background": "#dbe2fd",
+                            "on-secondary": "#003640",
+                            "outline-glow": "rgba(255, 255, 255, 0.2)",
+                            "error-container": "#93000a",
+                            "on-error": "#690005",
+                            "background": "#0b1326",
+                            "on-primary-fixed-variant": "#4d3d76",
+                            "on-secondary-fixed": "#001f26",
+                            "surface-dim": "#0b1326",
+                            "on-secondary-container": "#00424e",
+                            "tertiary-fixed": "#ffdadb",
+                            "on-primary-fixed": "#210f48",
+                            "outline": "#948f9a",
+                            "surface-container": "#171f33",
+                            "on-tertiary-container": "#7b4147",
+                            "surface-glass": "rgba(11, 19, 38, 0.6)",
+                            "secondary-container": "#03b5d4",
+                            "surface-container-low": "#131b2e",
+                            "accent-cyan": "#00e5ff",
+                            "on-tertiary": "#522126",
+                            "secondary-fixed": "#acedff",
+                            "primary-container": "#d0bcff",
+                            "secondary": "#4cd7f6",
+                            "on-secondary-fixed-variant": "#004e5c",
+                            "on-primary-container": "#594983",
+                            "surface": "#0b1326",
+                            "surface-container-high": "#222a3e",
+                            "inverse-primary": "#665590",
+                            "on-error-container": "#ffdad6",
+                            "outline-variant": "#49454f",
+                            "on-primary": "#37265e",
+                            "tertiary-fixed-dim": "#ffb2b7",
+                            "tertiary-container": "#ffb2b7",
+                            "deep-violet": "#1e0b4a"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "panel-padding": "1.5rem",
+                            "topbar-height": "72px",
+                            "sidebar-width": "280px",
+                            "container-margin": "2rem",
+                            "gutter": "1.5rem",
+                            "element-gap": "1rem"
+                    },
+                    "fontFamily": {
+                            "body-lg": ["Inter"],
+                            "headline-lg": ["Plus Jakarta Sans"],
+                            "display-xl": ["Plus Jakarta Sans"],
+                            "label-md": ["Inter"],
+                            "label-sm": ["Inter"],
+                            "headline-md": ["Plus Jakarta Sans"],
+                            "display-xl-mobile": ["Plus Jakarta Sans"],
+                            "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                            "display-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                            "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                            "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                            "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                            "display-xl-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                            "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .neu-raised {
+            box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.05), 4px 4px 10px rgba(0, 0, 0, 0.6);
+        }
+        .neu-pressed {
+            box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.6), inset -2px -2px 6px rgba(255, 255, 255, 0.05);
+        }
+        .glass-panel {
+            background-color: rgba(11, 19, 38, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .ambient-glow-primary {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(233, 221, 255, 0.15) 0%, rgba(233, 221, 255, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .ambient-glow-secondary {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(76, 215, 246, 0.15) 0%, rgba(76, 215, 246, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* Input overrides for neumorphic well */
+        input[type="number"], input[type="text"] {
+            caret-color: #4cd7f6;
+            background: transparent;
+        }
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen relative overflow-x-hidden antialiased">
+<!-- Background Texture/Shader Simulation -->
+<div class="fixed inset-0 z-[-2] opacity-30" style="background-image: radial-gradient(circle at 15% 50%, rgba(30, 11, 74, 0.4), transparent 50%), radial-gradient(circle at 85% 30%, rgba(0, 66, 78, 0.4), transparent 50%);"></div>
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col gap-element-gap p-panel-padding bg-surface-glass/60 backdrop-blur-[25px] fixed left-4 top-4 bottom-4 w-sidebar-width rounded-xl border-t border-l border-white/10 shadow-2xl z-40">
+<div class="mb-8">
+<h1 class="font-display-xl text-primary font-extrabold tracking-tighter">LUSO DTF</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Estudio de Producción</p>
+</div>
+<div class="flex-grow flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 duration-300 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 duration-300 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="manufacturing">manufacturing</span>
+<span class="font-label-md text-label-md">Trabajos</span>
+</a>
+<a class="text-primary font-bold shadow-[0_0_15px_rgba(208,188,255,0.4)] bg-primary-container/20 rounded-lg p-3 neu-pressed flex items-center gap-3 scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="draw">draw</span>
+<span class="font-label-md text-label-md">Mis diseños</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 duration-300 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="font-label-md text-label-md">Perfiles</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface p-3 transition-colors hover:bg-white/5 duration-300 rounded-lg flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+<button class="mt-auto neu-raised bg-primary/10 text-primary font-label-md text-label-md py-3 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined">add</span>
+            Nueva Órden
+        </button>
+</nav>
+<!-- TopNavBar -->
+<header class="hidden md:flex justify-between items-center px-gutter w-full bg-surface-glass/40 backdrop-blur-[25px] fixed top-4 right-4 left-[312px] h-topbar-height rounded-xl border-t border-l border-white/10 shadow-xl z-30" style="width: calc(100% - 312px - 1rem);">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-primary font-bold">Workflow: Preparación</span>
+<div class="h-6 w-px bg-white/10 mx-2"></div>
+<nav class="flex gap-4">
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-secondary transition-colors" href="#">Diseños</a>
+<a class="text-secondary border-b-2 border-secondary pb-1 font-bold font-label-sm text-label-sm" href="#">Preparación</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-secondary transition-colors" href="#">Revisión</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-secondary transition-colors" href="#">Nesting</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-secondary transition-colors" href="#">Planchas</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-secondary transition-colors" href="#">Exportación</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-secondary transition-colors scale-98">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors scale-98">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="md:ml-[312px] md:pt-[104px] p-4 md:p-container-margin max-w-7xl mx-auto min-h-screen flex flex-col">
+<!-- Page Header -->
+<div class="mb-8 relative">
+<div class="ambient-glow-primary -top-10 -left-10"></div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Configurar Diseño</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Ajusta las dimensiones y cantidad para el proceso de nesting.</p>
+</div>
+<!-- Content Layout: Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
+<!-- Left Column: Controls (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Main Configuration Panel -->
+<div class="glass-panel rounded-xl p-panel-padding relative overflow-hidden">
+<div class="ambient-glow-secondary top-0 right-0 opacity-50"></div>
+<h3 class="font-headline-md text-headline-md text-secondary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">straighten</span>
+                        Dimensiones
+                    </h3>
+<!-- Presets -->
+<div class="mb-8">
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-3 uppercase tracking-wider">Presets de Ancho</label>
+<div class="flex flex-wrap gap-3">
+<button class="neu-raised bg-surface-container py-2 px-4 rounded-lg font-label-md text-label-md text-on-surface hover:text-secondary transition-colors border border-transparent hover:border-secondary/30">30 cm</button>
+<button class="neu-raised bg-surface-container py-2 px-4 rounded-lg font-label-md text-label-md text-primary ring-1 ring-primary/50 transition-colors bg-primary/10">35 cm</button>
+<button class="neu-raised bg-surface-container py-2 px-4 rounded-lg font-label-md text-label-md text-on-surface hover:text-secondary transition-colors border border-transparent hover:border-secondary/30">40 cm</button>
+</div>
+</div>
+<!-- Input Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+<!-- Width -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="width">Ancho (cm)</label>
+<div class="neu-pressed bg-surface-container-low rounded-lg flex items-center px-4 h-12 border border-white/5">
+<input class="w-full bg-transparent border-none text-on-surface font-body-lg text-body-lg focus:ring-0 p-0" id="width" step="0.1" type="number" value="35.0"/>
+<span class="text-on-surface-variant font-label-sm text-label-sm ml-2">cm</span>
+</div>
+</div>
+<!-- Height -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="height">Alto (cm)</label>
+<div class="neu-pressed bg-surface-container-low rounded-lg flex items-center px-4 h-12 border border-white/5">
+<input class="w-full bg-transparent border-none text-on-surface font-body-lg text-body-lg focus:ring-0 p-0" id="height" step="0.1" type="number" value="45.5"/>
+<span class="text-on-surface-variant font-label-sm text-label-sm ml-2">cm</span>
+</div>
+</div>
+</div>
+<hr class="border-white/10 my-6"/>
+<!-- Secondary Controls -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Quantity -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="quantity">Cantidad</label>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 neu-raised bg-surface-container rounded-lg flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<div class="neu-pressed bg-surface-container-low rounded-lg flex items-center justify-center px-4 h-12 border border-white/5 flex-grow">
+<input class="w-full bg-transparent border-none text-on-surface font-body-lg text-body-lg focus:ring-0 p-0 text-center" id="quantity" type="number" value="150"/>
+</div>
+<button class="w-10 h-10 neu-raised bg-surface-container rounded-lg flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<!-- Rotation -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Rotación Permitida</label>
+<div class="flex gap-3 h-12">
+<button class="flex-1 neu-raised bg-primary/10 ring-1 ring-primary/50 rounded-lg flex items-center justify-center text-primary font-label-sm text-label-sm gap-2">
+<span class="material-symbols-outlined text-sm">360</span> Libre
+                                </button>
+<button class="flex-1 neu-raised bg-surface-container rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm">screen_rotation</span> 90°
+                                </button>
+<button class="flex-1 neu-raised bg-surface-container rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm">lock</span> Fijo
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Visualizer & Stats (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Preview Image Area -->
+<div class="glass-panel rounded-xl p-4 flex flex-col items-center justify-center min-h-[300px] relative group">
+<div class="absolute inset-0 bg-surface-container-highest/20 rounded-xl m-4 border border-dashed border-white/20 flex items-center justify-center overflow-hidden">
+<!-- Placeholder for user design -->
+<img class="object-contain w-3/4 h-3/4 opacity-80 mix-blend-screen group-hover:scale-105 transition-transform duration-500" data-alt="A highly detailed 3D rendering of a vibrant, cyberpunk-style graphic design featuring glowing neon cyan and purple elements on a dark technical background. The design is displayed perfectly flat as if ready for industrial printing, illuminated by bright, clinical overhead lighting that emphasizes the rich, liquid-light colors and crisp edges of the vector-like art. The mood is high-tech and precise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbRRLyra7ZTcLGh11Uxg6fFl0dk697tlSDBcysDFvJpfXRJP02qX_k7HImwmoODfFOyIVMEXgxOfFhLjGIhVNKfYhtaQlZOOjf37ZUMgKxx5F1hZQMXOUjgeJBbVfGQTzxnmu2UwFAEg43xUrn8YoCSe1-HlTKTTFskVvOIcc5nZy3R-O8jUuowono8eyRZX43KlzeBKT0IDzAgzcy5VKCSktCrKUxe6PT4rw4YePckhqma0STGst5qdnKFxebNH4eY7Z8tg7Dnhgk"/>
+</div>
+<div class="absolute bottom-6 right-6 bg-surface/80 backdrop-blur-md rounded-full px-3 py-1 border border-white/10 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(76,215,246,0.8)]"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Alta Resolución</span>
+</div>
+</div>
+<!-- Stats Panel -->
+<div class="glass-panel rounded-xl p-panel-padding">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Resumen</h3>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center pb-4 border-b border-white/5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tamaño final de impresión</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold tracking-wide">35.0 x 45.5 cm</span>
+</div>
+<div class="flex justify-between items-center pb-4 border-b border-white/5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Área utilizada</span>
+<span class="font-body-md text-body-md text-secondary font-semibold">1,592.5 cm²</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Metros lineales (est.)</span>
+<span class="font-headline-md text-headline-md text-primary font-bold">12.5 m</span>
+</div>
+</div>
+<button class="w-full mt-8 neu-raised bg-primary text-on-primary font-label-md text-label-md py-4 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Confirmar y Añadir a Nesting
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav for Mobile (simulated structure based on prompt rules) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 glass-panel border-t-0 rounded-t-xl z-40 pb-safe">
+<div class="flex justify-around items-center p-3">
+<a class="flex flex-col items-center p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-[10px] mt-1">Inicio</span>
+</a>
+<a class="flex flex-col items-center p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="manufacturing">manufacturing</span>
+<span class="font-label-sm text-[10px] mt-1">Trabajos</span>
+</a>
+<a class="flex flex-col items-center p-2 text-primary" href="#">
+<div class="bg-primary-container/20 p-1 rounded-lg mb-1 shadow-[0_0_10px_rgba(208,188,255,0.3)]">
+<span class="material-symbols-outlined" data-icon="draw">draw</span>
+</div>
+<span class="font-label-sm text-[10px] font-bold">Mis diseños</span>
+</a>
+<a class="flex flex-col items-center p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-[10px] mt-1">Configuración</span>
+</a>
+</div>
+</nav>
+</body></html>

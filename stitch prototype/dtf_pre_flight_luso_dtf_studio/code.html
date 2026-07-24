@@ -1,0 +1,504 @@
+<!DOCTYPE html><html class="dark" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>DTF Pre-Flight</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-on-surface": "#283044",
+                      "on-surface": "#dbe2fd",
+                      "error": "#ffb4ab",
+                      "surface-container-lowest": "#060d20",
+                      "primary-fixed-dim": "#d0bcff",
+                      "primary-fixed": "#e9ddff",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "surface-container-highest": "#2d3449",
+                      "tertiary": "#ffd9db",
+                      "surface-tint": "#d0bcff",
+                      "inverse-surface": "#dbe2fd",
+                      "on-surface-variant": "#cac4d0",
+                      "surface-variant": "#2d3449",
+                      "on-tertiary-fixed": "#370c12",
+                      "surface-bright": "#31394e",
+                      "on-tertiary-fixed-variant": "#6d363b",
+                      "primary": "#e9ddff",
+                      "on-background": "#dbe2fd",
+                      "on-secondary": "#003640",
+                      "outline-glow": "rgba(255, 255, 255, 0.2)",
+                      "error-container": "#93000a",
+                      "on-error": "#690005",
+                      "background": "#0b1326",
+                      "on-primary-fixed-variant": "#4d3d76",
+                      "on-secondary-fixed": "#001f26",
+                      "surface-dim": "#0b1326",
+                      "on-secondary-container": "#00424e",
+                      "tertiary-fixed": "#ffdadb",
+                      "on-primary-fixed": "#210f48",
+                      "outline": "#948f9a",
+                      "surface-container": "#171f33",
+                      "on-tertiary-container": "#7b4147",
+                      "surface-glass": "rgba(11, 19, 38, 0.6)",
+                      "secondary-container": "#03b5d4",
+                      "surface-container-low": "#131b2e",
+                      "accent-cyan": "#00e5ff",
+                      "on-tertiary": "#522126",
+                      "secondary-fixed": "#acedff",
+                      "primary-container": "#d0bcff",
+                      "secondary": "#4cd7f6",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "on-primary-container": "#594983",
+                      "surface": "#0b1326",
+                      "surface-container-high": "#222a3e",
+                      "inverse-primary": "#665590",
+                      "on-error-container": "#ffdad6",
+                      "outline-variant": "#49454f",
+                      "on-primary": "#37265e",
+                      "tertiary-fixed-dim": "#ffb2b7",
+                      "tertiary-container": "#ffb2b7",
+                      "deep-violet": "#1e0b4a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "panel-padding": "1.5rem",
+                      "topbar-height": "72px",
+                      "sidebar-width": "280px",
+                      "container-margin": "2rem",
+                      "gutter": "1.5rem",
+                      "element-gap": "1rem"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-xl": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-xl-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-xl-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            background-image: radial-gradient(circle at 15% 50%, rgba(208, 188, 255, 0.05) 0%, transparent 50%), radial-gradient(circle at 85% 30%, rgba(76, 215, 246, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: theme('colors.on-background');
+        }
+
+        .glass-panel {
+            background-color: theme('colors.surface-glass');
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .neu-pressed {
+            background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(255,255,255,0.02) 100%);
+            box-shadow: inset 4px 4px 10px rgba(0,0,0,0.6), inset -2px -2px 5px rgba(255,255,255,0.05);
+        }
+
+        .neu-raised {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.4), -2px -2px 5px rgba(255,255,255,0.05);
+        }
+
+        /* Ambient Glows */
+        .glow-primary {
+            position: relative;
+        }
+        .glow-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 80%; height: 80%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(208, 188, 255, 0.15) 0%, transparent 70%);
+            filter: blur(20px);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glow-secondary {
+             position: relative;
+        }
+        .glow-secondary::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 80%; height: 80%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(76, 215, 246, 0.15) 0%, transparent 70%);
+            filter: blur(20px);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-correct {
+            background-color: theme('colors.secondary');
+            box-shadow: 0 0 8px theme('colors.secondary');
+        }
+        .status-review {
+            background-color: #f59e0b;
+            box-shadow: 0 0 8px #f59e0b;
+        }
+        .status-problem {
+            background-color: theme('colors.error');
+            box-shadow: 0 0 8px theme('colors.error');
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen overflow-x-hidden relative" style="background: radial-gradient(circle at 0% 0%, rgb(30, 11, 74) 0%, rgb(11, 19, 38) 50%, rgb(6, 13, 32) 100%) fixed, radial-gradient(circle at 100% 0%, rgb(89, 73, 131) 0%, transparent 40%), radial-gradient(circle at 50% 100%, rgb(147, 0, 10) 0%, transparent 50%);">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-4 right-4 left-[312px] h-topbar-height rounded-xl border-t border-l border-white/10 bg-surface-glass/40 backdrop-blur-[25px] shadow-xl flex justify-between items-center px-gutter w-[calc(100%-328px)] z-50 hidden md:flex border-white/20">
+<div class="flex items-center gap-6">
+<h1 class="font-headline-md text-headline-md text-primary font-bold tracking-tighter">Workflow: Preparación</h1>
+<div class="h-6 w-px bg-white/10 mx-2"></div>
+<ul class="flex gap-4">
+<li class=""><a class="text-on-surface-variant font-label-sm text-label-sm font-medium hover:text-secondary transition-colors px-2 py-1" href="#">Diseños</a></li>
+<li class=""><a class="text-secondary font-label-sm text-label-sm font-bold border-b-2 border-secondary pb-1 px-2 py-1 glow-secondary" href="#">Preparación</a></li>
+<li class=""><a class="text-on-surface-variant font-label-sm text-label-sm font-medium hover:text-secondary transition-colors px-2 py-1" href="#">Revisión</a></li>
+<li class=""><a class="text-on-surface-variant font-label-sm text-label-sm font-medium hover:text-secondary transition-colors px-2 py-1" href="#">Nesting</a></li>
+<li class=""><a class="text-on-surface-variant font-label-sm text-label-sm font-medium hover:text-secondary transition-colors px-2 py-1" href="#">Planchas</a></li>
+<li class=""><a class="text-on-surface-variant font-label-sm text-label-sm font-medium hover:text-secondary transition-colors px-2 py-1" href="#">Exportación</a></li>
+</ul>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative w-48 hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-surface-container-low/50 text-on-surface font-label-sm text-label-sm rounded-full pl-9 pr-4 py-2 border border-white/5 focus:border-secondary focus:ring-1 focus:ring-secondary/50 outline-none neu-pressed" placeholder="Buscar..." type="text">
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-4 top-4 bottom-4 w-sidebar-width rounded-xl border-t border-l border-white/10 bg-surface-glass/60 backdrop-blur-[25px] shadow-2xl flex flex-col gap-element-gap p-panel-padding z-50 hidden md:flex bg-surface-glass/40">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center neu-raised">
+<span class="font-display-xl text-display-xl text-deep-violet text-lg font-black">L</span>
+</div>
+<div>
+<h2 class="font-display-xl text-display-xl text-primary font-extrabold tracking-tighter text-xl leading-none">LUSO DTF</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Estudio de Producción</p>
+</div>
+</div>
+<button class="w-full bg-primary/10 text-primary font-label-md text-label-md font-bold py-3 rounded-lg border border-primary/20 hover:bg-primary/20 transition-all neu-raised flex items-center justify-center gap-2 mb-4 glow-primary">
+<span class="material-symbols-outlined text-sm">add</span> Nueva Órden
+        </button>
+<nav class="flex-1 overflow-y-auto">
+<ul class="flex flex-col gap-2">
+<li class="">
+<a class="flex items-center gap-3 text-on-surface-variant font-label-md text-label-md hover:text-on-surface p-3 rounded-lg transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined">home</span> Inicio
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 text-on-surface-variant font-label-md text-label-md hover:text-on-surface p-3 rounded-lg transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined">manufacturing</span> Trabajos
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 text-primary font-label-md text-label-md font-bold shadow-[0_0_15px_rgba(208,188,255,0.4)] bg-primary-container/20 rounded-lg p-3 neu-pressed transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">draw</span> Mis diseños
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 text-on-surface-variant font-label-md text-label-md hover:text-on-surface p-3 rounded-lg transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined">settings_suggest</span> Perfiles
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 text-on-surface-variant font-label-md text-label-md hover:text-on-surface p-3 rounded-lg transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined">settings</span> Configuración
+                    </a>
+</li>
+</ul>
+</nav>
+<div class="mt-auto pt-4 border-t border-white/5 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover border border-white/20" data-alt="A macro shot of liquid cyan glowing polymer drops on a dark carbon fiber surface, highly detailed, sharp focus, vibrant neon lighting, dark mode aesthetic, industrial cyberpunk vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLPfC9yLx0bIFGhj3J5lNSVdilgQKDWRQbvfg2sLZ0LN1dBqjv9zBT-KvX4CPxuIsNl-scT6yXCa4vq8c27H_Nt_qujkVbQoc9r8_uoJAkQnFUocROtsFZiODHZ-GHiZ2wX4bZKieBcggiEi6TZ7Nr_8zCNstGXgHHZvMhVJFsTTgHPSRV8NAEsP5az0Vzf-wDZDXXBf08nHDT8Jq9jrNZNNFzYo3dJ5foSDkDqJ6kt9T7RWyBvJRqRhA0kuTDpjaszhzznMa53VvP">
+<div class="flex-1 overflow-hidden">
+<p class="font-label-sm text-label-sm text-on-surface truncate">Usuario Admin</p>
+<p class="text-[10px] text-on-surface-variant truncate">admin@lusodtf.com</p>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="md:ml-[312px] md:mt-[104px] p-container-margin max-w-7xl mx-auto flex-1 transition-all duration-300">
+<header class="mb-8">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">policy</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Pre-Flight Control</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Revisión automática de calidad antes de rasterización y nesting. Verifica los parámetros críticos para asegurar una impresión óptima.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Visualizer & Summary -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<!-- Image Preview Glass Card -->
+<div class="glass-panel rounded-xl p-4 flex flex-col gap-4 glow-secondary h-[400px] relative overflow-hidden group">
+<div class="absolute inset-0 bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+<button class="bg-secondary/20 text-secondary font-label-md text-label-md border border-secondary/50 rounded-full px-6 py-2 backdrop-blur-md hover:bg-secondary/30 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">zoom_in</span> Ver Detalle
+                         </button>
+</div>
+<div class="w-full h-full bg-contain bg-center bg-no-repeat rounded-lg neu-pressed" data-alt="A highly detailed digital illustration of a cyberpunk samurai helmet, neon pink and cyan accents, dark metallic textures, isolated on a transparent background, high contrast, sharp edges, suitable for high-quality DTF printing." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBTAzlxBk50gMVnkfJ2DkEk_6ldsaynqPiw1dS-X99pUeLYzWeE-2LjOMKBIKSEQtHs_-iMnUHPWXsLqbnAXdv_sZPQfAV5JuZHDO90EJWUfWQ7abWbC5YWvWd__ZIJlxALj5SP-jLxT6v7-jbZgrgRh45WLwU949wcsW4AalWUT7rk-OX3svSxlCq96UqFr3w0WWs64eF1YMV7HHOFLZtA2hf7G9yfsovEEaiNXmkcO2gCjanXGuSS5U6t5X6SyZBJPRS7CoD83ygb')"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-center bg-surface-container-high/90 backdrop-blur-md rounded-lg p-3 border border-white/5">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Archivo</p>
+<p class="font-label-md text-label-md text-on-surface truncate max-w-[150px]">cyber_samurai_v2.png</p>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2 py-1 rounded-full text-[10px] text-secondary border border-secondary/30">
+<span class="material-symbols-outlined text-[12px]">aspect_ratio</span> 28x40 cm
+                             </span>
+</div>
+</div>
+</div>
+<!-- Status Summary -->
+<div class="glass-panel rounded-xl p-6 glow-primary relative overflow-hidden bg-surface-glass/60">
+<!-- Subtle background decoration -->
+<div class="absolute -right-12 -top-12 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center border border-secondary/30 text-secondary neu-raised shrink-0">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Tu diseño está listo para producción</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Hemos detectado algunos problemas menores, pero pueden corregirse automáticamente antes del ripeo.</p>
+<div class="flex flex-col sm:flex-row gap-3">
+<button class="flex-1 bg-primary/10 text-primary font-label-md text-label-md py-2.5 px-4 rounded-lg border border-primary/30 hover:bg-primary/20 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">auto_fix_high</span> Corregir automáticamente
+                                </button>
+<button class="flex-1 bg-secondary text-on-secondary font-label-md text-label-md py-2.5 px-4 rounded-lg hover:bg-accent-cyan transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(76,215,246,0.3)]">
+                                    Continuar <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Checklist Bento Grid -->
+<div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-min">
+<!-- Resolución Card -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between hover:bg-white/[0.02] transition-colors border border-white/5 relative overflow-hidden">
+<div class="absolute right-0 top-0 w-1 h-full bg-secondary opacity-50"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">high_quality</span>
+<h4 class="font-label-md text-label-md text-on-surface">Resolución</h4>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container/50 px-2.5 py-1 rounded-full border border-white/5">
+<span class="status-dot status-correct"></span>
+<span class="text-[11px] font-medium text-on-surface-variant">Correcto</span>
+</div>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-headline-md text-on-surface">300</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">DPI</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Calidad óptima para impresión DTF. Detalle fino garantizado.</p>
+</div>
+</div>
+<!-- Fondo Card -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between hover:bg-white/[0.02] transition-colors border border-white/5 relative overflow-hidden">
+<div class="absolute right-0 top-0 w-1 h-full bg-secondary opacity-50"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">layers_clear</span>
+<h4 class="font-label-md text-label-md text-on-surface">Fondo</h4>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container/50 px-2.5 py-1 rounded-full border border-white/5">
+<span class="status-dot status-correct"></span>
+<span class="text-[11px] font-medium text-on-surface-variant">Correcto</span>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<div class="w-6 h-6 rounded bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjY2NjIi8+CjxyZWN0IHg9IjQiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiLz4KPHJlY3QgeT0iNCIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0iI2ZmZiIvPgo8cmVjdCB4PSI0IiB5PSI0IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjY2NjIi8+Cjwvc3ZnPg==')] border border-white/20"></div>
+<span class="font-label-md text-label-md text-on-surface">Transparente</span>
+</div>
+<p class="text-xs text-on-surface-variant">Canal alfa detectado sin fondo sólido.</p>
+</div>
+</div>
+<!-- Bordes Card (Warning) -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between hover:bg-white/[0.02] transition-colors border border-yellow-500/20 relative overflow-hidden bg-yellow-500/5">
+<div class="absolute right-0 top-0 w-1 h-full bg-yellow-500 opacity-80"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-yellow-500">blur_on</span>
+<h4 class="font-label-md text-label-md text-yellow-500">Bordes</h4>
+</div>
+<div class="flex items-center gap-1.5 bg-yellow-500/10 px-2.5 py-1 rounded-full border border-yellow-500/20">
+<span class="status-dot status-review"></span>
+<span class="text-[11px] font-medium text-yellow-500">Revisar</span>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-2 py-1 rounded border border-white/5 neu-pressed">Aliasing detectado</span>
+</div>
+<p class="text-xs text-on-surface-variant">Posible halo blanco en la impresión. Recomendamos aplicar "choking" (encogimiento de blanco).</p>
+<button class="mt-3 text-xs text-yellow-500 font-medium hover:underline flex items-center gap-1">
+                            Ver área afectada <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Semitransparencias Card (Problem) -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between hover:bg-white/[0.02] transition-colors border border-error/30 relative overflow-hidden bg-error/5 glow-error">
+<div class="absolute right-0 top-0 w-1 h-full bg-error opacity-80 shadow-[0_0_10px_theme('colors.error')]"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error">opacity</span>
+<h4 class="font-label-md text-label-md text-error">Semitransparencias</h4>
+</div>
+<div class="flex items-center gap-1.5 bg-error/10 px-2.5 py-1 rounded-full border border-error/30">
+<span class="status-dot status-problem"></span>
+<span class="text-[11px] font-medium text-error">Problema</span>
+</div>
+</div>
+<div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline-md text-headline-md text-on-surface">12%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">píxeles &lt; 100% opacidad</span>
+</div>
+<p class="text-xs text-on-surface-variant">DTF no reproduce gradientes de opacidad a transparente correctamente. Se generará una base blanca dura.</p>
+<button class="mt-3 text-xs bg-error/20 text-error px-3 py-1.5 rounded border border-error/40 hover:bg-error/30 transition-colors w-full text-center">
+                            Eliminar semitonos
+                        </button>
+</div>
+</div>
+<!-- Dimensiones Card (Spans 2 cols on md) -->
+<div class="glass-panel rounded-xl p-5 md:col-span-2 flex flex-col sm:flex-row justify-between sm:items-center hover:bg-white/[0.02] transition-colors border border-white/5 relative overflow-hidden gap-4">
+<div class="absolute right-0 top-0 w-1 h-full bg-secondary opacity-50"></div>
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-on-surface-variant">straighten</span>
+<h4 class="font-label-md text-label-md text-on-surface">Dimensiones y Proporción</h4>
+</div>
+<p class="text-xs text-on-surface-variant">El diseño encaja dentro del ancho máximo de bobina (58cm).</p>
+</div>
+<div class="flex gap-4 items-center bg-surface-container/30 p-3 rounded-lg border border-white/5">
+<div class="flex flex-col items-center">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-1">Ancho</span>
+<span class="font-label-md text-label-md text-on-surface bg-surface-container px-3 py-1 rounded neu-pressed">28.0 cm</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">close</span>
+<div class="flex flex-col items-center">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-1">Alto</span>
+<span class="font-label-md text-label-md text-on-surface bg-surface-container px-3 py-1 rounded neu-pressed">40.0 cm</span>
+</div>
+<div class="ml-2 pl-4 border-l border-white/10 flex items-center justify-center">
+<div class="flex items-center gap-1.5">
+<span class="status-dot status-correct"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+</body></html>
