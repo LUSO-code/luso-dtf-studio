@@ -1,160 +1,286 @@
+import Link from "next/link";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
-import { Printer, Sparkles, Layers, FileUp, CheckCircle2, Clock } from "lucide-react";
+import {
+  Upload,
+  PlusCircle,
+  Sparkles,
+  Layers,
+  Wrench,
+  Grid,
+  Settings,
+  Image as ImageIcon,
+  ArrowRight,
+  FileCheck2,
+  Maximize2,
+} from "lucide-react";
 
 export default function Home() {
   return (
     <div className="space-y-8">
-      {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-display text-3xl font-extrabold tracking-tight text-on-surface">
-            Panel de Control
+      {/* Workflow Primary Hero Banner */}
+      <div className="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden">
+        {/* Background Subtle Ambient Light Accent */}
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/80 border border-primary/20 text-xs font-semibold text-primary">
+            <Sparkles className="w-3.5 h-3.5 text-secondary" />
+            <span>Suite de Preparación para Impresión DTF</span>
+          </div>
+
+          <h1 className="font-display text-2xl md:text-4xl font-extrabold text-on-surface tracking-tight leading-tight">
+            Flujo de Preparación e Optimización de <span className="text-secondary">Planchas DTF</span>
           </h1>
-          <p className="text-sm text-on-surface-variant mt-1">
-            Resumen de producción DTF, estado de impresora y cola de impresión en tiempo real.
+
+          <p className="text-sm md:text-base text-on-surface-variant max-w-2xl leading-relaxed">
+            Prepara tus imágenes vectoriales y rásster, ajusta la máscara de tinta blanca, optimiza el aprovechamiento de película con Smart Nesting y exporta planchas listas para RIP.
           </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <NeuButton variant="glass" size="md">
-            <Sparkles className="w-4 h-4 text-secondary" />
-            <span>Pre-Flight Rápido</span>
-          </NeuButton>
-          <NeuButton variant="primary" size="md" active>
-            <FileUp className="w-4 h-4" />
-            <span>Nuevo Trabajo</span>
-          </NeuButton>
+
+          <div className="pt-2 flex flex-wrap items-center gap-4">
+            <Link href="/proyecto/nuevo">
+              <NeuButton variant="primary" size="lg" active className="shadow-glow-violet">
+                <PlusCircle className="w-5 h-5" />
+                <span>Crear Nuevo Proyecto</span>
+              </NeuButton>
+            </Link>
+
+            <Link href="/disenos">
+              <NeuButton variant="glass" size="lg">
+                <Upload className="w-5 h-5 text-secondary" />
+                <span>Subir Diseños</span>
+              </NeuButton>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* KPI Metric Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <GlassCard glow="violet">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
-              Trabajos Activos
-            </span>
-            <div className="p-2 rounded-xl bg-primary-dark/30 text-primary">
-              <Printer className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <span className="font-display text-3xl font-bold text-on-surface">12</span>
-            <span className="text-xs text-secondary ml-2 font-medium">↑ 4 en cola</span>
-          </div>
-        </GlassCard>
+      {/* Quick Access Tools Grid */}
+      <div className="space-y-4">
+        <h2 className="font-display text-lg font-bold text-on-surface flex items-center gap-2">
+          <Wrench className="w-5 h-5 text-primary" />
+          <span>Acceso Rápido a Herramientas</span>
+        </h2>
 
-        <GlassCard glow="cyan">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
-              Metros Lineales (Hoy)
-            </span>
-            <div className="p-2 rounded-xl bg-secondary-dark/30 text-secondary">
-              <Layers className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <span className="font-display text-3xl font-bold text-on-surface">48.5 m</span>
-            <span className="text-xs text-on-surface-variant ml-2">Rollo 58cm</span>
-          </div>
-        </GlassCard>
-
-        <GlassCard>
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
-              Aprovechamiento
-            </span>
-            <div className="p-2 rounded-xl bg-surface-container-highest text-primary">
-              <Sparkles className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <span className="font-display text-3xl font-bold text-on-surface">94.2%</span>
-            <span className="text-xs text-secondary ml-2">Smart Nesting</span>
-          </div>
-        </GlassCard>
-
-        <GlassCard>
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
-              Estado Impresora
-            </span>
-            <span className="flex h-3 w-3 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
-            </span>
-          </div>
-          <div className="mt-4">
-            <span className="font-display text-xl font-bold text-secondary">EPSON I3200</span>
-            <p className="text-xs text-on-surface-variant mt-0.5">Tinta Blanca: 82%</p>
-          </div>
-        </GlassCard>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {[
+            {
+              title: "DTF Pre-Flight",
+              desc: "Verificación de DPI y transparencias",
+              icon: FileCheck2,
+              href: "/herramientas/preflight",
+              glow: "violet",
+            },
+            {
+              title: "Preparación Imagen",
+              desc: "Ajuste de color y limpieza de fondo",
+              icon: ImageIcon,
+              href: "/herramientas/preparacion",
+              glow: "cyan",
+            },
+            {
+              title: "Editor de Máscara",
+              desc: "Underbase y encogimiento de blanco",
+              icon: Layers,
+              href: "/herramientas/mascara",
+              glow: "violet",
+            },
+            {
+              title: "Smart Nesting",
+              desc: "Anidación optimizada en rollo",
+              icon: Grid,
+              href: "/herramientas/nesting",
+              glow: "cyan",
+            },
+            {
+              title: "Config. Plancha",
+              desc: "Parámetros de prensado térmico",
+              icon: Settings,
+              href: "/herramientas/plancha",
+              glow: "none",
+            },
+          ].map((tool) => {
+            const Icon = tool.icon;
+            return (
+              <Link key={tool.title} href={tool.href}>
+                <GlassCard
+                  glow={tool.glow as "violet" | "cyan" | "none"}
+                  className="h-full flex flex-col justify-between group hover:scale-[1.02] transition-all cursor-pointer p-5"
+                >
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-surface-container-high/80 border border-white/10 flex items-center justify-center text-primary group-hover:text-secondary group-hover:border-secondary/30 transition-colors">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-display font-bold text-sm text-on-surface group-hover:text-primary transition-colors">
+                        {tool.title}
+                      </h3>
+                      <p className="text-xs text-on-surface-variant/80 mt-1 leading-snug">
+                        {tool.desc}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pt-3 flex items-center text-xs font-semibold text-secondary opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Abrir</span>
+                    <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  </div>
+                </GlassCard>
+              </Link>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Production Preview Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Job Queue Preview (2 Columns) */}
-        <GlassCard className="lg:col-span-2 space-y-4">
+      {/* Workflow Sections Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Section 1: Diseños Recientes */}
+        <GlassCard className="space-y-4">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <h2 className="font-display text-lg font-bold text-on-surface flex items-center gap-2">
-              <Clock className="w-5 h-5 text-primary" />
-              <span>Últimos Trabajos de Impresión</span>
-            </h2>
-            <span className="text-xs text-on-surface-variant cursor-pointer hover:text-primary">
-              Ver Todos →
-            </span>
+            <div>
+              <h2 className="font-display text-base font-bold text-on-surface flex items-center gap-2">
+                <ImageIcon className="w-4 h-4 text-secondary" />
+                <span>Diseños Recientes</span>
+              </h2>
+              <p className="text-xs text-on-surface-variant mt-0.5">
+                Archivos subidos listos para procesar
+              </p>
+            </div>
+            <Link href="/disenos">
+              <span className="text-xs font-semibold text-primary hover:text-secondary transition-colors cursor-pointer">
+                Ver todos →
+              </span>
+            </Link>
           </div>
 
           <div className="space-y-3">
             {[
-              { id: "DTF-1092", title: "Diseño Deportivo Vectorial", client: "SportClub", meters: "4.2m", status: "Imprimiendo", color: "text-secondary" },
-              { id: "DTF-1091", title: "Logo Textil Ilustrado", client: "Moda Urbana", meters: "1.8m", status: "Listo", color: "text-primary" },
-              { id: "DTF-1090", title: "Colección Verano 2026", client: "Luso Brand", meters: "12.0m", status: "Pre-Flight", color: "text-tertiary" },
-            ].map((job) => (
+              {
+                name: "Ilustracion_Deportiva_V2.png",
+                size: "45 cm x 30 cm",
+                dpi: "300 DPI",
+                status: "Verificado",
+                color: "text-secondary border-secondary/30",
+              },
+              {
+                name: "Logo_Emblema_Vintage.png",
+                size: "28 cm x 28 cm",
+                dpi: "300 DPI",
+                status: "Máscara Lista",
+                color: "text-primary border-primary/30",
+              },
+              {
+                name: "Estampa_Frente_Camiseta.png",
+                size: "35 cm x 40 cm",
+                dpi: "240 DPI",
+                status: "Requiere Ajuste",
+                color: "text-tertiary border-tertiary/30",
+              },
+            ].map((design) => (
               <div
-                key={job.id}
-                className="neu-pressed bg-surface-container/60 rounded-xl p-4 flex items-center justify-between hover:bg-surface-container-high/60 transition-colors"
+                key={design.name}
+                className="neu-pressed bg-surface-container/60 rounded-xl p-3.5 flex items-center justify-between hover:bg-surface-container-high/60 transition-colors"
               >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-primary">{job.id}</span>
-                    <h3 className="text-sm font-semibold text-on-surface">{job.title}</h3>
-                  </div>
-                  <p className="text-xs text-on-surface-variant">Cliente: {job.client} • Longitud: {job.meters}</p>
-                </div>
                 <div className="flex items-center gap-3">
-                  <span className={`text-xs font-semibold px-3 py-1 rounded-full bg-surface-container-highest/80 ${job.color}`}>
-                    {job.status}
-                  </span>
+                  <div className="w-10 h-10 rounded-lg bg-surface-container-lowest border border-white/10 flex items-center justify-center text-on-surface-variant">
+                    <ImageIcon className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-on-surface truncate max-w-[200px] sm:max-w-[260px]">
+                      {design.name}
+                    </h3>
+                    <p className="text-[11px] text-on-surface-variant mt-0.5">
+                      {design.size} • {design.dpi}
+                    </p>
+                  </div>
                 </div>
+
+                <span
+                  className={`text-[11px] font-semibold px-2.5 py-1 rounded-full bg-surface-container-highest/80 border ${design.color}`}
+                >
+                  {design.status}
+                </span>
               </div>
             ))}
           </div>
         </GlassCard>
 
-        {/* System Architecture & Status (1 Column) */}
+        {/* Section 2: Planchas Recientes */}
         <GlassCard className="space-y-4">
-          <h2 className="font-display text-lg font-bold text-on-surface flex items-center gap-2 border-b border-white/10 pb-4">
-            <CheckCircle2 className="w-5 h-5 text-secondary" />
-            <span>Infraestructura LUSO</span>
-          </h2>
-          <div className="space-y-3 text-xs">
-            <div className="flex justify-between items-center p-3 rounded-lg bg-surface-container-high/40">
-              <span className="text-on-surface-variant">Base de Datos:</span>
-              <span className="font-semibold text-primary">Supabase PostgreSQL</span>
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div>
+              <h2 className="font-display text-base font-bold text-on-surface flex items-center gap-2">
+                <Layers className="w-4 h-4 text-primary" />
+                <span>Planchas en Preparación</span>
+              </h2>
+              <p className="text-xs text-on-surface-variant mt-0.5">
+                Pliegos y rollos DTF activos
+              </p>
             </div>
-            <div className="flex justify-between items-center p-3 rounded-lg bg-surface-container-high/40">
-              <span className="text-on-surface-variant">Hosting & CDN:</span>
-              <span className="font-semibold text-secondary">Vercel Edge</span>
-            </div>
-            <div className="flex justify-between items-center p-3 rounded-lg bg-surface-container-high/40">
-              <span className="text-on-surface-variant">Almacenamiento:</span>
-              <span className="font-semibold text-on-surface">Supabase Storage (R2 Ready)</span>
-            </div>
-            <div className="flex justify-between items-center p-3 rounded-lg bg-surface-container-high/40">
-              <span className="text-on-surface-variant">Edge & DNS:</span>
-              <span className="font-semibold text-on-surface">Cloudflare OAuth Connected</span>
-            </div>
+            <Link href="/planchas">
+              <span className="text-xs font-semibold text-primary hover:text-secondary transition-colors cursor-pointer">
+                Ver todas →
+              </span>
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            {[
+              {
+                name: "Plancha_Rollo_58cm_V1",
+                dims: "58 cm x 150 cm",
+                efficiency: "94% aprovechamiento",
+                designs: "14 diseños",
+                status: "Lista para PNG",
+                color: "text-secondary border-secondary/30",
+              },
+              {
+                name: "Pliego_A3_Standard_02",
+                dims: "29.7 cm x 42 cm",
+                efficiency: "88% aprovechamiento",
+                designs: "4 diseños",
+                status: "En Maquetación",
+                color: "text-primary border-primary/30",
+              },
+              {
+                name: "Plancha_Rollo_58cm_V2",
+                dims: "58 cm x 200 cm",
+                efficiency: "91% aprovechamiento",
+                designs: "22 diseños",
+                status: "Borrador",
+                color: "text-on-surface-variant border-white/10",
+              },
+            ].map((sheet) => (
+              <div
+                key={sheet.name}
+                className="neu-pressed bg-surface-container/60 rounded-xl p-3.5 flex items-center justify-between hover:bg-surface-container-high/60 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-surface-container-lowest border border-white/10 flex items-center justify-center text-on-surface-variant">
+                    <Maximize2 className="w-5 h-5 text-secondary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-on-surface truncate max-w-[180px] sm:max-w-[240px]">
+                      {sheet.name}
+                    </h3>
+                    <p className="text-[11px] text-on-surface-variant mt-0.5">
+                      {sheet.dims} • {sheet.designs}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <span
+                    className={`text-[11px] font-semibold px-2.5 py-1 rounded-full bg-surface-container-highest/80 border ${sheet.color}`}
+                  >
+                    {sheet.status}
+                  </span>
+                  <p className="text-[10px] text-secondary font-medium mt-1">
+                    {sheet.efficiency}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </GlassCard>
       </div>

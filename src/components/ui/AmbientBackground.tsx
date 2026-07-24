@@ -1,16 +1,70 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { AMBIENT_TOKENS, type AmbientTier } from "@lib/theme/tokens";
+import { CssAmbientBackground } from "./CssAmbientBackground";
 
 export function AmbientBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [tier, setTier] = useState<AmbientTier | null>(null);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
+    // 1. Accessibility Check: prefers-reduced-motion
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(motionQuery.matches);
+
+    const handleMotionChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    motionQuery.addEventListener("change", handleMotionChange);
+
+    // 2. Hardware Capability & Tier Detection
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    ) || window.innerWidth < 768;
+
+    const hasWebGL = (() => {
+      try {
+        const testCanvas = document.createElement("canvas");
+        return !!(
+          window.WebGLRenderingContext &&
+          (testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl"))
+        );
+      } catch {
+        return false;
+      }
+    })();
+
+    if (!hasWebGL || isMobile) {
+      setTier("tier3");
+    } else {
+      // High-performance desktop tier vs medium tier
+      const cores = navigator.hardwareConcurrency || 4;
+      setTier(cores >= 4 ? "tier1" : "tier2");
+    }
+
+    return () => {
+      motionQuery.removeEventListener("change", handleMotionChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (tier === "tier3" || tier === null) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const gl = (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
-    if (!gl) return;
+    const gl = (canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+
+    if (!gl) {
+      setTier("tier3");
+      return;
+    }
+
+    const tierConfig =
+      tier === "tier1"
+        ? AMBIENT_TOKENS.performanceTiers.tier1
+        : AMBIENT_TOKENS.performanceTiers.tier2;
 
     const vs = `
       attribute vec2 a_position;
@@ -21,6 +75,8 @@ export function AmbientBackground() {
       }
     `;
 
+    // Centralized Design Token Colors injected into GLSL
+    const { glslRgb } = AMBIENT_TOKENS;
     const fs = `
       precision highp float;
       varying vec2 v_texCoord;
@@ -53,22 +109,21 @@ export function AmbientBackground() {
 
       void main() {
         vec2 uv = v_texCoord;
-        float t = u_time * 0.15;
+        float t = u_time * 0.12;
 
-        // Dynamic organic fluid layers (Midnight Blue, Indigo, Violet, Fuchsia, Cyan)
-        float n1 = snoise(uv * 2.0 + t);
-        float n2 = snoise(uv * 4.0 - t * 0.8);
-        float n3 = snoise(uv * 1.5 + vec2(t * 0.5, -t * 0.3));
+        float n1 = snoise(uv * 1.8 + t);
+        float n2 = snoise(uv * 3.5 - t * 0.7);
+        float n3 = snoise(uv * 1.2 + vec2(t * 0.4, -t * 0.2));
 
-        vec3 colDeepNavy   = vec3(0.04, 0.07, 0.15); // #0b1326
-        vec3 colViolet     = vec3(0.51, 0.35, 0.82); // #8259d0
-        vec3 colFuchsia    = vec3(0.72, 0.20, 0.65); // #b833a6
-        vec3 colCyberCyan  = vec3(0.12, 0.75, 0.90); // #1ebfef
+        vec3 cDeepNavy  = vec3(${glslRgb.deepNavy.join(",")});
+        vec3 cViolet    = vec3(${glslRgb.violet.join(",")});
+        vec3 cMagenta   = vec3(${glslRgb.magenta.join(",")});
+        vec3 cCyan      = vec3(${glslRgb.subtleCyan.join(",")});
 
-        vec3 color = colDeepNavy;
-        color = mix(color, colViolet, smoothstep(-0.5, 0.8, n1) * 0.35);
-        color = mix(color, colFuchsia, smoothstep(-0.4, 0.9, n2) * 0.25);
-        color = mix(color, colCyberCyan, smoothstep(0.1, 1.0, n3) * 0.20);
+        vec3 color = cDeepNavy;
+        color = mix(color, cViolet, smoothstep(-0.5, 0.8, n1) * 0.35);
+        color = mix(color, cMagenta, smoothstep(-0.4, 0.9, n2) * 0.25);
+        color = mix(color, cCyan, smoothstep(0.1, 1.0, n3) * 0.20);
 
         gl_FragColor = vec4(color, 0.85);
       }
@@ -80,7 +135,6 @@ export function AmbientBackground() {
       gl!.shaderSource(shader, source);
       gl!.compileShader(shader);
       if (!gl!.getShaderParameter(shader, gl!.COMPILE_STATUS)) {
-        console.error(gl!.getShaderInfoLog(shader));
         gl!.deleteShader(shader);
         return null;
       }
@@ -89,14 +143,20 @@ export function AmbientBackground() {
 
     const vert = compileShader(gl.VERTEX_SHADER, vs);
     const frag = compileShader(gl.FRAGMENT_SHADER, fs);
-    if (!vert || !frag) return;
+    if (!vert || !frag) {
+      setTier("tier3");
+      return;
+    }
 
     const program = gl.createProgram();
     if (!program) return;
     gl.attachShader(program, vert);
     gl.attachShader(program, frag);
     gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      setTier("tier3");
+      return;
+    }
 
     gl.useProgram(program);
 
@@ -115,13 +175,16 @@ export function AmbientBackground() {
     const timeLocation = gl.getUniformLocation(program, "u_time");
     const resLocation = gl.getUniformLocation(program, "u_resolution");
 
-    let animationFrameId: number;
+    let animationFrameId: number | null = null;
+    let isPaused = false;
     const startTime = performance.now();
 
     function resize() {
       if (!canvas) return;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      // Scale internal drawing buffer down to reduce GPU fragment shader overhead by up to 75%
+      const width = Math.floor(window.innerWidth * tierConfig.resolutionScale);
+      const height = Math.floor(window.innerHeight * tierConfig.resolutionScale);
+
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
@@ -132,27 +195,69 @@ export function AmbientBackground() {
     window.addEventListener("resize", resize);
     resize();
 
-    function render() {
-      const now = performance.now();
-      const elapsed = (now - startTime) / 1000;
+    function render(time: number) {
+      if (isPaused) return;
+
+      const elapsed = reducedMotion ? 10.0 : (time - startTime) / 1000;
 
       if (timeLocation) gl!.uniform1f(timeLocation, elapsed);
       if (resLocation && canvas) gl!.uniform2f(resLocation, canvas.width, canvas.height);
 
       gl!.drawArrays(gl!.TRIANGLES, 0, 6);
-      animationFrameId = requestAnimationFrame(render);
+
+      // If reduced motion is requested, render 1 static frame and stop loop
+      if (!reducedMotion) {
+        animationFrameId = requestAnimationFrame(render);
+      }
     }
 
-    render();
+    // 3. Visibility API: Pause render loop completely when tab is hidden
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        isPaused = true;
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+      } else {
+        if (isPaused) {
+          isPaused = false;
+          if (!reducedMotion) {
+            animationFrameId = requestAnimationFrame(render);
+          }
+        }
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Initial trigger
+    animationFrameId = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener("resize", resize);
-      cancelAnimationFrame(animationFrameId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
-  }, []);
+  }, [tier, reducedMotion]);
+
+  // Fallback to CSS Tier 3 if mobile, low power, or WebGL unavailable
+  if (tier === "tier3" || tier === null) {
+    return <CssAmbientBackground staticMode={reducedMotion} />;
+  }
 
   return (
-    <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-80 mix-blend-screen overflow-hidden">
+    <div
+      className="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-80 mix-blend-screen overflow-hidden"
+      style={{
+        backdropFilter:
+          tier === "tier1"
+            ? AMBIENT_TOKENS.performanceTiers.tier1.blurAmount
+            : AMBIENT_TOKENS.performanceTiers.tier2.blurAmount,
+      }}
+    >
       <canvas ref={canvasRef} className="block w-full h-full" />
     </div>
   );

@@ -6,10 +6,20 @@
   :root {
     --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-plus-jakarta: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    /* Centralized Color Variables matching tokens.ts */
+    --color-deep-navy: #0b1326;
+    --color-midnight-blue: #131b2e;
+    --color-indigo: #1f1d47;
+    --color-violet: #5c3d99;
+    --color-purple: #843896;
+    --color-magenta: #b8337a;
+    --color-fuchsia: #d93b94;
+    --color-subtle-cyan: #1ebfef;
   }
 
   body {
-    background-color: #0b1326;
+    background-color: var(--color-deep-navy);
     color: #dbe2fd;
     font-family: var(--font-inter);
     min-height: 100vh;
@@ -19,43 +29,101 @@
   }
 }
 
-/* Glassmorphism specular border & container styles */
+/* Glassmorphism hierarchy & specular borders */
 .glass-panel {
-  background: rgba(11, 19, 38, 0.65);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(11, 19, 38, 0.70);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
   border-left: 1px solid rgba(255, 255, 255, 0.12);
   border-right: 1px solid rgba(255, 255, 255, 0.04);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
 }
 
 .glass-card {
-  background: rgba(23, 31, 51, 0.6);
+  background: rgba(23, 31, 51, 0.65);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
   border-left: 1px solid rgba(255, 255, 255, 0.08);
   border-right: 1px solid rgba(255, 255, 255, 0.02);
   border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
-/* Neumorphic tactile utilities */
+.glass-floating {
+  background: rgba(45, 52, 73, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Neumorphic tactile button & input states */
 .neu-raised {
   box-shadow: -4px -4px 10px rgba(255, 255, 255, 0.03), 4px 4px 10px rgba(0, 0, 0, 0.6);
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .neu-raised:hover {
-  box-shadow: -6px -6px 14px rgba(255, 255, 255, 0.04), 6px 6px 14px rgba(0, 0, 0, 0.7), 0 0 20px rgba(208, 188, 255, 0.2);
+  box-shadow: -6px -6px 14px rgba(255, 255, 255, 0.04), 6px 6px 14px rgba(0, 0, 0, 0.7), 0 0 20px rgba(208, 188, 255, 0.25);
+  transform: translateY(-1px);
 }
 
+.neu-raised:active,
 .neu-pressed {
   box-shadow: inset -4px -4px 10px rgba(255, 255, 255, 0.03), inset 4px 4px 10px rgba(0, 0, 0, 0.6);
+  transform: translateY(0);
 }
 
-/* Scrollbar customization */
+/* Keyframe animations for Tier 3 CSS fallback ambient light */
+@keyframes ambientPulseSlow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.1);
+    opacity: 0.65;
+  }
+}
+
+@keyframes ambientShiftSlow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-50px, 40px) scale(1.15);
+    opacity: 0.55;
+  }
+}
+
+@keyframes ambientPulseAlt {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(30px, 20px) scale(1.08);
+    opacity: 0.5;
+  }
+}
+
+.animate-ambient-pulse-slow {
+  animation: ambientPulseSlow 18s ease-in-out infinite;
+}
+
+.animate-ambient-shift-slow {
+  animation: ambientShiftSlow 22s ease-in-out infinite;
+}
+
+.animate-ambient-pulse-alt {
+  animation: ambientPulseAlt 26s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
