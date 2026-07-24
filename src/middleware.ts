@@ -1,13 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+// Strictly protected routes requiring authentication
 const PROTECTED_ROUTES = [
-  "/",
   "/inicio",
   "/disenos",
   "/planchas",
-  "/catalogo",
-  "/herramientas",
   "/cuenta",
   "/configuracion",
   "/proyecto/nuevo",
@@ -51,11 +49,11 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   const isProtectedRoute = PROTECTED_ROUTES.some(
-    (route) => pathname === route || (route !== "/" && pathname.startsWith(route))
+    (route) => pathname === route || pathname.startsWith(route + "/")
   );
   const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
 
-  // 1. Redirect unauthenticated users trying to access protected routes to /login
+  // 1. Redirect unauthenticated users trying to access strictly protected routes to /login
   if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";

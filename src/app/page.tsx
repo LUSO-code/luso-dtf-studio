@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { createClient } from "@lib/supabase/server";
+import { PublicLanding } from "@components/landing/PublicLanding";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
 import {
@@ -15,12 +17,22 @@ import {
   Maximize2,
 } from "lucide-react";
 
-export default function Home() {
+export default async function HomePage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // If unauthenticated, render Public Welcome / Landing experience
+  if (!user) {
+    return <PublicLanding />;
+  }
+
+  // If authenticated, render existing Inicio Dashboard experience
   return (
     <div className="space-y-8">
       {/* Workflow Primary Hero Banner */}
       <div className="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden">
-        {/* Background Subtle Ambient Light Accent */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -46,10 +58,10 @@ export default function Home() {
               </NeuButton>
             </Link>
 
-            <Link href="/disenos">
-              <NeuButton variant="glass" size="lg">
-                <Upload className="w-5 h-5 text-secondary" />
-                <span>Subir Diseños</span>
+            <Link href="/herramientas/image-lab">
+              <NeuButton variant="secondary" size="lg" active className="shadow-glow-cyan">
+                <Wrench className="w-5 h-5" />
+                <span>Abrir Image Lab</span>
               </NeuButton>
             </Link>
           </div>
@@ -66,18 +78,18 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
             {
+              title: "Image Lab Studio",
+              desc: "Análisis DPI y limpieza de alfas",
+              icon: Wrench,
+              href: "/herramientas/image-lab",
+              glow: "cyan",
+            },
+            {
               title: "DTF Pre-Flight",
               desc: "Verificación de DPI y transparencias",
               icon: FileCheck2,
               href: "/herramientas/preflight",
               glow: "violet",
-            },
-            {
-              title: "Preparación Imagen",
-              desc: "Ajuste de color y limpieza de fondo",
-              icon: ImageIcon,
-              href: "/herramientas/preparacion",
-              glow: "cyan",
             },
             {
               title: "Editor de Máscara",
