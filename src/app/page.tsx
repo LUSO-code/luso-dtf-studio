@@ -4,7 +4,6 @@ import { PublicLanding } from "@components/landing/PublicLanding";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
 import {
-  Upload,
   PlusCircle,
   Sparkles,
   Layers,
@@ -15,6 +14,8 @@ import {
   ArrowRight,
   FileCheck2,
   Maximize2,
+  Clock,
+  Play,
 } from "lucide-react";
 
 export default async function HomePage() {
@@ -28,18 +29,47 @@ export default async function HomePage() {
     return <PublicLanding />;
   }
 
-  // If authenticated, render existing Inicio Dashboard experience
+  // Fetch user active workspace & latest assets for Workflow Continuation
+  let latestDesign: any = null;
+  let latestSheet: any = null;
+
+  const { data: member } = await supabase
+    .from("workspace_members")
+    .select("workspace_id")
+    .eq("user_id", user.id)
+    .single();
+
+  if (member?.workspace_id) {
+    const { data: dData } = await supabase
+      .from("designs")
+      .select("*")
+      .eq("workspace_id", member.workspace_id)
+      .order("updated_at", { ascending: false })
+      .limit(1);
+
+    if (dData?.[0]) latestDesign = dData[0];
+
+    const { data: sData } = await supabase
+      .from("print_sheets")
+      .select("*")
+      .eq("workspace_id", member.workspace_id)
+      .order("updated_at", { ascending: false })
+      .limit(1);
+
+    if (sData?.[0]) latestSheet = sData[0];
+  }
+
   return (
     <div className="space-y-8">
       {/* Workflow Primary Hero Banner */}
-      <div className="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden">
+      <div className="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden border border-white/10">
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/80 border border-primary/20 text-xs font-semibold text-primary">
             <Sparkles className="w-3.5 h-3.5 text-secondary" />
-            <span>Suite de Preparación para Impresión DTF</span>
+            <span>Suite de Preparación e Impresión DTF</span>
           </div>
 
           <h1 className="font-display text-2xl md:text-4xl font-extrabold text-on-surface tracking-tight leading-tight">
@@ -47,24 +77,98 @@ export default async function HomePage() {
           </h1>
 
           <p className="text-sm md:text-base text-on-surface-variant max-w-2xl leading-relaxed">
-            Prepara tus imágenes vectoriales y rásster, ajusta la máscara de tinta blanca, optimiza el aprovechamiento de película con Smart Nesting y exporta planchas listas para RIP.
+            Optimiza imágenes, limpia alfas, genera base de blanco, acomoda diseños con Smart Nesting y exporta planchas 300 DPI listas para RIP.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-4">
-            <Link href="/proyecto/nuevo">
-              <NeuButton variant="primary" size="lg" active className="shadow-glow-violet">
-                <PlusCircle className="w-5 h-5" />
-                <span>Crear Nuevo Proyecto</span>
-              </NeuButton>
-            </Link>
-
             <Link href="/herramientas/image-lab">
               <NeuButton variant="secondary" size="lg" active className="shadow-glow-cyan">
                 <Wrench className="w-5 h-5" />
                 <span>Abrir Image Lab</span>
               </NeuButton>
             </Link>
+
+            <Link href="/planchas/nueva">
+              <NeuButton variant="primary" size="lg" active className="shadow-glow-violet">
+                <PlusCircle className="w-5 h-5" />
+                <span>Crear Nueva Plancha</span>
+              </NeuButton>
+            </Link>
           </div>
+        </div>
+      </div>
+
+      {/* Continuation Area: "Continúa tu Producción" */}
+      <div className="space-y-4">
+        <h2 className="font-display text-lg font-bold text-on-surface flex items-center gap-2">
+          <Clock className="w-5 h-5 text-secondary" />
+          <span>Continúa tu Producción</span>
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Card 1: Último Diseño Editado */}
+          <GlassCard glow="cyan" className="p-5 flex items-center justify-between gap-4">
+            <div className="space-y-1 overflow-hidden">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary">
+                Último Diseño Editado
+              </span>
+              <h3 className="font-display font-bold text-base text-on-surface truncate">
+                {latestDesign ? latestDesign.name : "Sin diseños recientes"}
+              </h3>
+              <p className="text-xs text-on-surface-variant">
+                {latestDesign
+                  ? `${latestDesign.print_width_cm || 30} × ${latestDesign.print_height_cm || 30} cm • ${latestDesign.dpi || 300} DPI`
+                  : "Carga un archivo en el Image Lab para comenzar."}
+              </p>
+            </div>
+
+            {latestDesign ? (
+              <Link href={`/herramientas/mascara?designId=${latestDesign.id}`}>
+                <NeuButton variant="secondary" size="sm" active className="shrink-0 shadow-glow-cyan">
+                  <span>Continuar</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </NeuButton>
+              </Link>
+            ) : (
+              <Link href="/herramientas/image-lab">
+                <NeuButton variant="glass" size="sm" className="shrink-0">
+                  <span>Subir</span>
+                </NeuButton>
+              </Link>
+            )}
+          </GlassCard>
+
+          {/* Card 2: Última Plancha Modificada */}
+          <GlassCard glow="violet" className="p-5 flex items-center justify-between gap-4">
+            <div className="space-y-1 overflow-hidden">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-primary">
+                Última Plancha Modificada
+              </span>
+              <h3 className="font-display font-bold text-base text-on-surface truncate">
+                {latestSheet ? latestSheet.name : "Sin planchas activas"}
+              </h3>
+              <p className="text-xs text-on-surface-variant">
+                {latestSheet
+                  ? `${latestSheet.sheet_width_cm} × ${latestSheet.sheet_height_cm} cm • Uso ${latestSheet.efficiency_percentage || 0}%`
+                  : "Acomoda diseños con el motor Smart Nesting."}
+              </p>
+            </div>
+
+            {latestSheet ? (
+              <Link href={`/planchas/${latestSheet.id}`}>
+                <NeuButton variant="primary" size="sm" active className="shrink-0 shadow-glow-violet">
+                  <span>Continuar</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </NeuButton>
+              </Link>
+            ) : (
+              <Link href="/planchas/nueva">
+                <NeuButton variant="glass" size="sm" className="shrink-0">
+                  <span>Crear</span>
+                </NeuButton>
+              </Link>
+            )}
+          </GlassCard>
         </div>
       </div>
 
@@ -85,15 +189,8 @@ export default async function HomePage() {
               glow: "cyan",
             },
             {
-              title: "DTF Pre-Flight",
-              desc: "Verificación de DPI y transparencias",
-              icon: FileCheck2,
-              href: "/herramientas/preflight",
-              glow: "violet",
-            },
-            {
               title: "Editor de Máscara",
-              desc: "Underbase y encogimiento de blanco",
+              desc: "Underbase y contracción de blanco",
               icon: Layers,
               href: "/herramientas/mascara",
               glow: "violet",
@@ -102,14 +199,21 @@ export default async function HomePage() {
               title: "Smart Nesting",
               desc: "Anidación optimizada en rollo",
               icon: Grid,
-              href: "/herramientas/nesting",
+              href: "/planchas/nueva",
               glow: "cyan",
             },
             {
-              title: "Config. Plancha",
-              desc: "Parámetros de prensado térmico",
-              icon: Settings,
-              href: "/herramientas/plancha",
+              title: "Mis Diseños",
+              desc: "Biblioteca de archivos DTF",
+              icon: ImageIcon,
+              href: "/disenos",
+              glow: "violet",
+            },
+            {
+              title: "Mis Planchas",
+              desc: "Pliegos y rollos maquetados",
+              icon: Maximize2,
+              href: "/planchas",
               glow: "none",
             },
           ].map((tool) => {
@@ -142,159 +246,6 @@ export default async function HomePage() {
             );
           })}
         </div>
-      </div>
-
-      {/* Workflow Sections Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Section 1: Diseños Recientes */}
-        <GlassCard className="space-y-4">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <div>
-              <h2 className="font-display text-base font-bold text-on-surface flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-secondary" />
-                <span>Diseños Recientes</span>
-              </h2>
-              <p className="text-xs text-on-surface-variant mt-0.5">
-                Archivos subidos listos para procesar
-              </p>
-            </div>
-            <Link href="/disenos">
-              <span className="text-xs font-semibold text-primary hover:text-secondary transition-colors cursor-pointer">
-                Ver todos →
-              </span>
-            </Link>
-          </div>
-
-          <div className="space-y-3">
-            {[
-              {
-                name: "Ilustracion_Deportiva_V2.png",
-                size: "45 cm x 30 cm",
-                dpi: "300 DPI",
-                status: "Verificado",
-                color: "text-secondary border-secondary/30",
-              },
-              {
-                name: "Logo_Emblema_Vintage.png",
-                size: "28 cm x 28 cm",
-                dpi: "300 DPI",
-                status: "Máscara Lista",
-                color: "text-primary border-primary/30",
-              },
-              {
-                name: "Estampa_Frente_Camiseta.png",
-                size: "35 cm x 40 cm",
-                dpi: "240 DPI",
-                status: "Requiere Ajuste",
-                color: "text-tertiary border-tertiary/30",
-              },
-            ].map((design) => (
-              <div
-                key={design.name}
-                className="neu-pressed bg-surface-container/60 rounded-xl p-3.5 flex items-center justify-between hover:bg-surface-container-high/60 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-surface-container-lowest border border-white/10 flex items-center justify-center text-on-surface-variant">
-                    <ImageIcon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-semibold text-on-surface truncate max-w-[200px] sm:max-w-[260px]">
-                      {design.name}
-                    </h3>
-                    <p className="text-[11px] text-on-surface-variant mt-0.5">
-                      {design.size} • {design.dpi}
-                    </p>
-                  </div>
-                </div>
-
-                <span
-                  className={`text-[11px] font-semibold px-2.5 py-1 rounded-full bg-surface-container-highest/80 border ${design.color}`}
-                >
-                  {design.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </GlassCard>
-
-        {/* Section 2: Planchas Recientes */}
-        <GlassCard className="space-y-4">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <div>
-              <h2 className="font-display text-base font-bold text-on-surface flex items-center gap-2">
-                <Layers className="w-4 h-4 text-primary" />
-                <span>Planchas en Preparación</span>
-              </h2>
-              <p className="text-xs text-on-surface-variant mt-0.5">
-                Pliegos y rollos DTF activos
-              </p>
-            </div>
-            <Link href="/planchas">
-              <span className="text-xs font-semibold text-primary hover:text-secondary transition-colors cursor-pointer">
-                Ver todas →
-              </span>
-            </Link>
-          </div>
-
-          <div className="space-y-3">
-            {[
-              {
-                name: "Plancha_Rollo_58cm_V1",
-                dims: "58 cm x 150 cm",
-                efficiency: "94% aprovechamiento",
-                designs: "14 diseños",
-                status: "Lista para PNG",
-                color: "text-secondary border-secondary/30",
-              },
-              {
-                name: "Pliego_A3_Standard_02",
-                dims: "29.7 cm x 42 cm",
-                efficiency: "88% aprovechamiento",
-                designs: "4 diseños",
-                status: "En Maquetación",
-                color: "text-primary border-primary/30",
-              },
-              {
-                name: "Plancha_Rollo_58cm_V2",
-                dims: "58 cm x 200 cm",
-                efficiency: "91% aprovechamiento",
-                designs: "22 diseños",
-                status: "Borrador",
-                color: "text-on-surface-variant border-white/10",
-              },
-            ].map((sheet) => (
-              <div
-                key={sheet.name}
-                className="neu-pressed bg-surface-container/60 rounded-xl p-3.5 flex items-center justify-between hover:bg-surface-container-high/60 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-surface-container-lowest border border-white/10 flex items-center justify-center text-on-surface-variant">
-                    <Maximize2 className="w-5 h-5 text-secondary" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-semibold text-on-surface truncate max-w-[180px] sm:max-w-[240px]">
-                      {sheet.name}
-                    </h3>
-                    <p className="text-[11px] text-on-surface-variant mt-0.5">
-                      {sheet.dims} • {sheet.designs}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="text-right">
-                  <span
-                    className={`text-[11px] font-semibold px-2.5 py-1 rounded-full bg-surface-container-highest/80 border ${sheet.color}`}
-                  >
-                    {sheet.status}
-                  </span>
-                  <p className="text-[10px] text-secondary font-medium mt-1">
-                    {sheet.efficiency}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </GlassCard>
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useRef, ChangeEvent } from "react";
+import { Suspense } from "react";
+import { useState, useRef, ChangeEvent, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
 import { UnderbasePreviewTabs } from "@components/underbase/UnderbasePreviewTabs";
 import { AuthGateModal } from "@components/auth/AuthGateModal";
+import { Breadcrumbs } from "@components/layout/Breadcrumbs";
 import { UnderbaseGenerator } from "@lib/image-processing/underbase/generator";
 import { UnderbaseMode, UnderbaseProcessingType } from "@lib/image-processing/underbase/types";
 import { mmToPixels } from "@lib/image-processing/underbase/choke";
@@ -20,10 +23,14 @@ import {
   AlertTriangle,
   Sliders,
   RefreshCw,
-  Info,
+  Grid,
 } from "lucide-react";
 
-export default function MascaraPage() {
+function MascaraContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const designIdParam = searchParams.get("designId");
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [colorImageUrl, setColorImageUrl] = useState<string | null>(null);
   const [underbaseImageUrl, setUnderbaseImageUrl] = useState<string | null>(null);
@@ -37,6 +44,7 @@ export default function MascaraPage() {
   const [targetDpi, setTargetDpi] = useState<number>(300);
 
   // States
+  const [activeDesignId, setActiveDesignId] = useState<string | null>(designIdParam);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -49,6 +57,42 @@ export default function MascaraPage() {
   const sourceImageRef = useRef<HTMLImageElement | null>(null);
 
   const chokePixels = mmToPixels(chokeMm, targetDpi);
+
+  // Load design if URL parameter designId is present
+  useEffect(() => {
+    async function loadExistingDesign() {
+      if (!designIdParam) return;
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("designs")
+        .select("*")
+        .eq("id", designIdParam)
+        .single();
+
+      if (data) {
+        const url = data.processed_file_url || data.original_file_url;
+        if (url) {
+          setColorImageUrl(url);
+          setActiveDesignId(data.id);
+          if (data.underbase_file_url) {
+            setUnderbaseImageUrl(data.underbase_file_url);
+          }
+
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.src = url;
+          img.onload = () => {
+            sourceImageRef.current = img;
+            if (!data.underbase_file_url) {
+              handleGenerateUnderbase(img);
+            }
+          };
+        }
+      }
+    }
+
+    loadExistingDesign();
+  }, [designIdParam]);
 
   // Handle File Selection
   function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
@@ -93,7 +137,6 @@ export default function MascaraPage() {
     setSaveSuccess(false);
 
     try {
-      // Create temporary canvas
       const canvas = document.createElement("canvas");
       canvas.width = img.naturalWidth || img.width;
       canvas.height = img.naturalHeight || img.height;
@@ -125,7 +168,7 @@ export default function MascaraPage() {
   }
 
   // Save Underbase Asset to Workspace
-  async function handleSaveUnderbase() {
+  async function handleSaveUnderbase(): Promise<string | null> {
     const supabase = createClient();
     const {
       data: { user },
@@ -133,12 +176,12 @@ export default function MascaraPage() {
 
     if (!user) {
       setIsAuthGateOpen(true);
-      return;
+      return null;
     }
 
-    if (!selectedFile || !underbaseBlob) {
+    if (!underbaseBlob && !underbaseImageUrl) {
       setErrorMessage("No hay máscara de base de blanco para guardar.");
-      return;
+      return null;
     }
 
     setIsSaving(true);
@@ -154,26 +197,26 @@ export default function MascaraPage() {
       if (!member?.workspace_id) throw new Error("Espacio de trabajo no encontrado.");
 
       const workspaceId = member.workspace_id;
-      const designId = crypto.randomUUID();
+      const designId = activeDesignId || crypto.randomUUID();
       const storageService = getStorageService();
 
-      // 1. Upload Original File
-      const originalPath = `${workspaceId}/designs/${designId}/original/${selectedFile.name}`;
-      const originalUpload = await storageService.upload("designs", originalPath, selectedFile);
+      let underbaseUrlToSave = underbaseImageUrl;
 
-      // 2. Upload Underbase PNG File
-      const underbasePath = `${workspaceId}/designs/${designId}/underbase/dtf_underbase_${selectedFile.name.replace(/\.[^/.]+$/, "")}.png`;
-      const underbaseFile = new File([underbaseBlob], `dtf_underbase_${selectedFile.name}`, { type: "image/png" });
-      const underbaseUpload = await storageService.upload("designs", underbasePath, underbaseFile);
+      if (underbaseBlob) {
+        const underbasePath = `${workspaceId}/designs/${designId}/underbase/dtf_underbase_${Date.now()}.png`;
+        const underbaseFile = new File([underbaseBlob], "dtf_underbase.png", { type: "image/png" });
+        const underbaseUpload = await storageService.upload("designs", underbasePath, underbaseFile);
+        underbaseUrlToSave = underbaseUpload.url;
+      }
 
-      // 3. Insert public.designs Record
-      const { error: errInsert } = await supabase.from("designs").insert({
+      // Update public.designs Record
+      const { error: errInsert } = await supabase.from("designs").upsert({
         id: designId,
         workspace_id: workspaceId,
-        name: selectedFile.name.replace(/\.[^/.]+$/, "") + " (Máscara de Blanco)",
-        original_file_url: originalUpload.url,
-        processed_file_url: originalUpload.url,
-        underbase_file_url: underbaseUpload.url,
+        name: selectedFile ? selectedFile.name.replace(/\.[^/.]+$/, "") + " (Máscara)" : "Diseño con Máscara",
+        original_file_url: colorImageUrl || "",
+        processed_file_url: colorImageUrl || "",
+        underbase_file_url: underbaseUrlToSave,
         dpi: targetDpi,
         processing_status: "completed",
         underbase_config: {
@@ -189,35 +232,23 @@ export default function MascaraPage() {
 
       if (errInsert) throw new Error(errInsert.message);
 
+      setActiveDesignId(designId);
       setSaveSuccess(true);
+      return designId;
     } catch (err: any) {
-      setErrorMessage(err?.message || "Error al guardar el bajo de blanco.");
+      setErrorMessage(err?.message || "Error al guardar la máscara de blanco.");
+      return null;
     } finally {
       setIsSaving(false);
     }
   }
 
-  // Export Dual Package (Color PNG + White Underbase PNG)
-  function handleExportDualPackage() {
-    if (!colorImageUrl || !underbaseBlob || !selectedFile) return;
-
-    // Download Color File
-    const aColor = document.createElement("a");
-    aColor.href = colorImageUrl;
-    aColor.download = `${selectedFile.name.replace(/\.[^/.]+$/, "")}_COLOR_300DPI.png`;
-    document.body.appendChild(aColor);
-    aColor.click();
-    document.body.removeChild(aColor);
-
-    // Download Underbase File
-    const uUrl = URL.createObjectURL(underbaseBlob);
-    const aUnderbase = document.createElement("a");
-    aUnderbase.href = uUrl;
-    aUnderbase.download = `${selectedFile.name.replace(/\.[^/.]+$/, "")}_BASE_BLANCO_300DPI.png`;
-    document.body.appendChild(aUnderbase);
-    aUnderbase.click();
-    document.body.removeChild(aUnderbase);
-    URL.revokeObjectURL(uUrl);
+  // Save and Navigate to Create Sheet
+  async function handleSaveAndCreateSheet() {
+    const id = await handleSaveUnderbase();
+    if (id) {
+      router.push(`/planchas/nueva?designId=${id}`);
+    }
   }
 
   return (
@@ -230,6 +261,14 @@ export default function MascaraPage() {
         actionTitle="para guardar la máscara de base de blanco en tu espacio de trabajo"
       />
 
+      {/* Breadcrumbs */}
+      <Breadcrumbs
+        items={[
+          { label: "Herramientas", href: "/herramientas" },
+          { label: "Editor de Máscara de Blanco" },
+        ]}
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -237,10 +276,21 @@ export default function MascaraPage() {
             <Sparkles className="w-3.5 h-3.5 text-secondary" />
             <span>Laboratorio de Base de Blanco (v1.0)</span>
           </div>
-          <h1 className="font-display text-2xl md:text-3xl font-extrabold text-on-surface">
-            Editor de Máscara de Blanco
-          </h1>
-          <p className="text-xs md:text-sm text-on-surface-variant">
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-2xl md:text-3xl font-extrabold text-on-surface">
+              Editor de Máscara de Blanco
+            </h1>
+            <span
+              className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${
+                underbaseImageUrl
+                  ? "bg-secondary/15 text-secondary border-secondary/30"
+                  : "bg-surface-container-high text-on-surface-variant border-white/10"
+              }`}
+            >
+              Máscara: {underbaseImageUrl ? "LISTA" : "NO PREPARADA"}
+            </span>
+          </div>
+          <p className="text-xs md:text-sm text-on-surface-variant mt-1">
             Genera underbase de blanco, ajusta contracción (choke) en milímetros y simula la prenda.
           </p>
         </div>
@@ -261,7 +311,7 @@ export default function MascaraPage() {
             className="shadow-glow-cyan"
           >
             <Upload className="w-4 h-4" />
-            <span>{selectedFile ? "Cambiar Imagen" : "Cargar Imagen"}</span>
+            <span>{colorImageUrl ? "Cambiar Imagen" : "Cargar Imagen"}</span>
           </NeuButton>
         </div>
       </div>
@@ -278,7 +328,7 @@ export default function MascaraPage() {
         <div className="neu-pressed bg-secondary-dark/30 border border-secondary/40 text-secondary p-4 rounded-xl text-xs flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-5 h-5 shrink-0" />
-            <span className="font-semibold">¡Máscara de blanco guardada en "Mis Diseños"!</span>
+            <span className="font-semibold">¡Máscara de blanco guardada en tu espacio de trabajo!</span>
           </div>
         </div>
       )}
@@ -413,23 +463,23 @@ export default function MascaraPage() {
                   variant="secondary"
                   size="lg"
                   active
-                  onClick={handleSaveUnderbase}
-                  disabled={isSaving || !underbaseBlob}
+                  onClick={() => handleSaveUnderbase()}
+                  disabled={isSaving || !underbaseImageUrl}
                   className="w-full justify-center shadow-glow-cyan"
                 >
                   <Save className="w-4 h-4" />
-                  <span>{isSaving ? "Guardando..." : "Guardar Máscara de Blanco"}</span>
+                  <span>{isSaving ? "Guardando..." : "Guardar en Mis Diseños"}</span>
                 </NeuButton>
 
                 <NeuButton
                   variant="glass"
                   size="md"
-                  onClick={handleExportDualPackage}
-                  disabled={!underbaseBlob}
+                  onClick={handleSaveAndCreateSheet}
+                  disabled={isSaving || !underbaseImageUrl}
                   className="w-full justify-center"
                 >
-                  <Download className="w-4 h-4 text-secondary" />
-                  <span>Exportar Color + Blanco (300 DPI)</span>
+                  <Grid className="w-4 h-4 text-secondary" />
+                  <span>Guardar y Crear Plancha</span>
                 </NeuButton>
               </div>
             </GlassCard>
@@ -464,5 +514,13 @@ export default function MascaraPage() {
         </GlassCard>
       )}
     </div>
+  );
+}
+
+export default function MascaraPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-xs text-on-surface-variant">Cargando Editor de Máscara...</div>}>
+      <MascaraContent />
+    </Suspense>
   );
 }
