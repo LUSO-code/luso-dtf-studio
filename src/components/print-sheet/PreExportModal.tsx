@@ -6,7 +6,10 @@ import { NeuButton } from "@components/ui/NeuButton";
 import { PlacedItem } from "@lib/nesting/types";
 import { validatePrintSheetForExport } from "@lib/print-sheet/exportValidation";
 import { PrintSheetRenderer } from "@lib/print-sheet/PrintSheetRenderer";
-import { FileCheck2, Download, X, AlertTriangle, CheckCircle2, RefreshCw } from "lucide-react";
+import { UnderbaseGenerator } from "@lib/image-processing/underbase/generator";
+import { FileCheck2, Download, X, AlertTriangle, CheckCircle2, RefreshCw, Layers } from "lucide-react";
+
+export type ExportSheetType = "color" | "underbase" | "dual";
 
 interface PreExportModalProps {
   isOpen: boolean;
@@ -31,6 +34,7 @@ export function PreExportModal({
   spacingCm,
   targetDpi,
 }: PreExportModalProps) {
+  const [exportType, setExportType] = useState<ExportSheetType>("color");
   const [isExporting, setIsExporting] = useState(false);
   const [progressMsg, setProgressMsg] = useState("");
   const [progressPct, setProgressPct] = useState(0);
@@ -55,26 +59,77 @@ export function PreExportModal({
     try {
       const renderer = new PrintSheetRenderer();
 
-      const blob = await renderer.renderToBlob(
-        items,
-        sheetWidthCm,
-        sheetHeightCm,
-        targetDpi,
-        (msg, pct) => {
-          setProgressMsg(msg);
-          setProgressPct(pct);
-        }
-      );
+      if (exportType === "color" || exportType === "dual") {
+        const colorBlob = await renderer.renderToBlob(
+          items,
+          sheetWidthCm,
+          sheetHeightCm,
+          targetDpi,
+          (msg, pct) => {
+            setProgressMsg(`[Color] ${msg}`);
+            setProgressPct(pct);
+          }
+        );
 
-      // Trigger File Download
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${sheetName.replace(/\s+/g, "_")}_${sheetWidthCm}x${sheetHeightCm}cm_300DPI.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+        const url = URL.createObjectURL(colorBlob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${sheetName.replace(/\s+/g, "_")}_COLOR_${sheetWidthCm}x${sheetHeightCm}cm_300DPI.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      if (exportType === "underbase" || exportType === "dual") {
+        // Generate Color Sheet first then extract Underbase Mask
+        const colorBlob = await renderer.renderToBlob(
+          items,
+          sheetWidthCm,
+          sheetHeightCm,
+          targetDpi,
+          (msg, pct) => {
+            setProgressMsg(`[Máscara Blanco] ${msg}`);
+            setProgressPct(pct);
+          }
+        );
+
+        setProgressMsg("Generando base de blanco para plancha completa...");
+        setProgressPct(90);
+
+        const img = new Image();
+        img.src = URL.createObjectURL(colorBlob);
+        await new Promise((res) => (img.onload = res));
+
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth || img.width;
+        canvas.height = img.naturalHeight || img.height;
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0);
+
+        const generator = new UnderbaseGenerator();
+        const uResult = await generator.generate(canvas, {
+          underbaseVersion: "1.0",
+          mode: "balanceado",
+          processingType: "binary",
+          chokeMm: 0.3,
+          chokePixels: 4,
+          alphaThreshold: 30,
+          targetDpi,
+          garmentColorSim: "#000000",
+        });
+
+        URL.revokeObjectURL(img.src);
+
+        const uUrl = URL.createObjectURL(uResult.underbaseBlob);
+        const aU = document.createElement("a");
+        aU.href = uUrl;
+        aU.download = `${sheetName.replace(/\s+/g, "_")}_BASE_BLANCO_${sheetWidthCm}x${sheetHeightCm}cm_300DPI.png`;
+        document.body.appendChild(aU);
+        aU.click();
+        document.body.removeChild(aU);
+        URL.revokeObjectURL(uUrl);
+      }
 
       onClose();
     } catch (err: any) {
@@ -104,7 +159,33 @@ export function PreExportModal({
           </button>
         </div>
 
-        {/* Validation Checklist */}
+        {/* Export Mode Selector */}
+        <div className="space-y-2">
+          <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+            Capa / Formato de Salida
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { id: "color", label: "Plancha Color" },
+              { id: "underbase", label: "Base de Blanco" },
+              { id: "dual", label: "Paquete Dual" },
+            ].map((mode) => (
+              <button
+                key={mode.id}
+                onClick={() => setExportType(mode.id as ExportSheetType)}
+                className={`py-2 rounded-xl text-xs font-semibold transition-all border ${
+                  exportType === mode.id
+                    ? "bg-secondary text-surface-container-lowest border-secondary shadow-glow-cyan font-bold"
+                    : "bg-surface-container/60 border-white/10 text-on-surface"
+                }`}
+              >
+                {mode.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Checklist */}
         <div className="space-y-3">
           <h3 className="text-xs font-bold text-on-surface uppercase tracking-wider">
             Lista de Verificación de Plancha
