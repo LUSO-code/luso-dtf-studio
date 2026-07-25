@@ -1,121 +1,177 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@lib/supabase/server";
+"use client";
+
+import { useState, useEffect } from "react";
+import { createClient } from "@lib/supabase/client";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
 import { signoutAction } from "@app/auth/actions";
-import { User, Shield, Mail, Calendar, LogOut, Layers } from "lucide-react";
+import { User, KeyRound, ShieldCheck, CheckCircle2, AlertTriangle, LogOut, Building2 } from "lucide-react";
 
-export default async function CuentaPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function CuentaPage() {
+  const [user, setUser] = useState<any | null>(null);
+  const [displayName, setDisplayName] = useState("");
+  const [activeWorkspaceName, setActiveWorkspaceName] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  if (!user) {
-    redirect("/login");
+  useEffect(() => {
+    async function loadUserData() {
+      const supabase = createClient();
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser();
+
+      if (authUser) {
+        setUser(authUser);
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("display_name")
+          .eq("user_id", authUser.id)
+          .single();
+
+        if (profile?.display_name) {
+          setDisplayName(profile.display_name);
+        } else {
+          setDisplayName(authUser.email?.split("@")[0] || "");
+        }
+
+        const activeId = localStorage.getItem("luso_active_workspace_id");
+        if (activeId) {
+          const { data: ws } = await supabase.from("workspaces").select("name").eq("id", activeId).single();
+          if (ws?.name) setActiveWorkspaceName(ws.name);
+        }
+      }
+    }
+
+    loadUserData();
+  }, []);
+
+  async function handleUpdateProfile() {
+    if (!user || !displayName.trim()) return;
+    setIsUpdating(true);
+    setErrorMessage(null);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase
+        .from("profiles")
+        .upsert({ user_id: user.id, display_name: displayName.trim() });
+
+      if (error) throw new Error(error.message);
+      setStatusMessage("¡Nombre de usuario actualizado con éxito!");
+    } catch (err: any) {
+      setErrorMessage(err?.message || "Error al actualizar perfil.");
+    } finally {
+      setIsUpdating(false);
+    }
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("display_name, created_at")
-    .eq("user_id", user.id)
-    .single();
-
-  const { data: member } = await supabase
-    .from("workspace_members")
-    .select("workspace_id, role, workspaces(name, created_at)")
-    .eq("user_id", user.id)
-    .single();
-
-  const displayName = profile?.display_name || user.email?.split("@")[0] || "Operador DTF";
-  const workspaceName = (member?.workspaces as any)?.name || "Mi espacio";
-  const userRole = member?.role || "owner";
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl">
+      {/* Header */}
       <div>
         <h1 className="font-display text-2xl md:text-3xl font-extrabold text-on-surface">
-          Cuenta de Usuario
+          Mi Cuenta de Usuario
         </h1>
-        <p className="text-xs md:text-sm text-on-surface-variant mt-1">
-          Información personal, sesión y espacio de trabajo activo.
+        <p className="text-xs md:text-sm text-on-surface-variant">
+          Gestiona tu perfil personal, credenciales de seguridad e información de inicio de sesión.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* User Card */}
-        <GlassCard glow="violet" className="lg:col-span-2 p-6 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary p-[2px] shadow-glow-violet">
-                <div className="w-full h-full bg-surface-container-high rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-on-surface" />
-                </div>
-              </div>
-              <div>
-                <h3 className="font-display font-bold text-xl text-on-surface">{displayName}</h3>
-                <p className="text-xs text-on-surface-variant">{user.email}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/30">
-                    Rol: {userRole}
-                  </span>
-                </div>
-              </div>
-            </div>
+      {statusMessage && (
+        <div className="p-4 rounded-xl bg-secondary-dark/30 border border-secondary/40 text-secondary text-xs flex items-center gap-3">
+          <CheckCircle2 className="w-5 h-5 shrink-0" />
+          <span className="font-semibold">{statusMessage}</span>
+        </div>
+      )}
 
-            <form action={signoutAction}>
-              <NeuButton variant="glass" size="sm" className="text-error border-error/20 hover:bg-error/10">
-                <LogOut className="w-4 h-4" />
-                <span>Cerrar Sesión</span>
+      {errorMessage && (
+        <div className="p-4 rounded-xl bg-error-container/30 border border-error/30 text-error text-xs flex items-center gap-3">
+          <AlertTriangle className="w-5 h-5 shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
+      {/* User Profile Card */}
+      <GlassCard className="p-6 space-y-6">
+        <h2 className="font-display text-base font-bold text-on-surface flex items-center gap-2 border-b border-white/10 pb-3">
+          <User className="w-4 h-4 text-secondary" />
+          <span>Información de Perfil</span>
+        </h2>
+
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+              Nombre de Usuario
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                className="w-full neu-pressed bg-surface-container-lowest text-on-surface text-xs rounded-xl px-4 py-2.5 border border-white/5 focus:outline-none focus:ring-1 focus:ring-secondary"
+              />
+              <NeuButton
+                variant="secondary"
+                size="md"
+                active
+                onClick={handleUpdateProfile}
+                disabled={isUpdating}
+              >
+                <span>{isUpdating ? "Guardando..." : "Guardar"}</span>
               </NeuButton>
-            </form>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="p-3.5 rounded-xl neu-pressed bg-surface-container/60 space-y-1">
-              <div className="flex items-center gap-2 text-on-surface-variant">
-                <Mail className="w-4 h-4 text-primary" />
-                <span>Correo de Cuenta:</span>
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+              Correo Electrónico
+            </label>
+            <input
+              type="email"
+              readOnly
+              value={user?.email || ""}
+              className="w-full neu-pressed bg-surface-container-lowest text-on-surface-variant font-mono text-xs rounded-xl px-4 py-2.5 border border-white/5 select-all"
+            />
+          </div>
+
+          {activeWorkspaceName && (
+            <div className="p-3 rounded-xl bg-surface-container/60 border border-white/5 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2 text-on-surface">
+                <Building2 className="w-4 h-4 text-secondary" />
+                <span>Espacio de Trabajo Activo:</span>
               </div>
-              <p className="font-semibold text-on-surface font-mono">{user.email}</p>
+              <span className="font-bold text-secondary font-mono">{activeWorkspaceName}</span>
             </div>
+          )}
+        </div>
+      </GlassCard>
 
-            <div className="p-3.5 rounded-xl neu-pressed bg-surface-container/60 space-y-1">
-              <div className="flex items-center gap-2 text-on-surface-variant">
-                <Calendar className="w-4 h-4 text-secondary" />
-                <span>Miembro Desde:</span>
-              </div>
-              <p className="font-semibold text-on-surface">
-                {new Date(user.created_at).toLocaleDateString("es-ES", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
-            </div>
-          </div>
-        </GlassCard>
+      {/* Security & Sessions Card */}
+      <GlassCard className="p-6 space-y-4">
+        <h2 className="font-display text-base font-bold text-on-surface flex items-center gap-2 border-b border-white/10 pb-3">
+          <ShieldCheck className="w-4 h-4 text-primary" />
+          <span>Seguridad y Sesiones</span>
+        </h2>
 
-        {/* Workspace Card */}
-        <GlassCard glow="cyan" className="p-6 space-y-4">
-          <h3 className="font-display font-bold text-base text-on-surface flex items-center gap-2 border-b border-white/10 pb-3">
-            <Layers className="w-5 h-5 text-secondary" />
-            <span>Espacio de Trabajo</span>
-          </h3>
+        <p className="text-xs text-on-surface-variant leading-relaxed">
+          Tu sesión está protegida mediante Supabase SSR Authentication y tokens cifrados.
+        </p>
 
-          <div className="space-y-3 text-xs">
-            <div className="p-3.5 rounded-xl neu-pressed bg-surface-container/60 space-y-1">
-              <span className="text-on-surface-variant">Nombre del Espacio:</span>
-              <p className="font-bold text-sm text-secondary">{workspaceName}</p>
-            </div>
+        <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
+          <span className="text-[11px] text-on-surface-variant/70 italic">
+            Gestión avanzada de múltiples sesiones activas próximamente.
+          </span>
 
-            <div className="p-3.5 rounded-xl neu-pressed bg-surface-container/60 space-y-1">
-              <span className="text-on-surface-variant">Seguridad de Datos:</span>
-              <p className="font-semibold text-primary">Row Level Security (RLS) Activo</p>
-            </div>
-          </div>
-        </GlassCard>
-      </div>
+          <form action={signoutAction}>
+            <NeuButton variant="glass" size="md" type="submit">
+              <LogOut className="w-4 h-4 text-error" />
+              <span>Cerrar Sesión</span>
+            </NeuButton>
+          </form>
+        </div>
+      </GlassCard>
     </div>
   );
 }
