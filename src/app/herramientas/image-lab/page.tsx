@@ -7,11 +7,13 @@ import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
 import { BeforeAfterSlider } from "@components/ui/BeforeAfterSlider";
 import { AuthGateModal } from "@components/auth/AuthGateModal";
+import { UpgradeModal } from "@components/billing/UpgradeModal";
 import { Breadcrumbs } from "@components/layout/Breadcrumbs";
 import { analyzeImage, ImageAnalysis } from "@lib/image-processing/analyzer";
 import { LocalCanvasProvider } from "@lib/image-processing/providers/local-provider";
 import { AlphaProcessingMode } from "@lib/image-processing/provider";
 import { getStorageService } from "@lib/storage/StorageService";
+import { canCreateDesign } from "@lib/billing/usage";
 import { createClient } from "@lib/supabase/client";
 import {
   Upload,
@@ -50,8 +52,9 @@ function ImageLabContent() {
   const [savedDesignId, setSavedDesignId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Auth Gate Modal State
+  // Auth Gate & Upgrade Modal States
   const [isAuthGateOpen, setIsAuthGateOpen] = useState(false);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -188,6 +191,16 @@ function ImageLabContent() {
       if (!member?.workspace_id) throw new Error("Espacio de trabajo no encontrado.");
 
       const workspaceId = member.workspace_id;
+
+      // Server-Side Design Limit Guard for new creations
+      if (!savedDesignId) {
+        const allowed = await canCreateDesign(supabase, workspaceId);
+        if (!allowed) {
+          setIsUpgradeModalOpen(true);
+          throw new Error("Has alcanzado el límite de diseños incluidos en tu plan comercial.");
+        }
+      }
+
       const designId = savedDesignId || crypto.randomUUID();
       const storageService = getStorageService();
 
@@ -244,12 +257,19 @@ function ImageLabContent() {
 
   return (
     <div className="space-y-6">
-      {/* Auth Gate Modal */}
+      {/* Auth Gate & Upgrade Modals */}
       <AuthGateModal
         isOpen={isAuthGateOpen}
         onClose={() => setIsAuthGateOpen(false)}
         redirectTo="/herramientas/image-lab"
         actionTitle="para guardar tus diseños procesados en tu espacio de trabajo"
+      />
+
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+        title="Límite de Diseños Alcanzado"
+        description="Has alcanzado el número máximo de diseños permitidos en tu plan actual. Mejora a Pro o Estudio para continuar subiendo diseños."
       />
 
       {/* Breadcrumbs */}
@@ -298,9 +318,16 @@ function ImageLabContent() {
 
       {/* Error & Success Banners */}
       {errorMessage && (
-        <div className="neu-pressed bg-error-container/30 border border-error/30 text-error p-4 rounded-xl text-xs flex items-center gap-3">
-          <AlertTriangle className="w-5 h-5 shrink-0" />
-          <span>{errorMessage}</span>
+        <div className="neu-pressed bg-error-container/30 border border-error/30 text-error p-4 rounded-xl text-xs flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+          {errorMessage.includes("límite") && (
+            <NeuButton variant="secondary" size="sm" active onClick={() => setIsUpgradeModalOpen(true)}>
+              <span>Mejorar Plan</span>
+            </NeuButton>
+          )}
         </div>
       )}
 
@@ -401,7 +428,7 @@ function ImageLabContent() {
                 </select>
               </div>
 
-              {/* Progressive Workflow CTAs: Guardar y Continuar */}
+              {/* Progressive Workflow CTAs */}
               <div className="space-y-3 pt-4 border-t border-white/10">
                 <span className="text-xs font-bold text-on-surface uppercase tracking-wider block">
                   Guardar y Continuar Producción

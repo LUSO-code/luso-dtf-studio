@@ -6,11 +6,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@lib/supabase/client";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
+import { UpgradeModal } from "@components/billing/UpgradeModal";
 import { PrintSheetEditor } from "@components/print-sheet/PrintSheetEditor";
 import { PlacedItem } from "@lib/nesting/types";
 import { MaxRectsNestingEngine } from "@lib/nesting/MaxRectsNestingEngine";
 import { Breadcrumbs } from "@components/layout/Breadcrumbs";
-import { Grid, Sparkles, Save, ArrowLeft, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { canCreatePrintSheet } from "@lib/billing/usage";
+import { Sparkles, Save, ArrowLeft, AlertTriangle } from "lucide-react";
 
 function NuevaPlanchaContent() {
   const searchParams = useSearchParams();
@@ -27,6 +29,7 @@ function NuevaPlanchaContent() {
   const [items, setItems] = useState<PlacedItem[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   // Automatically load design if designIdParam is present
   useEffect(() => {
@@ -99,6 +102,14 @@ function NuevaPlanchaContent() {
       if (!member?.workspace_id) throw new Error("Espacio de trabajo no encontrado.");
 
       const workspaceId = member.workspace_id;
+
+      // Server-Side Limit Check
+      const allowed = await canCreatePrintSheet(supabase, workspaceId);
+      if (!allowed) {
+        setIsUpgradeModalOpen(true);
+        throw new Error("Has alcanzado el límite de planchas DTF incluidas en tu plan comercial.");
+      }
+
       const sheetId = crypto.randomUUID();
 
       // Calculate efficiency
@@ -152,6 +163,13 @@ function NuevaPlanchaContent() {
 
   return (
     <div className="space-y-6">
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+        title="Límite de Planchas Alcanzado"
+        description="Has alcanzado el número máximo de planchas permitidas en tu plan actual. Mejora a Pro o Estudio para crear más planchas."
+      />
+
       {/* Breadcrumbs */}
       <Breadcrumbs
         items={[
@@ -196,9 +214,16 @@ function NuevaPlanchaContent() {
       </div>
 
       {errorMessage && (
-        <div className="neu-pressed bg-error-container/30 border border-error/30 text-error p-4 rounded-xl text-xs flex items-center gap-3">
-          <AlertTriangle className="w-5 h-5 shrink-0" />
-          <span>{errorMessage}</span>
+        <div className="neu-pressed bg-error-container/30 border border-error/30 text-error p-4 rounded-xl text-xs flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+          {errorMessage.includes("límite") && (
+            <NeuButton variant="secondary" size="sm" active onClick={() => setIsUpgradeModalOpen(true)}>
+              <span>Mejorar Plan</span>
+            </NeuButton>
+          )}
         </div>
       )}
 

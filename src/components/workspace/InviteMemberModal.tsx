@@ -6,6 +6,7 @@ import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
 import { generateInvitationToken, hashInvitationToken, getInvitationExpiration } from "@lib/auth/invitations";
 import { WorkspaceRole } from "@lib/auth/rbac";
+import { canAddMember } from "@lib/billing/usage";
 import { UserPlus, X, Copy, CheckCircle2, AlertTriangle } from "lucide-react";
 
 interface InviteMemberModalProps {
@@ -40,6 +41,12 @@ export function InviteMemberModal({ isOpen, onClose, workspaceId }: InviteMember
       } = await supabase.auth.getUser();
 
       if (!user) throw new Error("Usuario no autenticado.");
+
+      // Server-Side Limit Guard for Team Members
+      const allowed = await canAddMember(supabase, workspaceId);
+      if (!allowed) {
+        throw new Error("Has alcanzado el límite de miembros de equipo incluidos en tu plan comercial.");
+      }
 
       const rawToken = generateInvitationToken();
       const tokenHash = hashInvitationToken(rawToken);
