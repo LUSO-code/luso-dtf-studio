@@ -5,20 +5,17 @@ import { createClient } from "@lib/supabase/client";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
 import { InviteMemberModal } from "@components/workspace/InviteMemberModal";
+import { PlanUsageDashboard } from "@components/billing/PlanUsageDashboard";
 import { hasPermission, WorkspaceRole } from "@lib/auth/rbac";
 import {
   Building2,
   Users,
   UserPlus,
-  ShieldCheck,
-  Crown,
   Trash2,
   Sliders,
   CheckCircle2,
   AlertTriangle,
-  RefreshCw,
   Mail,
-  Copy,
 } from "lucide-react";
 
 export default function ConfiguracionPage() {
@@ -161,7 +158,6 @@ export default function ConfiguracionPage() {
 
   const canManageMembers = hasPermission(userRole, "members.invite");
   const canUpdateWorkspace = hasPermission(userRole, "workspace.update");
-  const isOwner = userRole === "owner";
 
   return (
     <div className="space-y-6 max-w-5xl">
@@ -179,7 +175,7 @@ export default function ConfiguracionPage() {
           Configuración del Espacio de Trabajo
         </h1>
         <p className="text-xs md:text-sm text-on-surface-variant">
-          Gestiona los parámetros de producción, miembros del equipo y permisos de tu taller DTF.
+          Gestiona tu plan comercial, consumo de recursos, equipo y preferencias de producción.
         </p>
       </div>
 
@@ -197,6 +193,9 @@ export default function ConfiguracionPage() {
           <span>{errorMessage}</span>
         </div>
       )}
+
+      {/* Resource Usage & SaaS Plan Dashboard */}
+      {workspace && <PlanUsageDashboard workspaceId={workspace.id} />}
 
       {/* General Settings Card */}
       <GlassCard className="p-6 space-y-4">
