@@ -1,4 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { isPlatformAdmin } from "@lib/auth/platform-admin";
 
 export interface FunnelMetrics {
   totalRegistrations: number;
@@ -29,6 +30,7 @@ export interface AdminPlatformInsights {
 
 /**
  * Calculates conversion rates across the DTF production workflow.
+ * Guaranteed to run server-side aggregation.
  */
 export async function getFunnelMetrics(supabase: SupabaseClient): Promise<FunnelMetrics> {
   const [
@@ -47,7 +49,7 @@ export async function getFunnelMetrics(supabase: SupabaseClient): Promise<Funnel
     supabase.from("analytics_events").select("*", { count: "exact", head: true }).eq("event_name", "print_sheet_exported"),
   ]);
 
-  const reg = totalRegistrations || 1; // Prevent division by zero
+  const reg = totalRegistrations || 1;
   const uploads = totalDesignUploads || 0;
 
   return {
@@ -69,8 +71,17 @@ export async function getFunnelMetrics(supabase: SupabaseClient): Promise<Funnel
 
 /**
  * Calculates internal platform-wide owner insights.
+ * REQUIRES EXPLICIT PLATFORM ADMIN AUTHORIZATION.
  */
-export async function getAdminPlatformInsights(supabase: SupabaseClient): Promise<AdminPlatformInsights> {
+export async function getAdminPlatformInsights(
+  supabase: SupabaseClient,
+  userId?: string
+): Promise<AdminPlatformInsights | null> {
+  const isAdmin = await isPlatformAdmin(supabase, userId);
+  if (!isAdmin) {
+    return null; // Return null if not a platform admin
+  }
+
   const [
     { count: totalUsers },
     { count: totalWs },

@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { createClient } from "@lib/supabase/client";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
+import { isPlatformAdmin } from "@lib/auth/platform-admin";
 import { getFunnelMetrics, getAdminPlatformInsights, FunnelMetrics, AdminPlatformInsights } from "@lib/analytics/funnel";
-import { Activity, Users, Building2, Layers, Grid, Download, ShieldCheck, RefreshCw } from "lucide-react";
+import { Activity, Users, Building2, Layers, Grid, ShieldCheck, RefreshCw } from "lucide-react";
 
 export default function AdminInsightsPage() {
   const [funnel, setFunnel] = useState<FunnelMetrics | null>(null);
@@ -27,15 +28,10 @@ export default function AdminInsightsPage() {
         return;
       }
 
-      // Check if owner has owner membership in any workspace
-      const { data: member } = await supabase
-        .from("workspace_members")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "owner")
-        .limit(1);
+      // Check explicit Platform Admin table membership (NOT workspace owner role)
+      const isAdmin = await isPlatformAdmin(supabase, user.id);
 
-      if (!member || member.length === 0) {
+      if (!isAdmin) {
         setIsAuthorized(false);
         setIsLoading(false);
         return;
@@ -45,7 +41,7 @@ export default function AdminInsightsPage() {
 
       const [f, ins] = await Promise.all([
         getFunnelMetrics(supabase),
-        getAdminPlatformInsights(supabase),
+        getAdminPlatformInsights(supabase, user.id),
       ]);
 
       setFunnel(f);
@@ -63,11 +59,11 @@ export default function AdminInsightsPage() {
   if (!isAuthorized) {
     return (
       <div className="p-8 max-w-md mx-auto">
-        <GlassCard className="p-6 text-center space-y-4">
+        <GlassCard className="p-6 text-center space-y-4 border border-error/30">
           <ShieldCheck className="w-8 h-8 text-error mx-auto" />
           <h2 className="font-display text-lg font-bold text-on-surface">Acceso Restringido</h2>
           <p className="text-xs text-on-surface-variant">
-            Esta sección de análisis de plataforma requiere permisos de propietario.
+            Esta sección requiere permisos de Administrador de Plataforma. Los propietarios de espacio de trabajo no tienen acceso a métricas globales de la plataforma.
           </p>
         </GlassCard>
       </div>
@@ -84,10 +80,10 @@ export default function AdminInsightsPage() {
             <span>Métricas de Plataforma & Funnel Beta</span>
           </div>
           <h1 className="font-display text-2xl md:text-3xl font-extrabold text-on-surface">
-            Métricas de Producto LUSO DTF STUDIO
+            Métricas de Plataforma LUSO DTF STUDIO
           </h1>
           <p className="text-xs md:text-sm text-on-surface-variant">
-            Resumen global de activación, retención y producción de espacios de trabajo.
+            Resumen global de activación, retención y producción de espacios de trabajo (Exclusivo Administradores de Plataforma).
           </p>
         </div>
 
