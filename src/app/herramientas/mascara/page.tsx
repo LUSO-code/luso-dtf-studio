@@ -11,6 +11,7 @@ import { Breadcrumbs } from "@components/layout/Breadcrumbs";
 import { UnderbaseGenerator } from "@lib/image-processing/underbase/generator";
 import { UnderbaseMode, UnderbaseProcessingType } from "@lib/image-processing/underbase/types";
 import { mmToPixels } from "@lib/image-processing/underbase/choke";
+import { safeLoadImage } from "@lib/image-processing/utils";
 import { getStorageService } from "@lib/storage/StorageService";
 import { createClient } from "@lib/supabase/client";
 import {
@@ -78,15 +79,15 @@ function MascaraContent() {
             setUnderbaseImageUrl(data.underbase_file_url);
           }
 
-          const img = new Image();
-          img.crossOrigin = "anonymous";
-          img.src = url;
-          img.onload = () => {
+          try {
+            const img = await safeLoadImage(url);
             sourceImageRef.current = img;
             if (!data.underbase_file_url) {
               handleGenerateUnderbase(img);
             }
-          };
+          } catch (e) {
+            // handle error
+          }
         }
       }
     }
@@ -95,7 +96,7 @@ function MascaraContent() {
   }, [designIdParam]);
 
   // Handle File Selection
-  function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
+  async function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -117,14 +118,13 @@ function MascaraContent() {
     const objectUrl = URL.createObjectURL(file);
     setColorImageUrl(objectUrl);
 
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = objectUrl;
-
-    img.onload = () => {
+    try {
+      const img = await safeLoadImage(objectUrl);
       sourceImageRef.current = img;
       handleGenerateUnderbase(img);
-    };
+    } catch (err: any) {
+      setErrorMessage(err?.message || "Error al cargar la imagen.");
+    }
   }
 
   // Generate Underbase Mask

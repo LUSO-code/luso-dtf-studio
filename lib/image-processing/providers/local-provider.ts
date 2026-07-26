@@ -2,6 +2,7 @@ import { ImageProcessingProvider, ProcessingConfig, ProcessingResult } from "../
 import { analyzeImage, ImageAnalysis } from "../analyzer";
 import { runDtfPreflight } from "../preflight";
 import { embedPngDpi } from "../png-dpi";
+import { safeLoadImage } from "../utils";
 
 export class LocalCanvasProvider implements ImageProcessingProvider {
   name = "Local Canvas Deterministic Engine v1.0";
@@ -90,14 +91,13 @@ export class LocalCanvasProvider implements ImageProcessingProvider {
     // 5. Inject pHYs DPI Chunk (300 DPI metadata) into PNG Binary
     const processedBlob = await embedPngDpi(rawBlob, config.targetDpi);
 
-    // 6. Re-analyze Processed Image
-    const tempImg = new Image();
-    tempImg.src = URL.createObjectURL(processedBlob);
-    await new Promise((resolve) => (tempImg.onload = resolve));
+    // 6. Re-analyze Processed Image using safeLoadImage safeguard
+    const objectUrl = URL.createObjectURL(processedBlob);
+    const tempImg = await safeLoadImage(objectUrl);
 
     const updatedAnalysis = await analyzeImage(tempImg, processedBlob.size, "png");
     updatedAnalysis.hasEmbeddedDpi = true;
-    URL.revokeObjectURL(tempImg.src);
+    URL.revokeObjectURL(objectUrl);
 
     // 7. Run Pre-Flight Report
     const preflight = runDtfPreflight(updatedAnalysis, config.targetWidthCm, config.targetDpi);

@@ -6,6 +6,7 @@ import { NeuButton } from "@components/ui/NeuButton";
 import { PlacedItem } from "@lib/nesting/types";
 import { validatePrintSheetForExport } from "@lib/print-sheet/exportValidation";
 import { PrintSheetRenderer } from "@lib/print-sheet/PrintSheetRenderer";
+import { safeLoadImage } from "@lib/image-processing/utils";
 import { UnderbaseGenerator } from "@lib/image-processing/underbase/generator";
 import { FileCheck2, Download, X, AlertTriangle, CheckCircle2, RefreshCw, Layers } from "lucide-react";
 
@@ -97,9 +98,8 @@ export function PreExportModal({
         setProgressMsg("Generando base de blanco para plancha completa...");
         setProgressPct(90);
 
-        const img = new Image();
-        img.src = URL.createObjectURL(colorBlob);
-        await new Promise((res) => (img.onload = res));
+        const objectUrl = URL.createObjectURL(colorBlob);
+        const img = await safeLoadImage(objectUrl);
 
         const canvas = document.createElement("canvas");
         canvas.width = img.naturalWidth || img.width;

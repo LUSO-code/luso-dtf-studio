@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { useState, useRef, ChangeEvent, useEffect, useMemo } from "react";
+import { useState, useRef, ChangeEvent, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
@@ -12,6 +12,7 @@ import { Breadcrumbs } from "@components/layout/Breadcrumbs";
 import { analyzeImage, ImageAnalysis } from "@lib/image-processing/analyzer";
 import { LocalCanvasProvider } from "@lib/image-processing/providers/local-provider";
 import { AlphaProcessingMode } from "@lib/image-processing/provider";
+import { safeLoadImage } from "@lib/image-processing/utils";
 import { getStorageService } from "@lib/storage/StorageService";
 import { canCreateDesign } from "@lib/billing/usage";
 import { createClient } from "@lib/supabase/client";
@@ -63,9 +64,9 @@ function ImageLabContent() {
     return (
       !isSaving &&
       !isProcessing &&
-      (Boolean(processedBlob) || Boolean(savedDesignId))
+      (Boolean(processedBlob) || Boolean(savedDesignId) || Boolean(processedUrl))
     );
-  }, [isSaving, isProcessing, processedBlob, savedDesignId]);
+  }, [isSaving, isProcessing, processedBlob, savedDesignId, processedUrl]);
 
   // Load design if URL parameter designId is present
   useEffect(() => {
@@ -93,6 +94,46 @@ function ImageLabContent() {
     loadExistingDesign();
   }, [designIdParam]);
 
+  // Execute DTF Optimization Pipeline
+  const processImageWithLocalProvider = useCallback(
+    async (file: File, currentAnalysis: ImageAnalysis) => {
+      setIsProcessing(true);
+      setErrorMessage(null);
+
+      try {
+        const objectUrl = URL.createObjectURL(file);
+        const img = await safeLoadImage(objectUrl);
+
+        const provider = new LocalCanvasProvider();
+        const result = await provider.process(
+          img,
+          {
+            processingVersion: "1.0",
+            targetWidthCm,
+            targetDpi,
+            alphaMode,
+            alphaThreshold: 30,
+            cleanAlpha: true,
+            removeBackground: enableChroma,
+            backgroundColorKey: enableChroma ? chromaColor : undefined,
+            backgroundRemovalMode: enableChroma ? "color-key" : undefined,
+          },
+          currentAnalysis
+        );
+
+        const procObjectUrl = URL.createObjectURL(result.processedBlob);
+        setProcessedUrl(procObjectUrl);
+        setProcessedBlob(result.processedBlob);
+        URL.revokeObjectURL(objectUrl);
+      } catch (err: any) {
+        setErrorMessage(err?.message || "Error durante el procesamiento de la imagen.");
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [targetWidthCm, targetDpi, alphaMode, enableChroma, chromaColor]
+  );
+
   // Handle File Select
   async function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -117,10 +158,7 @@ function ImageLabContent() {
     setOriginalUrl(origObjectUrl);
 
     try {
-      const img = new Image();
-      img.src = origObjectUrl;
-      await new Promise((res) => (img.onload = res));
-
+      const img = await safeLoadImage(origObjectUrl);
       const resultAnalysis = await analyzeImage(img, file.size, format);
       setAnalysis(resultAnalysis);
       await processImageWithLocalProvider(file, resultAnalysis);
@@ -129,45 +167,12 @@ function ImageLabContent() {
     }
   }
 
-  // Execute DTF Optimization Pipeline
-  async function processImageWithLocalProvider(
-    file: File,
-    currentAnalysis: ImageAnalysis
-  ) {
-    setIsProcessing(true);
-    setErrorMessage(null);
-
-    try {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      await new Promise((res) => (img.onload = res));
-
-      const provider = new LocalCanvasProvider();
-      const result = await provider.process(
-        img,
-        {
-          processingVersion: "1.0",
-          targetWidthCm,
-          targetDpi,
-          alphaMode,
-          alphaThreshold: 30,
-          cleanAlpha: true,
-          removeBackground: enableChroma,
-          backgroundColorKey: enableChroma ? chromaColor : undefined,
-          backgroundRemovalMode: enableChroma ? "color-key" : undefined,
-        },
-        currentAnalysis
-      );
-
-      const procObjectUrl = URL.createObjectURL(result.processedBlob);
-      setProcessedUrl(procObjectUrl);
-      setProcessedBlob(result.processedBlob);
-    } catch (err: any) {
-      setErrorMessage(err?.message || "Error durante el procesamiento de la imagen.");
-    } finally {
-      setIsProcessing(false);
+  // Reactive Re-processing on setting changes if selectedFile and analysis are present
+  useEffect(() => {
+    if (selectedFile && analysis) {
+      processImageWithLocalProvider(selectedFile, analysis);
     }
-  }
+  }, [targetWidthCm, targetDpi, alphaMode, enableChroma, chromaColor]);
 
   // Save Design Record to Supabase
   async function saveDesignRecord(): Promise<string | null> {
@@ -200,7 +205,8 @@ function ImageLabContent() {
         .from("workspace_members")
         .select("workspace_id")
         .eq("user_id", user.id)
-        .single();
+        .limit(1)
+        .maybeSingle();
 
       if (!member?.workspace_id) throw new Error("Espacio de trabajo no encontrado.");
 

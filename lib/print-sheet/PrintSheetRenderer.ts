@@ -1,5 +1,6 @@
 import { PlacedItem } from "@lib/nesting/types";
 import { embedPngDpi } from "@lib/image-processing/png-dpi";
+import { safeLoadImage } from "@lib/image-processing/utils";
 
 export interface RenderProgressCallback {
   (message: string, percentage: number): void;
@@ -49,14 +50,12 @@ export class PrintSheetRenderer {
       const srcUrl = item.processedFileUrl || item.thumbnailUrl;
       if (!srcUrl) continue;
 
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.src = srcUrl;
-
-      await new Promise<void>((resolve, reject) => {
-        img.onload = () => resolve();
-        img.onerror = () => resolve(); // Skip failing image cleanly without crashing job
-      });
+      let img: HTMLImageElement;
+      try {
+        img = await safeLoadImage(srcUrl, "anonymous");
+      } catch (e) {
+        continue; // Skip failing image cleanly without crashing job
+      }
 
       // Calculate pixel coordinates
       const itemXPx = Math.round((item.xCm / 2.54) * targetDpi);
