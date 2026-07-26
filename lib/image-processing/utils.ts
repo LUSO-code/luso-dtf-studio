@@ -14,11 +14,18 @@ export function safeLoadImage(
       img.crossOrigin = crossOrigin;
     }
 
+    const urlType = src.startsWith("blob:") ? "blob" : src.startsWith("data:") ? "data" : "remote";
+    console.log(`[IMAGE_LAB_DEBUG] PROCESSED_LOAD_START urlType=${urlType}`);
+
     img.onload = () => {
+      console.log(
+        `[IMAGE_LAB_DEBUG] PROCESSED_LOAD_SUCCESS urlType=${urlType} width=${img.width} height=${img.height} naturalWidth=${img.naturalWidth} naturalHeight=${img.naturalHeight} complete=${img.complete}`
+      );
       resolve(img);
     };
 
     img.onerror = (err) => {
+      console.error(`[IMAGE_LAB_DEBUG] PROCESSED_LOAD_ERROR urlType=${urlType}`, err);
       reject(
         new Error(
           "Error al cargar la imagen. Verifique que el archivo no esté dañado y sea una imagen válida."
@@ -30,6 +37,9 @@ export function safeLoadImage(
 
     // Synchronous memory-cache / Blob URL resolution safeguard
     if (img.complete && img.naturalWidth > 0) {
+      console.log(
+        `[IMAGE_LAB_DEBUG] PROCESSED_LOAD_SUCCESS_SYNC urlType=${urlType} naturalWidth=${img.naturalWidth} naturalHeight=${img.naturalHeight}`
+      );
       resolve(img);
     }
   });

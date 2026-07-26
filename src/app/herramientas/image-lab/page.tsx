@@ -102,6 +102,7 @@ function ImageLabContent() {
 
       try {
         const objectUrl = URL.createObjectURL(file);
+        console.log(`[IMAGE_LAB_DEBUG] PROCESSING_PIPELINE_START fileName=${file.name} size=${file.size} type=${file.type}`);
         const img = await safeLoadImage(objectUrl);
 
         const provider = new LocalCanvasProvider();
@@ -125,7 +126,9 @@ function ImageLabContent() {
         setProcessedUrl(procObjectUrl);
         setProcessedBlob(result.processedBlob);
         URL.revokeObjectURL(objectUrl);
+        console.log(`[IMAGE_LAB_DEBUG] PIPELINE_SUCCESS processedBlobSize=${result.processedBlob.size}`);
       } catch (err: any) {
+        console.error("[IMAGE_LAB_DEBUG] PIPELINE_ERROR", err);
         setErrorMessage(err?.message || "Error durante el procesamiento de la imagen.");
       } finally {
         setIsProcessing(false);
@@ -142,14 +145,16 @@ function ImageLabContent() {
     setErrorMessage(null);
     setSaveSuccess(false);
 
+    console.log(`[IMAGE_LAB_DEBUG] FILE_SELECTED name=${file.name} size=${file.size} type=${file.type}`);
+
     const format = file.name.split(".").pop()?.toLowerCase() || "";
     if (!["png", "jpg", "jpeg", "webp"].includes(format)) {
-      setErrorMessage("Formato no compatible. Sube una imagen PNG, JPG o WEBP.");
+      setErrorMessage("Formato de imagen no compatible. Por favor sube un archivo en formato PNG, JPG o WEBP.");
       return;
     }
 
     if (file.size > 50 * 1024 * 1024) {
-      setErrorMessage("El archivo supera el límite de 50 MB.");
+      setErrorMessage("El archivo de imagen supera el límite máximo de 50 MB.");
       return;
     }
 
@@ -158,12 +163,15 @@ function ImageLabContent() {
     setOriginalUrl(origObjectUrl);
 
     try {
+      console.log("[IMAGE_LAB_DEBUG] ORIGINAL_LOAD_START");
       const img = await safeLoadImage(origObjectUrl);
+      console.log(`[IMAGE_LAB_DEBUG] ORIGINAL_LOAD_SUCCESS naturalWidth=${img.naturalWidth} naturalHeight=${img.naturalHeight}`);
       const resultAnalysis = await analyzeImage(img, file.size, format);
       setAnalysis(resultAnalysis);
       await processImageWithLocalProvider(file, resultAnalysis);
     } catch (err: any) {
-      setErrorMessage(err?.message || "Error al analizar la imagen.");
+      console.error("[IMAGE_LAB_DEBUG] ORIGINAL_LOAD_ERROR", err);
+      setErrorMessage(err?.message || "Error al analizar la imagen subida.");
     }
   }
 

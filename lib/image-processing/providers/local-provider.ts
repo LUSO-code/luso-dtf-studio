@@ -13,16 +13,15 @@ export class LocalCanvasProvider implements ImageProcessingProvider {
     originalAnalysis: ImageAnalysis
   ): Promise<ProcessingResult> {
     const startTime = performance.now();
+    console.log(`[IMAGE_LAB_DEBUG] PROCESSING_START targetWidthCm=${config.targetWidthCm} targetDpi=${config.targetDpi} alphaMode=${config.alphaMode}`);
 
     // 1. Calculate Target Pixel Dimensions
-    // Formula: pixels = (centimeters / 2.54) * targetDpi
     const targetWidthInches = config.targetWidthCm / 2.54;
     const targetWidthPx = Math.round(targetWidthInches * config.targetDpi);
-    const targetHeightPx = Math.round(targetWidthPx / originalAnalysis.aspectRatio);
-
-    // Safeguard: Limit max Canvas dimension to 8192px to prevent browser GPU/Canvas OOM crashes
     const safeWidthPx = Math.min(targetWidthPx, 8192);
     const safeHeightPx = Math.round(safeWidthPx / originalAnalysis.aspectRatio);
+
+    console.log(`[IMAGE_LAB_DEBUG] CANVAS_RENDER_START safeWidthPx=${safeWidthPx} safeHeightPx=${safeHeightPx}`);
 
     // 2. Setup Canvas
     const canvas = document.createElement("canvas");
@@ -34,19 +33,16 @@ export class LocalCanvasProvider implements ImageProcessingProvider {
       throw new Error("No se pudo inicializar el motor de renderizado Canvas 2D.");
     }
 
-    // High Quality Bilinear/Bicubic Resampling
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
-    // Draw Source Image
     ctx.drawImage(sourceImage, 0, 0, safeWidthPx, safeHeightPx);
 
-    // 3. Alpha Channel Transformations (Conservative / Balanced / Aggressive Modes)
+    // 3. Alpha Channel Transformations
     if (config.cleanAlpha || config.removeBackground) {
       const imageData = ctx.getImageData(0, 0, safeWidthPx, safeHeightPx);
       const data = imageData.data;
 
-      // Thresholds according to mode
       let cutoffThreshold = config.alphaThreshold || 30;
       if (config.alphaMode === "conservative") {
         cutoffThreshold = Math.min(cutoffThreshold, 15);
@@ -60,20 +56,17 @@ export class LocalCanvasProvider implements ImageProcessingProvider {
         const b = data[i + 2];
         const alpha = data[i + 3];
 
-        // Color-Key Background Removal (Chroma)
         if (config.removeBackground && config.backgroundRemovalMode === "color-key") {
-          // Pure white / high-light background keying
           if (r > 245 && g > 245 && b > 245) {
             data[i + 3] = 0;
             continue;
           }
         }
 
-        // Alpha Mode Transformations
         if (alpha < cutoffThreshold) {
-          data[i + 3] = 0; // Cut off low opacity noise completely
+          data[i + 3] = 0;
         } else if (config.alphaMode === "aggressive" && alpha < 255) {
-          data[i + 3] = 255; // Force crisp opaque edges for aggressive mode
+          data[i + 3] = 255;
         }
       }
 
@@ -81,28 +74,44 @@ export class LocalCanvasProvider implements ImageProcessingProvider {
     }
 
     // 4. Export PNG Blob
+    console.log("[IMAGE_LAB_DEBUG] CANVAS_TO_BLOB_START");
     const rawBlob = await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob((blob) => {
-        if (blob) resolve(blob);
-        else reject(new Error("Error al generar archivo PNG."));
+        if (blob) {
+          console.log(`[IMAGE_LAB_DEBUG] CANVAS_TO_BLOB_SUCCESS blobSize=${blob.size} blobType=${blob.type}`);
+          resolve(blob);
+        } else {
+          console.error("[IMAGE_LAB_DEBUG] CANVAS_TO_BLOB_ERROR canvas.toBlob returned null");
+          reject(new Error("Error al generar archivo PNG desde el lienzo Canvas."));
+        }
       }, "image/png");
     });
 
     // 5. Inject pHYs DPI Chunk (300 DPI metadata) into PNG Binary
     const processedBlob = await embedPngDpi(rawBlob, config.targetDpi);
+    console.log(`[IMAGE_LAB_DEBUG] EMBED_DPI_SUCCESS processedBlobSize=${processedBlob.size}`);
 
     // 6. Re-analyze Processed Image using safeLoadImage safeguard
     const objectUrl = URL.createObjectURL(processedBlob);
-    const tempImg = await safeLoadImage(objectUrl);
+    console.log("[IMAGE_LAB_DEBUG] PROCESSED_LOAD_START objectUrl generated");
+    let tempImg: HTMLImageElement;
+    try {
+      tempImg = await safeLoadImage(objectUrl);
+      console.log(`[IMAGE_LAB_DEBUG] PROCESSED_LOAD_SUCCESS tempImgWidth=${tempImg.naturalWidth} tempImgHeight=${tempImg.naturalHeight}`);
+    } catch (loadErr: any) {
+      console.error("[IMAGE_LAB_DEBUG] PROCESSED_LOAD_ERROR failed to load processed blob image", loadErr);
+      throw loadErr;
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+    }
 
     const updatedAnalysis = await analyzeImage(tempImg, processedBlob.size, "png");
     updatedAnalysis.hasEmbeddedDpi = true;
-    URL.revokeObjectURL(objectUrl);
 
-    // 7. Run Pre-Flight Report
     const preflight = runDtfPreflight(updatedAnalysis, config.targetWidthCm, config.targetDpi);
-
     const processingTimeMs = Math.round(performance.now() - startTime);
+
+    console.log(`[IMAGE_LAB_DEBUG] PROCESSING_COMPLETE durationMs=${processingTimeMs}`);
 
     return {
       processedCanvas: canvas,
