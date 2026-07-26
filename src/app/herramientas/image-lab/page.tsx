@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { useState, useRef, ChangeEvent, useEffect } from "react";
+import { useState, useRef, ChangeEvent, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { GlassCard } from "@components/ui/GlassCard";
 import { NeuButton } from "@components/ui/NeuButton";
@@ -57,6 +57,15 @@ function ImageLabContent() {
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Derived Condition for Continuing Production Workflow
+  const canContinue = useMemo(() => {
+    return (
+      !isSaving &&
+      !isProcessing &&
+      (Boolean(processedBlob) || Boolean(savedDesignId))
+    );
+  }, [isSaving, isProcessing, processedBlob, savedDesignId]);
 
   // Load design if URL parameter designId is present
   useEffect(() => {
@@ -172,8 +181,13 @@ function ImageLabContent() {
       return null;
     }
 
+    // CASE B: Existing design already saved/loaded, and no new file to re-upload
+    if (savedDesignId && (!selectedFile || !processedBlob)) {
+      return savedDesignId;
+    }
+
+    // CASE A: New design requires selectedFile and processedBlob
     if (!selectedFile || !processedBlob) {
-      if (savedDesignId) return savedDesignId;
       setErrorMessage("No hay archivo procesado para guardar.");
       return null;
     }
@@ -192,7 +206,7 @@ function ImageLabContent() {
 
       const workspaceId = member.workspace_id;
 
-      // Server-Side Design Limit Guard for new creations
+      // Server-Side Design Limit Guard ONLY for new design creations
       if (!savedDesignId) {
         const allowed = await canCreateDesign(supabase, workspaceId);
         if (!allowed) {
@@ -439,7 +453,7 @@ function ImageLabContent() {
                   size="md"
                   active
                   onClick={() => saveDesignRecord()}
-                  disabled={isSaving || !processedBlob}
+                  disabled={!canContinue}
                   className="w-full justify-center shadow-glow-cyan"
                 >
                   <Save className="w-4 h-4" />
@@ -451,7 +465,7 @@ function ImageLabContent() {
                   size="md"
                   active
                   onClick={handleSaveAndUnderbase}
-                  disabled={isSaving || !processedBlob}
+                  disabled={!canContinue}
                   className="w-full justify-center shadow-glow-violet"
                 >
                   <Layers className="w-4 h-4" />
@@ -462,7 +476,7 @@ function ImageLabContent() {
                   variant="glass"
                   size="md"
                   onClick={handleSaveAndCreateSheet}
-                  disabled={isSaving || !processedBlob}
+                  disabled={!canContinue}
                   className="w-full justify-center"
                 >
                   <Grid className="w-4 h-4 text-secondary" />
