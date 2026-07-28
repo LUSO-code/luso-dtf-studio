@@ -36,6 +36,22 @@ export interface StorageService {
 }
 
 /**
+ * Sanitizes object key paths to ensure compatibility with Supabase Storage and S3 rules.
+ * Replaces non-ASCII characters, Spanish accents, quotes, spaces, and special symbols.
+ */
+export function sanitizeStoragePath(path: string): string {
+  if (!path) return "";
+  return path
+    .split("/")
+    .map((segment) => {
+      const normalized = segment.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const safe = normalized.replace(/[^a-zA-Z0-9._-]/g, "_");
+      return safe.replace(/_+/g, "_");
+    })
+    .join("/");
+}
+
+/**
  * Supabase Storage Implementation
  */
 export class SupabaseStorageAdapter implements StorageService {
@@ -50,10 +66,11 @@ export class SupabaseStorageAdapter implements StorageService {
     options?: StorageOptions
   ): Promise<UploadResult> {
     const supabase = this.getClient();
+    const safePath = sanitizeStoragePath(path);
 
     const { data, error } = await supabase.storage
       .from(bucket)
-      .upload(path, file, {
+      .upload(safePath, file, {
         contentType: options?.contentType,
         cacheControl: options?.cacheControl || "3600",
         upsert: true,

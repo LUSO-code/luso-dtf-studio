@@ -1,5 +1,6 @@
 import { detectImageCharacteristics } from "../../image-processing/auto-detector";
 import { ImageAnalysis } from "../../image-processing/analyzer";
+import { sanitizeStoragePath } from "../../storage/StorageService";
 
 // Helper to create mock Canvas ImageData for node environment testing
 function createMockCanvas(width: number, height: number, fillPixel: (x: number, y: number) => [number, number, number, number]) {
@@ -139,8 +140,17 @@ async function runDtfAutoPrepTests() {
   console.assert(resA.recommendedChokeMm === 0.35, "Test 7 Failed: Default choke must be 0.35 mm");
   console.log("✓ Test 7 Passed: Recommended default choke set to 0.35 mm.");
 
+  // Test 8: Storage Path Sanitization (Non-ASCII, quotes, accents, spanish punctuation)
+  const problematicPath = `038f7d52/designs/13552314/original/“Maeta, ¿cuándo salimos de vacaciones”.png`;
+  const sanitized = sanitizeStoragePath(problematicPath);
+  console.assert(
+    sanitized === `038f7d52/designs/13552314/original/_Maeta_cuando_salimos_de_vacaciones_.png`,
+    `Test 8 Failed: Storage path sanitization mismatch, got: ${sanitized}`
+  );
+  console.log("✓ Test 8 Passed: Storage path sanitization converts non-ASCII & quote characters to safe keys.");
+
   console.log("==========================================");
-  console.log("ALL 7 DTF AUTO PREP ENGINE TESTS PASSED 100%");
+  console.log("ALL 8 DTF AUTO PREP ENGINE TESTS PASSED 100%");
   console.log("==========================================");
 }
 

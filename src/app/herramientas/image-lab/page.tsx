@@ -10,7 +10,7 @@ import { UpgradeModal } from "@components/billing/UpgradeModal";
 import { Breadcrumbs } from "@components/layout/Breadcrumbs";
 import { ImageAnalysis } from "@lib/image-processing/analyzer";
 import { executeDtfAutoPrep, AutoPrepResult } from "@lib/image-processing/dtf-auto-prep";
-import { getStorageService } from "@lib/storage/StorageService";
+import { getStorageService, sanitizeStoragePath } from "@lib/storage/StorageService";
 import { canCreateDesign } from "@lib/billing/usage";
 import { createClient } from "@lib/supabase/client";
 import {
@@ -232,20 +232,23 @@ function ImageLabContent() {
       const designId = savedDesignId || crypto.randomUUID();
       const storageService = getStorageService();
 
+      const safeFileName = sanitizeStoragePath(selectedFile.name);
+      const safeBaseName = safeFileName.replace(/\.[^/.]+$/, "") || "design";
+
       // Upload original file
-      const originalPath = `${workspaceId}/designs/${designId}/original/${selectedFile.name}`;
+      const originalPath = `${workspaceId}/designs/${designId}/original/${safeFileName}`;
       const originalUpload = await storageService.upload("designs", originalPath, selectedFile);
 
       // Upload processed color file
-      const processedPath = `${workspaceId}/designs/${designId}/processed/dtf_optimized_${selectedFile.name.replace(/\.[^/.]+$/, "")}.png`;
-      const processedFile = new File([processedBlob!], `dtf_optimized_${selectedFile.name}`, { type: "image/png" });
+      const processedPath = `${workspaceId}/designs/${designId}/processed/dtf_optimized_${safeBaseName}.png`;
+      const processedFile = new File([processedBlob!], `dtf_optimized_${safeBaseName}.png`, { type: "image/png" });
       const processedUpload = await storageService.upload("designs", processedPath, processedFile);
 
       // Upload white underbase file if available
       let underbaseUploadUrl = "";
       if (underbaseBlob) {
-        const underbasePath = `${workspaceId}/designs/${designId}/underbase/white_mask_${selectedFile.name.replace(/\.[^/.]+$/, "")}.png`;
-        const underbaseFile = new File([underbaseBlob], `white_mask_${selectedFile.name}`, { type: "image/png" });
+        const underbasePath = `${workspaceId}/designs/${designId}/underbase/white_mask_${safeBaseName}.png`;
+        const underbaseFile = new File([underbaseBlob], `white_mask_${safeBaseName}.png`, { type: "image/png" });
         const ubRes = await storageService.upload("designs", underbasePath, underbaseFile);
         underbaseUploadUrl = ubRes.url;
       }
